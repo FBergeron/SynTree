@@ -1,0 +1,47 @@
+<project name="SynTree" default="build" basedir=".">
+
+    <property name="version" value="1.6"/>
+    <property name="src" value="src"/>
+    <property name="lib" value="lib"/>
+    <property name="classes" value="classes"/>
+
+    <path id="project.class.path">
+        <pathelement path="${classpath}"/>
+            <fileset dir="${lib}">
+                <include name="**/*.jar"/>
+            </fileset>
+        <pathelement location="${classes}"/>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="${classes}"/>
+        <javac srcdir="${src}" destdir="${classes}" target="${version}" deprecation="true" includeantruntime="false" debug="true">
+            <classpath refid="project.class.path"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile">
+        <mkdir dir="tmp"/>
+        <copy todir="tmp">
+            <fileset dir="${classes}"/>
+            <fileset dir="img"/>
+        </copy>  
+        <unjar dest="tmp">
+            <fileset dir="${lib}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </unjar>
+        <jar destfile="syntree.jar" basedir="tmp">
+        <manifest>
+        <attribute name="Main-Class" value="cn.edu.zzu.nlp.utopiar.editor.GraphEditor"/>
+        </manifest>
+        </jar>
+        <delete dir="tmp"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${classes}"/>
+        <delete file="SynTree.jar"/>
+    </target>
+</project>
+
