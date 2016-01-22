@@ -271,6 +271,7 @@ public class TreeParser extends JPanel {
     
     public static List<Object> creatTree(GraphEditor editor, final mxGraphComponent graphComponent,List<String> list,
             int vertexY) {
+        vertexY += 40;
         mxGraph graph = graphComponent.getGraph();
         graphComponent.setToolTips(true);
         Object parent = graph.getDefaultParent();
@@ -339,7 +340,7 @@ public class TreeParser extends JPanel {
         try {
             List<Object> os = new ArrayList<Object>();
             for (List<String> list2 : lists) {
-                rtList = creatTree(editor, graphComponent,list2, vertexY + 50);
+                rtList = creatTree(editor, graphComponent,list2, vertexY + 60);
                 os.add(rtList.get(0));          
                 pointX += (Integer) rtList.get(1);
             }
