@@ -340,7 +340,7 @@ public class TreeParser extends JPanel {
         try {
             List<Object> os = new ArrayList<Object>();
             for (List<String> list2 : lists) {
-                rtList = creatTree(editor, graphComponent,list2, vertexY + 60);
+                rtList = creatTree(editor, graphComponent,list2, vertexY + 30);
                 os.add(rtList.get(0));          
                 pointX += (Integer) rtList.get(1);
             }
