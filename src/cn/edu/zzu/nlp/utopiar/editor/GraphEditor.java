@@ -25,6 +25,7 @@ import javax.swing.plaf.FontUIResource;
 import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
+import cn.edu.zzu.nlp.utopiar.util.Preferences;
 
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
@@ -238,6 +239,7 @@ public class GraphEditor extends JPanel{
         {
             EditorSettingFrame setting = new EditorSettingFrame(frame);
             setting.setModal(true);
+            setting.setResizable(true);
 
             // Centers inside the application frame
             int x = frame.getX() + (frame.getWidth() - setting.getWidth()) / 2;
@@ -306,30 +308,39 @@ public class GraphEditor extends JPanel{
      */
     public static void main(String[] args) throws IOException
     {
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        UIManager.installLookAndFeel( new UIManager.LookAndFeelInfo( "BeautyEye", "org.jb2011.lnf.beautyeye.BeautyEyeLookAndFeelCross" ) );
+
+        try {
+            Preferences.getInstance().load();
         }
-        catch (Exception e1)
-        {
-            e1.printStackTrace();
+        catch( Exception e ) {
+            e.printStackTrace();
         }
-        
-        //使用BeautyEye风格
-        try
-        {
-            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-            UIManager.put("RootPane.setupButtonVisible", false);
-            initGlobalFontSetting(new Font("微软雅黑",5,14));
+       
+        try {
+            String lnf = Preferences.getInstance().getLookAndFeel();
+            if( lnf == null )
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            else if( "org.jb2011.lnf.beautyeye.BeautyEyeLookAndFeelCross".equals( lnf ) ) {
+                org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+                UIManager.put("RootPane.setupButtonVisible", false);
+                initGlobalFontSetting(new Font("微软雅黑",5,14));
+                // mxSwingConstants.SHADOW_COLOR = Color.LIGHT_GRAY;
+                // mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
+            }
+            else {
+                UIManager.setLookAndFeel(lnf);
+            }
         }
-        catch(Exception e)
-        {
-            //TODO exception
+        catch( Exception e ) {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+            catch( Exception e2 ) {
+                e2.printStackTrace();
+            }
         }
 
-//      mxSwingConstants.SHADOW_COLOR = Color.LIGHT_GRAY;
-//      mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
-        
         setGraphComponent(EditorTabbedPane.ZH_GRAPH_COMPONENT);
         GraphEditor editor = new GraphEditor(graphComponent);
         int nowCount = EditorTabbedPane.iszH()?TreeParser.ZHCOUNT:TreeParser.ENGCOUNT;
