@@ -90,7 +90,6 @@ public class EditorToolBar extends ToggleButtonToolBar{
         addToggleButton(editor.bind("上一个", new ActionPre(),"img/pre.gif"));
         addToggleButton(editor.bind("下一个", new ActionNext(),"img/next.gif"));
         addToggleButton(editor.bind("整理", new ActionSort(),"img/pan.gif"));
-        addToggleButton(editor.bind("刷新", new ActionRefresh(),"img/refresh.jpg"));
         addToggleButton(editor.bind("重建", new ActionRebuild()));
         add(comboBox);
         addSeparator();
@@ -118,5 +117,6 @@ public class EditorToolBar extends ToggleButtonToolBar{
         addToggleButton(editor.bind("+", mxGraphActions.getZoomInAction()));
         addToggleButton(editor.bind("-", mxGraphActions.getZoomOutAction()));
         addToggleButton(editor.bind("=", mxGraphActions.getZoomActualAction()));
+        addToggleButton(editor.bind("刷新", new ActionRefresh(),"img/refresh.jpg"));
     }   
 }
