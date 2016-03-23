@@ -67,6 +67,15 @@ public class Preferences {
         save();
     }
 
+    public Color getBoxBackgroundColor() {
+        return( boxBackgroundColor );
+    }
+
+    public void setBoxBackgroundColor( Color bgColor ) throws Exception {
+        boxBackgroundColor = bgColor;
+        save();
+    }
+
     public String getLookAndFeel() {
         return( lookAndFeel );
     }
@@ -83,6 +92,11 @@ public class Preferences {
             String graphBackgroundColorStr = graphBackgroundColor.getRed() + "," + 
                 graphBackgroundColor.getGreen() + "," + graphBackgroundColor.getBlue();
             xml += "  <pref " + getKeyValueAsXmlAttributes( "graphBackgroundColor", graphBackgroundColorStr ) + "/>\n";
+        }
+        if( boxBackgroundColor != null ) {
+            String boxBackgroundColorStr = boxBackgroundColor.getRed() + "," + 
+                boxBackgroundColor.getGreen() + "," + boxBackgroundColor.getBlue();
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "boxBackgroundColor", boxBackgroundColorStr ) + "/>\n";
         }
         if( lookAndFeel != null )
             xml += "  <pref " + getKeyValueAsXmlAttributes( "lookAndFeel", lookAndFeel + "" ) + "/>\n";
@@ -120,6 +134,15 @@ public class Preferences {
                                 graphBackgroundColor = new Color( red, green, blue );
                             }
                         }
+                        else if( "boxBackgroundColor".equals( key ) ) {
+                            String[] rgbVals = value.split( "," );
+                            if( rgbVals.length == 3 ) {
+                                int red = Integer.parseInt( rgbVals[ 0 ] );
+                                int green = Integer.parseInt( rgbVals[ 1 ] );
+                                int blue = Integer.parseInt( rgbVals[ 2 ] );
+                                boxBackgroundColor = new Color( red, green, blue );
+                            }
+                        }
                         else if( "lookAndFeel".equals( key ) )
                             lookAndFeel = value;
                     }
@@ -136,6 +159,7 @@ public class Preferences {
     }
 
     private Color graphBackgroundColor;
+    private Color boxBackgroundColor;
     private String lookAndFeel;
 
     private static Preferences instance;

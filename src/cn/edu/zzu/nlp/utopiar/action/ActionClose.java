@@ -29,7 +29,7 @@ public class ActionClose extends ActionGraph {
     public void actionPerformed(ActionEvent e) {
         editorSettingFrame.setVisible(false);
 
-        GraphEditor editor = getEditor(e);
+        GraphEditor editor = editorSettingFrame.getEditor();
         refreshTree(editor, TreeParser.getNow());
         EditorBottom.getTextArea().setText(SetLabel.setLabel());
 
@@ -42,7 +42,16 @@ public class ActionClose extends ActionGraph {
 
         try {
             Color color = editorSettingFrame.getGraphBackgroundColor();
-            Preferences.getInstance().setGraphBackgroundColor( color.equals(UIManager.get( "ScrollPane.background")) ? null : color );
+            Preferences.getInstance().setGraphBackgroundColor( UIManager.get( "ScrollPane.background").equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = editorSettingFrame.getBoxBackgroundColor();
+            Preferences.getInstance().setBoxBackgroundColor( new Color( 195, 217, 255 ).equals(color) ? null : color );
+            editor.getTabbedPane().update();
         }
         catch( Exception ex ) {
             ex.printStackTrace();

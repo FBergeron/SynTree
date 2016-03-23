@@ -1,5 +1,6 @@
 package cn.edu.zzu.nlp.utopiar.editor;
 
+import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -64,72 +65,14 @@ public class EditorTabbedPane extends JTabbedPane{
     public static mxGraphComponent OR_GraphComponent = ENG_GRAPH_COMPONENT;
     
     public EditorTabbedPane(final GraphEditor editor) throws IOException{
-        
+       
+        this.editor = editor;
+
         this.addChangeListener(new ChangeListener() {
             
             @Override
             public void stateChanged(ChangeEvent e) {
-                EditorToolBar.getCombobox().setSelectedIndex(0);
-                TreeParser.getSplitList().clear();
-                mxGraph saveGraph = null;
-                String savePath = null;
-                if(PATH.equalsIgnoreCase(CHINESE_PATH)){
-                    saveGraph = ZH_GRAPH;
-                    savePath = CHINESE_PATH;
-                }else {
-                    saveGraph = ENG_GRAPH;
-                    savePath = ENGLISH_PATH;
-                }
-                String str = ActionGraph.getSaveStr(editor, saveGraph);
-                if(str==null){
-                    return;
-                }
-                try {
-                    SaveTree.save(TreeParser.getNow(), str ,savePath);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                if(getSelectedIndex()==0){
-                    PATH = CHINESE_PATH;
-                    OR_GRAPH = ENG_GRAPH;
-                    OR_PATH = ENGLISH_PATH;
-                    OR_GraphComponent = ENG_GRAPH_COMPONENT;
-                    iszH = true;
-                    ZH_GRAPH_COMPONENT.getViewport().setBackground(Preferences.getInstance().getGraphBackgroundColor());
-                    GraphEditor.changeUndo(ZH_GRAPH_COMPONENT);
-                    GraphEditor.setGraphComponent(ZH_GRAPH_COMPONENT);
-                    TreeParser.setCountleaf(1);
-                    ZH_GRAPH.selectAll();
-                    ZH_GRAPH.removeCells();
-                    List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(PATH));
-                    TreeParser.getLeaf().clear();
-                    TreeParser.getSplitList().clear();
-                    TreeParser.vertex.clear();
-                    TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,0);
-                    ValidCell.valid(editor);
-                    EditorBottom.getTextArea().setText(SetLabel.setLabel());
-                    EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ZHCOUNT+"条    ");
-                }else{
-                    PATH = ENGLISH_PATH;
-                    OR_GRAPH = ZH_GRAPH;
-                    OR_PATH = CHINESE_PATH;
-                    OR_GraphComponent = ZH_GRAPH_COMPONENT;
-                    iszH = false;
-                    GraphEditor.changeUndo(ENG_GRAPH_COMPONENT);
-                    ENG_GRAPH_COMPONENT.getViewport().setBackground(Preferences.getInstance().getGraphBackgroundColor());
-                    GraphEditor.setGraphComponent(ENG_GRAPH_COMPONENT);
-                    TreeParser.setCountleaf(1);
-                    ENG_GRAPH.selectAll();
-                    ENG_GRAPH.removeCells();
-                    List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(PATH));
-                    TreeParser.getLeaf().clear();
-                    TreeParser.getSplitList().clear();
-                    TreeParser.vertex.clear();
-                    TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,0);
-                    ValidCell.valid(editor);
-                    EditorBottom.getTextArea().setText(SetLabel.setLabel());
-                    EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ENGCOUNT+"条    ");
-                }
+                update();
             }
         });
         
@@ -145,6 +88,74 @@ public class EditorTabbedPane extends JTabbedPane{
         ((JTabbedPane)ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, CHINESE_PATH);
         ((JTabbedPane)ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, ENGLISH_PATH);
         drag(this,editor);
+    }
+
+    public void update() {
+        EditorToolBar.getCombobox().setSelectedIndex(0);
+        TreeParser.getSplitList().clear();
+        mxGraph saveGraph = null;
+        String savePath = null;
+        if(PATH.equalsIgnoreCase(CHINESE_PATH)){
+            saveGraph = ZH_GRAPH;
+            savePath = CHINESE_PATH;
+        }else {
+            saveGraph = ENG_GRAPH;
+            savePath = ENGLISH_PATH;
+        }
+        String str = ActionGraph.getSaveStr(editor, saveGraph);
+        if(str==null){
+            return;
+        }
+        try {
+            SaveTree.save(TreeParser.getNow(), str ,savePath);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        if(getSelectedIndex()==0){
+            PATH = CHINESE_PATH;
+            OR_GRAPH = ENG_GRAPH;
+            OR_PATH = ENGLISH_PATH;
+            OR_GraphComponent = ENG_GRAPH_COMPONENT;
+            iszH = true;
+            Color prefColor = Preferences.getInstance().getGraphBackgroundColor();
+            if( prefColor != null )
+                ZH_GRAPH_COMPONENT.getViewport().setBackground( prefColor );
+            GraphEditor.changeUndo(ZH_GRAPH_COMPONENT);
+            GraphEditor.setGraphComponent(ZH_GRAPH_COMPONENT);
+            TreeParser.setCountleaf(1);
+            ZH_GRAPH.selectAll();
+            ZH_GRAPH.removeCells();
+            List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(PATH));
+            TreeParser.getLeaf().clear();
+            TreeParser.getSplitList().clear();
+            TreeParser.vertex.clear();
+            TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,0);
+            ValidCell.valid(editor);
+            EditorBottom.getTextArea().setText(SetLabel.setLabel());
+            EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ZHCOUNT+"条    ");
+        }else{
+            PATH = ENGLISH_PATH;
+            OR_GRAPH = ZH_GRAPH;
+            OR_PATH = CHINESE_PATH;
+            OR_GraphComponent = ZH_GRAPH_COMPONENT;
+            iszH = false;
+            GraphEditor.changeUndo(ENG_GRAPH_COMPONENT);
+            Color prefColor = Preferences.getInstance().getGraphBackgroundColor();
+            if( prefColor != null )
+                ENG_GRAPH_COMPONENT.getViewport().setBackground( prefColor );
+            GraphEditor.setGraphComponent(ENG_GRAPH_COMPONENT);
+            TreeParser.setCountleaf(1);
+            ENG_GRAPH.selectAll();
+            ENG_GRAPH.removeCells();
+            List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(PATH));
+            TreeParser.getLeaf().clear();
+            TreeParser.getSplitList().clear();
+            TreeParser.vertex.clear();
+            TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,0);
+            ValidCell.valid(editor);
+            EditorBottom.getTextArea().setText(SetLabel.setLabel());
+            EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ENGCOUNT+"条    ");
+        }
     }
 
     public static String getPATH() {
@@ -276,4 +287,6 @@ public class EditorTabbedPane extends JTabbedPane{
         });
     }
     
+    private GraphEditor editor;
+
 }

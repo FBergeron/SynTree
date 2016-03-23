@@ -1,6 +1,7 @@
 package cn.edu.zzu.nlp.readTree;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,8 +16,10 @@ import javax.swing.JPanel;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.SetLabel;
 import cn.edu.zzu.nlp.utopiar.util.UnicodeReader;
+import cn.edu.zzu.nlp.utopiar.util.Util;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
 import com.mxgraph.swing.mxGraphComponent;
@@ -296,8 +299,12 @@ public class TreeParser extends JPanel {
             leaf.add(list.get(0));
             countleaf++;
             try {
+                StringBuilder strStyle = new StringBuilder("fontSize=18;");
+                Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
+                if( boxBackgroundColor != null ) 
+                    strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
                 Object ob = graph.insertVertex(parent, null, list.get(0), pointX,
-                        vertexY, 50, 30, "fontSize=18");
+                        vertexY, 50, 30, strStyle.toString());
                 vertex.put(ob, String.valueOf(countleaf-2));
                 rtList.add(ob);
             } catch (Exception e) {
@@ -345,8 +352,12 @@ public class TreeParser extends JPanel {
                 pointX += (Integer) rtList.get(1);
             }
             pointX = pointX / os.size();
+            StringBuilder strStyle = new StringBuilder("fontSize=18;");
+            Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
+            if( boxBackgroundColor != null ) 
+                strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
             Object v1 = graph.insertVertex(parent, null, list.get(1), pointX,
-                    vertexY, 50, 30, "fontSize=18");
+                    vertexY, 50, 30, strStyle.toString());
             rtList.set(0, v1);
             rtList.set(1, pointX);
             for (Object object : os) {

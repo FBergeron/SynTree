@@ -156,6 +156,10 @@ public class GraphEditor extends JPanel{
         GraphEditor.graphComponent = graphComponent;
     }
 
+    public EditorTabbedPane getTabbedPane() {
+        return( tabbedPane );
+    }
+
     public mxUndoManager getUndoManager() {
         return undoManager;
     }
@@ -169,7 +173,8 @@ public class GraphEditor extends JPanel{
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.add(new EditorTabbedPane(this), BorderLayout.CENTER);
+        tabbedPane = new EditorTabbedPane(this);
+        panel.add(tabbedPane, BorderLayout.CENTER);
         add(panel, BorderLayout.CENTER);
     }
     
@@ -237,7 +242,7 @@ public class GraphEditor extends JPanel{
 
         if (frame != null)
         {
-            EditorSettingFrame setting = new EditorSettingFrame(frame);
+            EditorSettingFrame setting = new EditorSettingFrame(frame, this);
             setting.setModal(true);
             setting.setResizable(true);
 
@@ -347,5 +352,7 @@ public class GraphEditor extends JPanel{
         EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+nowCount+"条    ");
         editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
     }
-    
+
+    private EditorTabbedPane tabbedPane;
+
 }

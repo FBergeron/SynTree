@@ -47,16 +47,15 @@ public class EditorSettingFrame extends JDialog {
      */
     private static final long serialVersionUID = -5938480800710447552L;
     
-    
-    
-    public EditorSettingFrame(JFrame owner) {
+    public EditorSettingFrame(JFrame owner, GraphEditor editor) {
         super(owner);
+        this.editor = editor;
         setTitle("设置");
         setLayout(new BorderLayout());
     
         JTabbedPane tabPanel = new JTabbedPane();
 
-        JPanel visualPrefsPanel = new JPanel();
+        JPanel visualPrefsPanel = new JPanel( new FlowLayout( FlowLayout.CENTER, 20, 0 ) );
         JLabel lookAndFeelLabel = new JLabel( "Look and Feel" );
         lookAndFeelComboBox = new JComboBox();
         UIManager.LookAndFeelInfo[] lnfInfo = UIManager.getInstalledLookAndFeels();
@@ -75,9 +74,9 @@ public class EditorSettingFrame extends JDialog {
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {
                     lookAndFeelComboBox.hidePopup();
-                    if( !hasShownLookAndFeelWarning ) {
-                        JOptionPane.showMessageDialog(EditorSettingFrame.this, "You might need to restart the application to activate the selected Look And Feel.");
-                        hasShownLookAndFeelWarning = true;
+                    if( !hasShownPrefChangeWarning ) {
+                        JOptionPane.showOptionDialog(EditorSettingFrame.this, "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
+                        hasShownPrefChangeWarning = true;
                     }
 
                     final UIManager.LookAndFeelInfo lnf = (UIManager.LookAndFeelInfo)lookAndFeelComboBox.getSelectedItem();
@@ -93,7 +92,7 @@ public class EditorSettingFrame extends JDialog {
             }
         );
 
-        JLabel backgroundColorLabel = new JLabel( "Graph Background Color" );
+        JLabel graphBackgroundColorLabel = new JLabel( "Graph Background Color" );
         graphBackgroundColorField = new ColorField( Preferences.getInstance().getGraphBackgroundColor(), (Color)UIManager.get( "ScrollPane.background" ) );
         graphBackgroundColorField.setPreferredSize( new Dimension( 240, graphBackgroundColorField.getPreferredSize().height ) );
         graphBackgroundColorField.addActionListener(
@@ -105,6 +104,24 @@ public class EditorSettingFrame extends JDialog {
             }
         );
 
+        JLabel boxBackgroundColorLabel = new JLabel( "Box Background Color" );
+        boxBackgroundColorField = new ColorField( Preferences.getInstance().getBoxBackgroundColor(), new Color( 195, 217, 255 ) );
+        boxBackgroundColorField.setPreferredSize( new Dimension( 240, boxBackgroundColorField.getPreferredSize().height ) );
+        boxBackgroundColorField.addActionListener(
+            new ActionListener() {
+                public void actionPerformed( ActionEvent evt ) {
+                    if( !hasShownPrefChangeWarning ) {
+                        JOptionPane.showOptionDialog(EditorSettingFrame.this, "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
+                        hasShownPrefChangeWarning = true;
+                    }
+                }
+            }
+        );
+
+        lookAndFeelLabel.setPreferredSize( new Dimension( lookAndFeelLabel.getPreferredSize().width, lookAndFeelComboBox.getPreferredSize().height ) );
+        graphBackgroundColorLabel.setPreferredSize( new Dimension( graphBackgroundColorLabel.getPreferredSize().width, graphBackgroundColorField.getPreferredSize().height ) ); 
+        boxBackgroundColorLabel.setPreferredSize( new Dimension( boxBackgroundColorLabel.getPreferredSize().width, boxBackgroundColorField.getPreferredSize().height ) );
+
         Box leftPanel = Box.createVerticalBox();
         Box rightPanel = Box.createVerticalBox();
 
@@ -112,8 +129,12 @@ public class EditorSettingFrame extends JDialog {
         rightPanel.add(lookAndFeelComboBox);
         leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
         rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
-        leftPanel.add(backgroundColorLabel);
+        leftPanel.add(graphBackgroundColorLabel);
         rightPanel.add(graphBackgroundColorField);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(boxBackgroundColorLabel);
+        rightPanel.add(boxBackgroundColorField);
         leftPanel.add(Box.createVerticalGlue());
         rightPanel.add(Box.createVerticalGlue());
 
@@ -172,6 +193,10 @@ public class EditorSettingFrame extends JDialog {
         setSize(750, 550);
     }
 
+    public GraphEditor getEditor() {
+        return( editor );
+    }
+
     public String getLookAndFeel() {
         UIManager.LookAndFeelInfo lnf = (UIManager.LookAndFeelInfo)lookAndFeelComboBox.getSelectedItem();
         return( lnf.getClassName() );
@@ -179,6 +204,10 @@ public class EditorSettingFrame extends JDialog {
 
     public Color getGraphBackgroundColor() {
         return( graphBackgroundColorField.getColor() );
+    }
+
+    public Color getBoxBackgroundColor() {
+        return( boxBackgroundColorField.getColor() );
     }
 
     /**
@@ -279,7 +308,10 @@ public class EditorSettingFrame extends JDialog {
 
     private JComboBox lookAndFeelComboBox;
     private ColorField graphBackgroundColorField;
+    private ColorField boxBackgroundColorField;
 
-    private boolean hasShownLookAndFeelWarning = false;
+    private boolean hasShownPrefChangeWarning = false;
+
+    private final GraphEditor editor;
 
 }
