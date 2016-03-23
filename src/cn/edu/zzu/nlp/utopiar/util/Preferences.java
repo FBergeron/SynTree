@@ -58,12 +58,12 @@ public class Preferences {
         writer.close();
     }
 
-    public Color getBackgroundColor() {
-        return( backgroundColor );
+    public Color getGraphBackgroundColor() {
+        return( graphBackgroundColor );
     }
 
-    public void setBackgroundColor( Color bgColor ) throws Exception {
-        backgroundColor = bgColor;
+    public void setGraphBackgroundColor( Color bgColor ) throws Exception {
+        graphBackgroundColor = bgColor;
         save();
     }
 
@@ -79,10 +79,10 @@ public class Preferences {
     public String toXML() {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
         xml += "<prefs>\n";
-        if( backgroundColor != null ) {
-            String backgroundColorStr = backgroundColor.getRed() + "," + 
-                backgroundColor.getGreen() + "," + backgroundColor.getBlue();
-            xml += "  <pref " + getKeyValueAsXmlAttributes( "backgroundColor", backgroundColorStr ) + "/>\n";
+        if( graphBackgroundColor != null ) {
+            String graphBackgroundColorStr = graphBackgroundColor.getRed() + "," + 
+                graphBackgroundColor.getGreen() + "," + graphBackgroundColor.getBlue();
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "graphBackgroundColor", graphBackgroundColorStr ) + "/>\n";
         }
         if( lookAndFeel != null )
             xml += "  <pref " + getKeyValueAsXmlAttributes( "lookAndFeel", lookAndFeel + "" ) + "/>\n";
@@ -111,13 +111,13 @@ public class Preferences {
                         String key = ( keyNode == null ? null : keyNode.getNodeValue() );
                         Node valueNode = attr.getNamedItem( "value" );
                         String value = ( valueNode == null ? null : valueNode.getNodeValue() );
-                        if( "backgroundColor".equals( key ) ) {
+                        if( "graphBackgroundColor".equals( key ) ) {
                             String[] rgbVals = value.split( "," );
                             if( rgbVals.length == 3 ) {
                                 int red = Integer.parseInt( rgbVals[ 0 ] );
                                 int green = Integer.parseInt( rgbVals[ 1 ] );
                                 int blue = Integer.parseInt( rgbVals[ 2 ] );
-                                backgroundColor = new Color( red, green, blue );
+                                graphBackgroundColor = new Color( red, green, blue );
                             }
                         }
                         else if( "lookAndFeel".equals( key ) )
@@ -135,7 +135,7 @@ public class Preferences {
         return( "key=\"" + key + "\" value=\"" + value + "\"" );
     }
 
-    private Color backgroundColor;
+    private Color graphBackgroundColor;
     private String lookAndFeel;
 
     private static Preferences instance;

@@ -152,7 +152,7 @@ public class GraphEditor extends JPanel{
         return graphComponent;
     }   
 
-    public  static void setGraphComponent(mxGraphComponent graphComponent) {
+    public static void setGraphComponent(mxGraphComponent graphComponent) {
         GraphEditor.graphComponent = graphComponent;
     }
 

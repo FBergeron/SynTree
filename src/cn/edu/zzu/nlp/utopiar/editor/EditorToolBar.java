@@ -1,5 +1,6 @@
 package cn.edu.zzu.nlp.utopiar.editor;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -11,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 
 import org.jb2011.lnf.beautyeye.widget.N9ComponentFactory;
 
@@ -114,9 +116,13 @@ public class EditorToolBar extends ToggleButtonToolBar{
         int nowCount = EditorTabbedPane.iszH()?TreeParser.ZHCOUNT:TreeParser.ENGCOUNT;
         description.setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+nowCount+"条    ");
         add(description);
-        addToggleButton(editor.bind("+", mxGraphActions.getZoomInAction()));
-        addToggleButton(editor.bind("-", mxGraphActions.getZoomOutAction()));
-        addToggleButton(editor.bind("=", mxGraphActions.getZoomActualAction()));
+        JToggleButton zoomInButton = addToggleButton(editor.bind("+", mxGraphActions.getZoomInAction()));
+        zoomInButton.setPreferredSize( new Dimension( 40, zoomInButton.getPreferredSize().height ) );
+        JToggleButton zoomOutButton = addToggleButton(editor.bind("-", mxGraphActions.getZoomOutAction()));
+        zoomOutButton.setPreferredSize( new Dimension( 40, zoomInButton.getPreferredSize().height ) );
+        JToggleButton revertZoomButton = addToggleButton(editor.bind("=", mxGraphActions.getZoomActualAction()));
+        revertZoomButton.setPreferredSize( new Dimension( 40, zoomInButton.getPreferredSize().height ) );
+
         addToggleButton(editor.bind("刷新", new ActionRefresh(),"img/refresh.jpg"));
     }   
 }

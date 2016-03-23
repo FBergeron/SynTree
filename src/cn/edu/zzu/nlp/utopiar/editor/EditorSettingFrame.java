@@ -36,6 +36,7 @@ import javax.swing.UIManager;
 
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionClose;
+import cn.edu.zzu.nlp.utopiar.util.ColorField;
 import cn.edu.zzu.nlp.utopiar.util.LookAndFeelNiceInfo;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 
@@ -55,7 +56,7 @@ public class EditorSettingFrame extends JDialog {
     
         JTabbedPane tabPanel = new JTabbedPane();
 
-        JPanel visualPrefsPanel = new JPanel( new GridLayout( 0, 2 ) );
+        JPanel visualPrefsPanel = new JPanel();
         JLabel lookAndFeelLabel = new JLabel( "Look and Feel" );
         lookAndFeelComboBox = new JComboBox();
         UIManager.LookAndFeelInfo[] lnfInfo = UIManager.getInstalledLookAndFeels();
@@ -92,17 +93,27 @@ public class EditorSettingFrame extends JDialog {
             }
         );
 
-        JLabel backgroundColorLabel = new JLabel( "Background Color" );
-        JTextField backoundColorTextField = new JTextField( "..." );
-        backoundColorTextField.setPreferredSize( new Dimension( 100, 20 ) );
+        JLabel backgroundColorLabel = new JLabel( "Graph Background Color" );
+        graphBackgroundColorField = new ColorField( Preferences.getInstance().getGraphBackgroundColor(), (Color)UIManager.get( "ScrollPane.background" ) );
+        graphBackgroundColorField.setPreferredSize( new Dimension( 240, graphBackgroundColorField.getPreferredSize().height ) );
+        graphBackgroundColorField.addActionListener(
+            new ActionListener() {
+                public void actionPerformed( ActionEvent evt ) {
+                    EditorTabbedPane.ZH_GRAPH_COMPONENT.getViewport().setBackground(graphBackgroundColorField.getColor());
+                    EditorTabbedPane.ENG_GRAPH_COMPONENT.getViewport().setBackground(graphBackgroundColorField.getColor());
+                }
+            }
+        );
 
         Box leftPanel = Box.createVerticalBox();
         Box rightPanel = Box.createVerticalBox();
 
         leftPanel.add(lookAndFeelLabel);
         rightPanel.add(lookAndFeelComboBox);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
         leftPanel.add(backgroundColorLabel);
-        rightPanel.add(backoundColorTextField);
+        rightPanel.add(graphBackgroundColorField);
         leftPanel.add(Box.createVerticalGlue());
         rightPanel.add(Box.createVerticalGlue());
 
@@ -164,6 +175,10 @@ public class EditorSettingFrame extends JDialog {
     public String getLookAndFeel() {
         UIManager.LookAndFeelInfo lnf = (UIManager.LookAndFeelInfo)lookAndFeelComboBox.getSelectedItem();
         return( lnf.getClassName() );
+    }
+
+    public Color getGraphBackgroundColor() {
+        return( graphBackgroundColorField.getColor() );
     }
 
     /**
@@ -263,6 +278,8 @@ public class EditorSettingFrame extends JDialog {
     }
 
     private JComboBox lookAndFeelComboBox;
+    private ColorField graphBackgroundColorField;
+
     private boolean hasShownLookAndFeelWarning = false;
 
 }

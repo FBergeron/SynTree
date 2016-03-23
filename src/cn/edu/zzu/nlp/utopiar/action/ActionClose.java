@@ -1,6 +1,9 @@
 package cn.edu.zzu.nlp.utopiar.action;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
+
+import javax.swing.UIManager;
 
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
@@ -32,6 +35,14 @@ public class ActionClose extends ActionGraph {
 
         try {
             Preferences.getInstance().setLookAndFeel( editorSettingFrame.getLookAndFeel() );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = editorSettingFrame.getGraphBackgroundColor();
+            Preferences.getInstance().setGraphBackgroundColor( color.equals(UIManager.get( "ScrollPane.background")) ? null : color );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
