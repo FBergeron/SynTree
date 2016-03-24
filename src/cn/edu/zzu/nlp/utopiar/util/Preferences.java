@@ -112,6 +112,51 @@ public class Preferences {
         save();
     }
 
+    public Integer getBoxWidth() {
+        return( boxWidth );
+    }
+
+    public void setBoxWidth( Integer width ) throws Exception {
+        this.boxWidth = width;
+        save();
+    }
+
+    public Integer getBoxHeight() {
+        return( boxHeight );
+    }
+
+    public void setBoxHeight( Integer height ) throws Exception {
+        this.boxHeight = height;
+        save();
+    }
+
+    public Integer getHorizontalInterBoxGap() {
+        return( horizontalInterBoxGap );
+    }
+
+    public void setHorizontalInterBoxGap( Integer gap ) throws Exception {
+        this.horizontalInterBoxGap = gap;
+        save();
+    }
+
+    public Integer getVerticalInterBoxGap() {
+        return( verticalInterBoxGap );
+    }
+
+    public void setVerticalInterBoxGap( Integer gap ) throws Exception {
+        this.verticalInterBoxGap = gap;
+        save();
+    }
+
+    public Integer getBoxFontSize() {
+        return( boxFontSize );
+    }
+
+    public void setBoxFontSize( Integer size ) throws Exception {
+        this.boxFontSize = size;
+        save();
+    }
+
     public String toXML() {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
         xml += "<prefs>\n";
@@ -142,6 +187,16 @@ public class Preferences {
         }
         if( lookAndFeel != null )
             xml += "  <pref " + getKeyValueAsXmlAttributes( "lookAndFeel", lookAndFeel + "" ) + "/>\n";
+        if( boxWidth != null )
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "boxWidth", boxWidth + "" ) + "/>\n";
+        if( boxHeight != null )
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "boxHeight", boxHeight + "" ) + "/>\n";
+        if( horizontalInterBoxGap != null )
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "horizontalInterBoxGap", horizontalInterBoxGap + "" ) + "/>\n";
+        if( verticalInterBoxGap != null )
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "verticalInterBoxGap", verticalInterBoxGap + "" ) + "/>\n";
+        if( boxFontSize != null )
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "boxFontSize", boxFontSize + "" ) + "/>\n";
 
         xml += "</prefs>\n";
         return xml;
@@ -214,6 +269,16 @@ public class Preferences {
                         }
                         else if( "lookAndFeel".equals( key ) )
                             lookAndFeel = value;
+                        else if( "boxWidth".equals( key ) )
+                            boxWidth = Integer.parseInt( value );
+                        else if( "boxHeight".equals( key ) )
+                            boxHeight = Integer.parseInt( value );
+                        else if( "horizontalInterBoxGap".equals( key ) )
+                            horizontalInterBoxGap = Integer.parseInt( value );
+                        else if( "verticalInterBoxGap".equals( key ) )
+                            verticalInterBoxGap = Integer.parseInt( value );
+                        else if( "boxFontSize".equals( key ) )
+                            boxFontSize = Integer.parseInt( value );
                     }
                 }
             }
@@ -227,12 +292,17 @@ public class Preferences {
         return( "key=\"" + key + "\" value=\"" + value + "\"" );
     }
 
-    private Color graphBackgroundColor;
-    private Color boxBackgroundColor;
-    private Color boxForegroundColor;
-    private Color boxBorderColor;
-    private Color edgeColor;
-    private String lookAndFeel;
+    private Color   graphBackgroundColor;
+    private Color   boxBackgroundColor;
+    private Color   boxForegroundColor;
+    private Color   boxBorderColor;
+    private Color   edgeColor;
+    private String  lookAndFeel;
+    private Integer boxWidth;
+    private Integer boxHeight;
+    private Integer horizontalInterBoxGap;
+    private Integer verticalInterBoxGap;
+    private Integer boxFontSize;
 
     private static Preferences instance;
 

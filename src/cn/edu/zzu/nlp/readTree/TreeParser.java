@@ -274,7 +274,8 @@ public class TreeParser extends JPanel {
     
     public static List<Object> creatTree(GraphEditor editor, final mxGraphComponent graphComponent,List<String> list,
             int vertexY) {
-        vertexY += 40;
+        Integer verticalInterBoxGap = Preferences.getInstance().getVerticalInterBoxGap();
+        vertexY += ( verticalInterBoxGap == null ? 40 : verticalInterBoxGap.intValue() );
         mxGraph graph = graphComponent.getGraph();
         graphComponent.setToolTips(true);
         Object parent = graph.getDefaultParent();
@@ -295,11 +296,17 @@ public class TreeParser extends JPanel {
                 list.add("");
             }
             graph.getModel().beginUpdate();
-            pointX = countleaf * 60;
+            Integer boxWidth = Preferences.getInstance().getBoxWidth();
+            Integer boxHeight = Preferences.getInstance().getBoxHeight();
+            Integer horizontalInterBoxGap = Preferences.getInstance().getHorizontalInterBoxGap();
+            pointX = countleaf * ( (boxWidth == null ? 50 : boxWidth.intValue() ) + ( horizontalInterBoxGap == null ? 10 : horizontalInterBoxGap ) );
             leaf.add(list.get(0));
             countleaf++;
             try {
-                StringBuilder strStyle = new StringBuilder("fontSize=18;");
+                StringBuilder strStyle = new StringBuilder();
+                Integer boxFontSize = Preferences.getInstance().getBoxFontSize();
+                if( boxFontSize != null )
+                    strStyle.append( "fontSize=" + boxFontSize + ";" );
                 Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
                 if( boxBackgroundColor != null ) 
                     strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
@@ -310,7 +317,7 @@ public class TreeParser extends JPanel {
                 if( boxBorderColor != null ) 
                     strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
                 Object ob = graph.insertVertex(parent, null, list.get(0), pointX,
-                        vertexY, 50, 30, strStyle.toString());
+                        vertexY, boxWidth == null ? 50 : boxWidth.intValue(), boxHeight == null ? 30 : boxHeight.intValue(), strStyle.toString());
                 vertex.put(ob, String.valueOf(countleaf-2));
                 rtList.add(ob);
             } catch (Exception e) {
@@ -358,7 +365,10 @@ public class TreeParser extends JPanel {
                 pointX += (Integer) rtList.get(1);
             }
             pointX = pointX / os.size();
-            StringBuilder strStyle = new StringBuilder("fontSize=18;");
+            StringBuilder strStyle = new StringBuilder();
+            Integer boxFontSize = Preferences.getInstance().getBoxFontSize();
+            if( boxFontSize != null )
+                strStyle.append( "fontSize=" + boxFontSize + ";" );
             Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
             if( boxBackgroundColor != null ) 
                 strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
@@ -368,8 +378,10 @@ public class TreeParser extends JPanel {
             Color boxBorderColor = Preferences.getInstance().getBoxBorderColor();
             if( boxBorderColor != null ) 
                 strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
+            Integer boxWidth = Preferences.getInstance().getBoxWidth();
+            Integer boxHeight = Preferences.getInstance().getBoxHeight();
             Object v1 = graph.insertVertex(parent, null, list.get(1), pointX,
-                    vertexY, 50, 30, strStyle.toString());
+                    vertexY, boxWidth == null ? 50 : boxWidth.intValue(), boxHeight == null ? 30 : boxHeight.intValue(), strStyle.toString());
             rtList.set(0, v1);
             rtList.set(1, pointX);
             for (Object object : os) {

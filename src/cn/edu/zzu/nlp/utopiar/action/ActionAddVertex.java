@@ -24,7 +24,10 @@ public class ActionAddVertex extends ActionGraph{
         Object parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
         try {
-            StringBuilder strStyle = new StringBuilder("fontSize=18;");
+            StringBuilder strStyle = new StringBuilder();
+            Integer boxFontSize = Preferences.getInstance().getBoxFontSize();
+            if( boxFontSize != null )
+                strStyle.append( "fontSize=" + boxFontSize + ";" );
             Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
             if( boxBackgroundColor != null ) 
                 strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );

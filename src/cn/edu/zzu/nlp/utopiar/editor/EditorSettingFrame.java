@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -28,17 +29,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import cn.edu.zzu.nlp.readTree.TreeParser;
-import cn.edu.zzu.nlp.utopiar.action.ActionClose;
 import cn.edu.zzu.nlp.utopiar.util.ColorField;
 import cn.edu.zzu.nlp.utopiar.util.LookAndFeelNiceInfo;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
+import cn.edu.zzu.nlp.utopiar.util.SpinnerField;
 
 public class EditorSettingFrame extends JDialog {
 
@@ -60,7 +65,7 @@ public class EditorSettingFrame extends JDialog {
         lookAndFeelComboBox = new JComboBox();
         UIManager.LookAndFeelInfo[] lnfInfo = UIManager.getInstalledLookAndFeels();
         LookAndFeelNiceInfo lnfToSelect = null;
-        String prefLnf = Preferences.getInstance().getLookAndFeel(); 
+        String prefLnf = Preferences.getInstance().getLookAndFeel();
         for( UIManager.LookAndFeelInfo lnf : lnfInfo ) {
             LookAndFeelNiceInfo lnfNiceInfo = new LookAndFeelNiceInfo( lnf.getName(), lnf.getClassName() );
             if( prefLnf == null && lnfNiceInfo.getClassName().equals( UIManager.getSystemLookAndFeelClassName() ) )
@@ -92,49 +97,62 @@ public class EditorSettingFrame extends JDialog {
             }
         );
 
-
-        ActionListener colorChangedListener = new ActionListener() {
+        ActionListener actionListener = new ActionListener() {
             public void actionPerformed( ActionEvent evt ) {
-                if( !hasShownPrefChangeWarning ) {
-                    JOptionPane.showOptionDialog(EditorSettingFrame.this, "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
-                    hasShownPrefChangeWarning = true;
-                }
+                update();
+            }
+        };
+
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged( ChangeEvent evt ) {
+                update();
             }
         };
 
         JLabel graphBackgroundColorLabel = new JLabel( "Graph Background Color" );
         graphBackgroundColorField = new ColorField( Preferences.getInstance().getGraphBackgroundColor(), (Color)UIManager.get( "ScrollPane.background" ) );
         graphBackgroundColorField.setPreferredSize( new Dimension( 240, graphBackgroundColorField.getPreferredSize().height ) );
-        graphBackgroundColorField.addActionListener( colorChangedListener );
+        graphBackgroundColorField.addActionListener( actionListener );
 
         JLabel boxBackgroundColorLabel = new JLabel( "Box Background Color" );
         boxBackgroundColorField = new ColorField( Preferences.getInstance().getBoxBackgroundColor(), new Color( 195, 217, 255 ) );
         boxBackgroundColorField.setPreferredSize( new Dimension( 240, boxBackgroundColorField.getPreferredSize().height ) );
-        boxBackgroundColorField.addActionListener( colorChangedListener );
+        boxBackgroundColorField.addActionListener( actionListener );
 
         JLabel boxForegroundColorLabel = new JLabel( "Box Foreground Color" );
         boxForegroundColorField = new ColorField( Preferences.getInstance().getBoxForegroundColor(), new Color( 119, 68, 0 ) );
         boxForegroundColorField.setPreferredSize( new Dimension( 240, boxForegroundColorField.getPreferredSize().height ) );
-        boxForegroundColorField.addActionListener( colorChangedListener );
+        boxForegroundColorField.addActionListener( actionListener );
 
         JLabel boxBorderColorLabel = new JLabel( "Box Border Color" );
         boxBorderColorField = new ColorField( Preferences.getInstance().getBoxBorderColor(), new Color( 100, 130, 185 ) );
         boxBorderColorField.setPreferredSize( new Dimension( 240, boxBorderColorField.getPreferredSize().height ) );
-        boxBorderColorField.addActionListener( colorChangedListener );
+        boxBorderColorField.addActionListener( actionListener );
 
         JLabel edgeColorLabel = new JLabel( "Box Edge Color" );
         edgeColorField = new ColorField( Preferences.getInstance().getEdgeColor(), new Color( 100, 130, 185 ) );
         edgeColorField.setPreferredSize( new Dimension( 240, edgeColorField.getPreferredSize().height ) );
-        edgeColorField.addActionListener(
-            new ActionListener() {
-                public void actionPerformed( ActionEvent evt ) {
-                    if( !hasShownPrefChangeWarning ) {
-                        JOptionPane.showOptionDialog(EditorSettingFrame.this, "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
-                        hasShownPrefChangeWarning = true;
-                    }
-                }
-            }
-        );
+        edgeColorField.addActionListener( actionListener );
+
+        JLabel boxWidthLabel = new JLabel( "Box Width" );
+        boxWidthSpinner = new SpinnerField( Preferences.getInstance().getBoxWidth(), 50 );
+        boxWidthSpinner.addChangeListener( changeListener );
+
+        JLabel boxHeightLabel = new JLabel( "Box Height" );
+        boxHeightSpinner = new SpinnerField( Preferences.getInstance().getBoxHeight(), 30 );
+        boxHeightSpinner.addChangeListener( changeListener );
+
+        JLabel horizontalInterBoxGapLabel = new JLabel( "Inter Box Gap Width" );
+        horizontalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getHorizontalInterBoxGap(), 10 );
+        horizontalInterBoxGapSpinner.addChangeListener( changeListener );
+
+        JLabel verticalInterBoxGapLabel = new JLabel( "Inter Box Gap Height" );
+        verticalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getVerticalInterBoxGap(), 40 );
+        verticalInterBoxGapSpinner.addChangeListener( changeListener );
+
+        JLabel boxFontSizeLabel = new JLabel( "Box Font Size" );
+        boxFontSizeSpinner = new SpinnerField( Preferences.getInstance().getBoxFontSize(), 18 );
+        boxFontSizeSpinner.addChangeListener( changeListener );
 
         lookAndFeelLabel.setPreferredSize( new Dimension( lookAndFeelLabel.getPreferredSize().width, lookAndFeelComboBox.getPreferredSize().height ) );
         graphBackgroundColorLabel.setPreferredSize( new Dimension( graphBackgroundColorLabel.getPreferredSize().width, graphBackgroundColorField.getPreferredSize().height ) ); 
@@ -142,14 +160,19 @@ public class EditorSettingFrame extends JDialog {
         boxForegroundColorLabel.setPreferredSize( new Dimension( boxForegroundColorLabel.getPreferredSize().width, boxForegroundColorField.getPreferredSize().height ) );
         boxBorderColorLabel.setPreferredSize( new Dimension( boxBorderColorLabel.getPreferredSize().width, boxBorderColorField.getPreferredSize().height ) );
         edgeColorLabel.setPreferredSize( new Dimension( edgeColorLabel.getPreferredSize().width, edgeColorField.getPreferredSize().height ) );
+        boxWidthLabel.setPreferredSize( new Dimension( boxWidthLabel.getPreferredSize().width, boxWidthSpinner.getPreferredSize().height ) );
+        boxHeightLabel.setPreferredSize( new Dimension( boxHeightLabel.getPreferredSize().width, boxHeightSpinner.getPreferredSize().height ) );
+        horizontalInterBoxGapLabel.setPreferredSize( new Dimension( horizontalInterBoxGapLabel.getPreferredSize().width, horizontalInterBoxGapSpinner.getPreferredSize().height ) );
+        verticalInterBoxGapLabel.setPreferredSize( new Dimension( verticalInterBoxGapLabel.getPreferredSize().width, verticalInterBoxGapSpinner.getPreferredSize().height ) );
+        boxFontSizeLabel.setPreferredSize( new Dimension( boxFontSizeLabel.getPreferredSize().width, boxHeightSpinner.getPreferredSize().height ) );
 
         Box leftPanel = Box.createVerticalBox();
         Box rightPanel = Box.createVerticalBox();
 
         leftPanel.add(lookAndFeelLabel);
         rightPanel.add(lookAndFeelComboBox);
-        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
-        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
         leftPanel.add(graphBackgroundColorLabel);
         rightPanel.add(graphBackgroundColorField);
         leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
@@ -168,6 +191,26 @@ public class EditorSettingFrame extends JDialog {
         rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
         leftPanel.add(edgeColorLabel);
         rightPanel.add(edgeColorField);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
+        leftPanel.add(boxWidthLabel);
+        rightPanel.add(boxWidthSpinner);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(boxHeightLabel);
+        rightPanel.add(boxHeightSpinner);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(horizontalInterBoxGapLabel);
+        rightPanel.add(horizontalInterBoxGapSpinner);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(verticalInterBoxGapLabel);
+        rightPanel.add(verticalInterBoxGapSpinner);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
+        leftPanel.add(boxFontSizeLabel);
+        rightPanel.add(boxFontSizeSpinner);
         leftPanel.add(Box.createVerticalGlue());
         rightPanel.add(Box.createVerticalGlue());
 
@@ -214,7 +257,13 @@ public class EditorSettingFrame extends JDialog {
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         // Adds OK button to close window
-        JButton closeButton = new JButton(new ActionClose(this));
+        JButton closeButton = new JButton(
+            new AbstractAction() {
+                public void actionPerformed( ActionEvent evt ) {
+                    EditorSettingFrame.this.setVisible( false );
+                }
+            }
+        );
 
         closeButton.setText("关闭");
         buttonPanel.add(closeButton);
@@ -226,33 +275,100 @@ public class EditorSettingFrame extends JDialog {
         setSize(750, 550);
     }
 
+    public void update() {
+        try {
+            String lnf = ((UIManager.LookAndFeelInfo)lookAndFeelComboBox.getSelectedItem()).getClassName();
+            Preferences.getInstance().setLookAndFeel( lnf );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = graphBackgroundColorField.getColor();
+            Preferences.getInstance().setGraphBackgroundColor( UIManager.get( "ScrollPane.background").equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = boxBackgroundColorField.getColor();
+            Preferences.getInstance().setBoxBackgroundColor( new Color( 195, 217, 255 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = boxForegroundColorField.getColor();
+            Preferences.getInstance().setBoxForegroundColor( new Color( 119, 68, 0 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = boxBorderColorField.getColor();
+            Preferences.getInstance().setBoxBorderColor( new Color( 100, 130, 185 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = edgeColorField.getColor();
+            Preferences.getInstance().setEdgeColor( new Color( 100, 130, 185 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            Integer width = (Integer)boxWidthSpinner.getValue();
+            Preferences.getInstance().setBoxWidth( Integer.valueOf( 50 ).equals(width) ? null : width );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            Integer height = (Integer)boxHeightSpinner.getValue();
+            Preferences.getInstance().setBoxHeight( Integer.valueOf( 30 ).equals(height) ? null : height );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            Integer gap = (Integer)horizontalInterBoxGapSpinner.getValue();
+            Preferences.getInstance().setHorizontalInterBoxGap( Integer.valueOf( 60 ).equals(gap) ? null : gap );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            Integer gap = (Integer)verticalInterBoxGapSpinner.getValue();
+            Preferences.getInstance().setVerticalInterBoxGap( Integer.valueOf( 40 ).equals(gap) ? null : gap );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            Integer fontSize = (Integer)boxFontSizeSpinner.getValue();
+            Preferences.getInstance().setBoxFontSize( Integer.valueOf( 18 ).equals(fontSize) ? null : fontSize );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        editor.getTabbedPane().update();
+    }
+
     public GraphEditor getEditor() {
         return( editor );
-    }
-
-    public String getLookAndFeel() {
-        UIManager.LookAndFeelInfo lnf = (UIManager.LookAndFeelInfo)lookAndFeelComboBox.getSelectedItem();
-        return( lnf.getClassName() );
-    }
-
-    public Color getGraphBackgroundColor() {
-        return( graphBackgroundColorField.getColor() );
-    }
-
-    public Color getBoxBackgroundColor() {
-        return( boxBackgroundColorField.getColor() );
-    }
-
-    public Color getBoxForegroundColor() {
-        return( boxForegroundColorField.getColor() );
-    }
-
-    public Color getBoxBorderColor() {
-        return( boxBorderColorField.getColor() );
-    }
-
-    public Color getEdgeColor() {
-        return( edgeColorField.getColor() );
     }
 
     /**
@@ -351,12 +467,17 @@ public class EditorSettingFrame extends JDialog {
         
     }
 
-    private JComboBox lookAndFeelComboBox;
-    private ColorField graphBackgroundColorField;
-    private ColorField boxBackgroundColorField;
-    private ColorField boxForegroundColorField;
-    private ColorField boxBorderColorField;
-    private ColorField edgeColorField;
+    private JComboBox       lookAndFeelComboBox;
+    private ColorField      graphBackgroundColorField;
+    private ColorField      boxBackgroundColorField;
+    private ColorField      boxForegroundColorField;
+    private ColorField      boxBorderColorField;
+    private ColorField      edgeColorField;
+    private SpinnerField    boxWidthSpinner;
+    private SpinnerField    boxHeightSpinner;
+    private SpinnerField    horizontalInterBoxGapSpinner;
+    private SpinnerField    verticalInterBoxGapSpinner;
+    private SpinnerField    boxFontSizeSpinner;
 
     private boolean hasShownPrefChangeWarning = false;
 

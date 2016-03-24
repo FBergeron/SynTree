@@ -23,29 +23,27 @@ public class ColorField extends Box {
     public ColorField( Color colour, Color defaultColour ) {
         super(BoxLayout.LINE_AXIS);
         defaultColor = defaultColour;
-        color = ( colour == null ? defaultColour : colour );
         colorPanel = new JPanel();
         colorPanel.setBorder( BorderFactory.createLineBorder( Color.BLACK ) );
-        colorPanel.setBackground( color );
+        colorPanel.setBackground( colour == null ? defaultColour : colour );
         colorPanel.setPreferredSize( new Dimension( 50, colorPanel.getPreferredSize().height ) );
         pickColorButton = new JButton( "..." );
         pickColorButton.setToolTipText( "Pick a color..." );
         pickColorButton.addActionListener(
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {
-                    color = JColorChooser.showDialog( ColorField.this, "Color Selection", Color.BLACK );
-                    colorPanel.setBackground( color );
+                    Color col = JColorChooser.showDialog( ColorField.this, "Color Selection", Color.BLACK );
+                    colorPanel.setBackground( col );
                     fireActionEvent();
                 }
             }
         );
         revertColorButton = new JButton( "X" );
-        revertColorButton.setToolTipText( "Revert to Look and Feel default color" );
+        revertColorButton.setToolTipText( "Revert to default color" );
         revertColorButton.addActionListener(
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {
-                    color = defaultColor;
-                    colorPanel.setBackground( color );
+                    colorPanel.setBackground( defaultColor );
                     fireActionEvent();
                 }
             }
@@ -58,7 +56,7 @@ public class ColorField extends Box {
     }
 
     public Color getColor() {
-        return( color );
+        return( colorPanel.getBackground() );
     }
 
     public synchronized void addActionListener( ActionListener listener ) {
@@ -77,7 +75,6 @@ public class ColorField extends Box {
         }
     }
 
-    private Color color;
     private Color defaultColor;
 
     private List<ActionListener> actionListeners = new ArrayList<ActionListener>();
