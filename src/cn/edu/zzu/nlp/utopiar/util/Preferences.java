@@ -62,8 +62,8 @@ public class Preferences {
         return( graphBackgroundColor );
     }
 
-    public void setGraphBackgroundColor( Color bgColor ) throws Exception {
-        graphBackgroundColor = bgColor;
+    public void setGraphBackgroundColor( Color color ) throws Exception {
+        graphBackgroundColor = color;
         save();
     }
 
@@ -71,8 +71,35 @@ public class Preferences {
         return( boxBackgroundColor );
     }
 
-    public void setBoxBackgroundColor( Color bgColor ) throws Exception {
-        boxBackgroundColor = bgColor;
+    public void setBoxBackgroundColor( Color color ) throws Exception {
+        boxBackgroundColor = color;
+        save();
+    }
+
+    public Color getBoxForegroundColor() {
+        return( boxForegroundColor );
+    }
+
+    public void setBoxForegroundColor( Color color ) throws Exception {
+        boxForegroundColor = color;
+        save();
+    }
+
+    public Color getBoxBorderColor() {
+        return( boxBorderColor );
+    }
+
+    public void setBoxBorderColor( Color color ) throws Exception {
+        boxBorderColor = color;
+        save();
+    }
+
+    public Color getEdgeColor() {
+        return( edgeColor );
+    }
+
+    public void setEdgeColor( Color color ) throws Exception {
+        edgeColor = color;
         save();
     }
 
@@ -97,6 +124,21 @@ public class Preferences {
             String boxBackgroundColorStr = boxBackgroundColor.getRed() + "," + 
                 boxBackgroundColor.getGreen() + "," + boxBackgroundColor.getBlue();
             xml += "  <pref " + getKeyValueAsXmlAttributes( "boxBackgroundColor", boxBackgroundColorStr ) + "/>\n";
+        }
+        if( boxForegroundColor != null ) {
+            String boxForegroundColorStr = boxForegroundColor.getRed() + "," + 
+                boxForegroundColor.getGreen() + "," + boxForegroundColor.getBlue();
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "boxForegroundColor", boxForegroundColorStr ) + "/>\n";
+        }
+        if( boxBorderColor != null ) {
+            String boxBorderColorStr = boxBorderColor.getRed() + "," + 
+                boxBorderColor.getGreen() + "," + boxBorderColor.getBlue();
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "boxBorderColor", boxBorderColorStr ) + "/>\n";
+        }
+        if( edgeColor != null ) {
+            String edgeColorStr = edgeColor.getRed() + "," + 
+                edgeColor.getGreen() + "," + edgeColor.getBlue();
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "edgeColor", edgeColorStr ) + "/>\n";
         }
         if( lookAndFeel != null )
             xml += "  <pref " + getKeyValueAsXmlAttributes( "lookAndFeel", lookAndFeel + "" ) + "/>\n";
@@ -143,6 +185,33 @@ public class Preferences {
                                 boxBackgroundColor = new Color( red, green, blue );
                             }
                         }
+                        else if( "boxForegroundColor".equals( key ) ) {
+                            String[] rgbVals = value.split( "," );
+                            if( rgbVals.length == 3 ) {
+                                int red = Integer.parseInt( rgbVals[ 0 ] );
+                                int green = Integer.parseInt( rgbVals[ 1 ] );
+                                int blue = Integer.parseInt( rgbVals[ 2 ] );
+                                boxForegroundColor = new Color( red, green, blue );
+                            }
+                        }
+                        else if( "boxBorderColor".equals( key ) ) {
+                            String[] rgbVals = value.split( "," );
+                            if( rgbVals.length == 3 ) {
+                                int red = Integer.parseInt( rgbVals[ 0 ] );
+                                int green = Integer.parseInt( rgbVals[ 1 ] );
+                                int blue = Integer.parseInt( rgbVals[ 2 ] );
+                                boxBorderColor = new Color( red, green, blue );
+                            }
+                        }
+                        else if( "edgeColor".equals( key ) ) {
+                            String[] rgbVals = value.split( "," );
+                            if( rgbVals.length == 3 ) {
+                                int red = Integer.parseInt( rgbVals[ 0 ] );
+                                int green = Integer.parseInt( rgbVals[ 1 ] );
+                                int blue = Integer.parseInt( rgbVals[ 2 ] );
+                                edgeColor = new Color( red, green, blue );
+                            }
+                        }
                         else if( "lookAndFeel".equals( key ) )
                             lookAndFeel = value;
                     }
@@ -160,6 +229,9 @@ public class Preferences {
 
     private Color graphBackgroundColor;
     private Color boxBackgroundColor;
+    private Color boxForegroundColor;
+    private Color boxBorderColor;
+    private Color edgeColor;
     private String lookAndFeel;
 
     private static Preferences instance;

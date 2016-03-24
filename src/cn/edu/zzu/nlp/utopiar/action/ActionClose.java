@@ -51,11 +51,36 @@ public class ActionClose extends ActionGraph {
         try {
             Color color = editorSettingFrame.getBoxBackgroundColor();
             Preferences.getInstance().setBoxBackgroundColor( new Color( 195, 217, 255 ).equals(color) ? null : color );
-            editor.getTabbedPane().update();
         }
         catch( Exception ex ) {
             ex.printStackTrace();
         }
+
+        try {
+            Color color = editorSettingFrame.getBoxForegroundColor();
+            Preferences.getInstance().setBoxForegroundColor( new Color( 119, 68, 0 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = editorSettingFrame.getBoxBorderColor();
+            Preferences.getInstance().setBoxBorderColor( new Color( 100, 130, 185 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
+        try {
+            Color color = editorSettingFrame.getEdgeColor();
+            Preferences.getInstance().setEdgeColor( new Color( 100, 130, 185 ).equals(color) ? null : color );
+        }
+        catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+        
+        editor.getTabbedPane().update();
     }
 
 }

@@ -92,22 +92,40 @@ public class EditorSettingFrame extends JDialog {
             }
         );
 
+
+        ActionListener colorChangedListener = new ActionListener() {
+            public void actionPerformed( ActionEvent evt ) {
+                if( !hasShownPrefChangeWarning ) {
+                    JOptionPane.showOptionDialog(EditorSettingFrame.this, "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
+                    hasShownPrefChangeWarning = true;
+                }
+            }
+        };
+
         JLabel graphBackgroundColorLabel = new JLabel( "Graph Background Color" );
         graphBackgroundColorField = new ColorField( Preferences.getInstance().getGraphBackgroundColor(), (Color)UIManager.get( "ScrollPane.background" ) );
         graphBackgroundColorField.setPreferredSize( new Dimension( 240, graphBackgroundColorField.getPreferredSize().height ) );
-        graphBackgroundColorField.addActionListener(
-            new ActionListener() {
-                public void actionPerformed( ActionEvent evt ) {
-                    EditorTabbedPane.ZH_GRAPH_COMPONENT.getViewport().setBackground(graphBackgroundColorField.getColor());
-                    EditorTabbedPane.ENG_GRAPH_COMPONENT.getViewport().setBackground(graphBackgroundColorField.getColor());
-                }
-            }
-        );
+        graphBackgroundColorField.addActionListener( colorChangedListener );
 
         JLabel boxBackgroundColorLabel = new JLabel( "Box Background Color" );
         boxBackgroundColorField = new ColorField( Preferences.getInstance().getBoxBackgroundColor(), new Color( 195, 217, 255 ) );
         boxBackgroundColorField.setPreferredSize( new Dimension( 240, boxBackgroundColorField.getPreferredSize().height ) );
-        boxBackgroundColorField.addActionListener(
+        boxBackgroundColorField.addActionListener( colorChangedListener );
+
+        JLabel boxForegroundColorLabel = new JLabel( "Box Foreground Color" );
+        boxForegroundColorField = new ColorField( Preferences.getInstance().getBoxForegroundColor(), new Color( 119, 68, 0 ) );
+        boxForegroundColorField.setPreferredSize( new Dimension( 240, boxForegroundColorField.getPreferredSize().height ) );
+        boxForegroundColorField.addActionListener( colorChangedListener );
+
+        JLabel boxBorderColorLabel = new JLabel( "Box Border Color" );
+        boxBorderColorField = new ColorField( Preferences.getInstance().getBoxBorderColor(), new Color( 100, 130, 185 ) );
+        boxBorderColorField.setPreferredSize( new Dimension( 240, boxBorderColorField.getPreferredSize().height ) );
+        boxBorderColorField.addActionListener( colorChangedListener );
+
+        JLabel edgeColorLabel = new JLabel( "Box Edge Color" );
+        edgeColorField = new ColorField( Preferences.getInstance().getEdgeColor(), new Color( 100, 130, 185 ) );
+        edgeColorField.setPreferredSize( new Dimension( 240, edgeColorField.getPreferredSize().height ) );
+        edgeColorField.addActionListener(
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {
                     if( !hasShownPrefChangeWarning ) {
@@ -121,6 +139,9 @@ public class EditorSettingFrame extends JDialog {
         lookAndFeelLabel.setPreferredSize( new Dimension( lookAndFeelLabel.getPreferredSize().width, lookAndFeelComboBox.getPreferredSize().height ) );
         graphBackgroundColorLabel.setPreferredSize( new Dimension( graphBackgroundColorLabel.getPreferredSize().width, graphBackgroundColorField.getPreferredSize().height ) ); 
         boxBackgroundColorLabel.setPreferredSize( new Dimension( boxBackgroundColorLabel.getPreferredSize().width, boxBackgroundColorField.getPreferredSize().height ) );
+        boxForegroundColorLabel.setPreferredSize( new Dimension( boxForegroundColorLabel.getPreferredSize().width, boxForegroundColorField.getPreferredSize().height ) );
+        boxBorderColorLabel.setPreferredSize( new Dimension( boxBorderColorLabel.getPreferredSize().width, boxBorderColorField.getPreferredSize().height ) );
+        edgeColorLabel.setPreferredSize( new Dimension( edgeColorLabel.getPreferredSize().width, edgeColorField.getPreferredSize().height ) );
 
         Box leftPanel = Box.createVerticalBox();
         Box rightPanel = Box.createVerticalBox();
@@ -135,6 +156,18 @@ public class EditorSettingFrame extends JDialog {
         rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
         leftPanel.add(boxBackgroundColorLabel);
         rightPanel.add(boxBackgroundColorField);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(boxForegroundColorLabel);
+        rightPanel.add(boxForegroundColorField);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(boxBorderColorLabel);
+        rightPanel.add(boxBorderColorField);
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 5 )));
+        leftPanel.add(edgeColorLabel);
+        rightPanel.add(edgeColorField);
         leftPanel.add(Box.createVerticalGlue());
         rightPanel.add(Box.createVerticalGlue());
 
@@ -208,6 +241,18 @@ public class EditorSettingFrame extends JDialog {
 
     public Color getBoxBackgroundColor() {
         return( boxBackgroundColorField.getColor() );
+    }
+
+    public Color getBoxForegroundColor() {
+        return( boxForegroundColorField.getColor() );
+    }
+
+    public Color getBoxBorderColor() {
+        return( boxBorderColorField.getColor() );
+    }
+
+    public Color getEdgeColor() {
+        return( edgeColorField.getColor() );
     }
 
     /**
@@ -309,6 +354,9 @@ public class EditorSettingFrame extends JDialog {
     private JComboBox lookAndFeelComboBox;
     private ColorField graphBackgroundColorField;
     private ColorField boxBackgroundColorField;
+    private ColorField boxForegroundColorField;
+    private ColorField boxBorderColorField;
+    private ColorField edgeColorField;
 
     private boolean hasShownPrefChangeWarning = false;
 

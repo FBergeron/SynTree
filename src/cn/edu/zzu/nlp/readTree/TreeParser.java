@@ -303,6 +303,12 @@ public class TreeParser extends JPanel {
                 Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
                 if( boxBackgroundColor != null ) 
                     strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
+                Color boxForegroundColor = Preferences.getInstance().getBoxForegroundColor();
+                if( boxForegroundColor != null ) 
+                    strStyle.append( "fontColor=" + Util.colorRGBToHex( boxForegroundColor ) + ";" );
+                Color boxBorderColor = Preferences.getInstance().getBoxBorderColor();
+                if( boxBorderColor != null ) 
+                    strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
                 Object ob = graph.insertVertex(parent, null, list.get(0), pointX,
                         vertexY, 50, 30, strStyle.toString());
                 vertex.put(ob, String.valueOf(countleaf-2));
@@ -356,12 +362,22 @@ public class TreeParser extends JPanel {
             Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
             if( boxBackgroundColor != null ) 
                 strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
+            Color boxForegroundColor = Preferences.getInstance().getBoxForegroundColor();
+            if( boxForegroundColor != null ) 
+                strStyle.append( "fontColor=" + Util.colorRGBToHex( boxForegroundColor ) + ";" );
+            Color boxBorderColor = Preferences.getInstance().getBoxBorderColor();
+            if( boxBorderColor != null ) 
+                strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
             Object v1 = graph.insertVertex(parent, null, list.get(1), pointX,
                     vertexY, 50, 30, strStyle.toString());
             rtList.set(0, v1);
             rtList.set(1, pointX);
             for (Object object : os) {
-                graph.insertEdge(parent, null, "", v1, object);
+                strStyle = new StringBuilder("");
+                Color edgeColor = Preferences.getInstance().getEdgeColor();
+                if( edgeColor != null ) 
+                    strStyle.append( "strokeColor=" + Util.colorRGBToHex( edgeColor ) + ";" );
+                graph.insertEdge(parent, null, "", v1, object, strStyle.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

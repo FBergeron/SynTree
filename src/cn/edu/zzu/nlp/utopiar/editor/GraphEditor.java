@@ -26,7 +26,9 @@ import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
+import cn.edu.zzu.nlp.utopiar.util.Util;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxEvent;
@@ -69,6 +71,18 @@ public class GraphEditor extends JPanel{
         }
     };
     
+    protected static mxIEventListener connectHandler = new mxIEventListener()
+    {
+        public void invoke(Object source, mxEventObject evt) {
+            mxCell edge = (mxCell)evt.getProperty("cell");
+            StringBuilder strStyle = new StringBuilder("");
+            java.awt.Color edgeColor = Preferences.getInstance().getEdgeColor();
+            if( edgeColor != null ) 
+                strStyle.append( "strokeColor=" + Util.colorRGBToHex( edgeColor ) + ";" );
+            edge.setStyle( strStyle.toString() );
+        }
+    };
+    
     public GraphEditor() throws IOException
     {
         this( new mxGraphComponent(new mxGraph()));
@@ -103,6 +117,8 @@ public class GraphEditor extends JPanel{
         // Adds the command history to the model and view
         graph.getModel().addListener(mxEvent.UNDO, undoHandler);
         graph.getView().addListener(mxEvent.UNDO, undoHandler);
+        getGraphComponent().getConnectionHandler().addListener(mxEvent.CONNECT, connectHandler); 
+        //graph.getView().addListener(mxEvent.CONNECT, connectHandler); 
     }
     
     /**

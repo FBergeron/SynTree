@@ -22,8 +22,8 @@ public class ColorField extends Box {
 
     public ColorField( Color colour, Color defaultColour ) {
         super(BoxLayout.LINE_AXIS);
-        color = colour;
         defaultColor = defaultColour;
+        color = ( colour == null ? defaultColour : colour );
         colorPanel = new JPanel();
         colorPanel.setBorder( BorderFactory.createLineBorder( Color.BLACK ) );
         colorPanel.setBackground( color );

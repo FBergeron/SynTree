@@ -1,11 +1,14 @@
 package cn.edu.zzu.nlp.utopiar.action;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Preferences;
+import cn.edu.zzu.nlp.utopiar.util.Util;
 
 public class ActionAddVertex extends ActionGraph{
 
@@ -20,10 +23,18 @@ public class ActionAddVertex extends ActionGraph{
         mxGraph graph = graphComponent.getGraph();
         Object parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
-        try
-        {
-            graph.insertVertex(parent, null, "我来了~", 0, 0, 50,
-                    30, "fontSize=18");
+        try {
+            StringBuilder strStyle = new StringBuilder("fontSize=18;");
+            Color boxBackgroundColor = Preferences.getInstance().getBoxBackgroundColor();
+            if( boxBackgroundColor != null ) 
+                strStyle.append( "fillColor=" + Util.colorRGBToHex( boxBackgroundColor ) + ";" );
+            Color boxForegroundColor = Preferences.getInstance().getBoxForegroundColor();
+            if( boxForegroundColor != null ) 
+                strStyle.append( "fontColor=" + Util.colorRGBToHex( boxForegroundColor ) + ";" );
+            Color boxBorderColor = Preferences.getInstance().getBoxBorderColor();
+            if( boxBorderColor != null ) 
+                strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
+            graph.insertVertex(parent, null, "我来了~", 0, 0, 50, 30, strStyle.toString());
         }
         finally
         {
