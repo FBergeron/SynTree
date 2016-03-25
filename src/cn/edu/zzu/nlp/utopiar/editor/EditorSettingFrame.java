@@ -62,7 +62,7 @@ public class EditorSettingFrame extends JDialog {
 
         JPanel visualPrefsPanel = new JPanel( new FlowLayout( FlowLayout.CENTER, 20, 0 ) );
         JLabel lookAndFeelLabel = new JLabel( "Look and Feel" );
-        lookAndFeelComboBox = new JComboBox();
+        lookAndFeelComboBox = new JComboBox<LookAndFeelNiceInfo>();
         UIManager.LookAndFeelInfo[] lnfInfo = UIManager.getInstalledLookAndFeels();
         LookAndFeelNiceInfo lnfToSelect = null;
         String prefLnf = Preferences.getInstance().getLookAndFeel();
@@ -93,6 +93,8 @@ public class EditorSettingFrame extends JDialog {
                     catch( Exception e ) {
                         e.printStackTrace();
                     }
+
+                    update();
                 }
             }
         );
@@ -467,7 +469,8 @@ public class EditorSettingFrame extends JDialog {
         
     }
 
-    private JComboBox       lookAndFeelComboBox;
+    private JComboBox<LookAndFeelNiceInfo>  lookAndFeelComboBox;
+
     private ColorField      graphBackgroundColorField;
     private ColorField      boxBackgroundColorField;
     private ColorField      boxForegroundColorField;

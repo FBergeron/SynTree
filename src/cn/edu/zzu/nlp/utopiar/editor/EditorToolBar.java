@@ -7,12 +7,16 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 
 import org.jb2011.lnf.beautyeye.widget.N9ComponentFactory;
 
@@ -24,12 +28,13 @@ import cn.edu.zzu.nlp.utopiar.action.ActionNext;
 import cn.edu.zzu.nlp.utopiar.action.ActionPre;
 import cn.edu.zzu.nlp.utopiar.action.ActionRebuild;
 import cn.edu.zzu.nlp.utopiar.action.ActionRefresh;
+import cn.edu.zzu.nlp.utopiar.action.ActionSave;
 import cn.edu.zzu.nlp.utopiar.action.ActionSort;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 import cn.edu.zzu.nlp.utopiar.util.SetLabel;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
-public class EditorToolBar extends ToggleButtonToolBar{
+public class EditorToolBar extends JToolBar {
 
     /**
      * 
@@ -41,7 +46,7 @@ public class EditorToolBar extends ToggleButtonToolBar{
      */
     public static int FLAG = 0;
     
-    public static final JComboBox comboBox = new JComboBox();   
+    public static final JComboBox<String> comboBox = new JComboBox<String>();   
     
     public static final JTextField textField = new JTextField(10);
     
@@ -69,32 +74,26 @@ public class EditorToolBar extends ToggleButtonToolBar{
     }
 
     public EditorToolBar(final GraphEditor editor,int orientation){     
+        super(orientation);
         textField.setText("请输入数字~");
         setBorder(BorderFactory.createCompoundBorder(BorderFactory
                 .createEmptyBorder(3, 3, 3, 3), getBorder()));
         setFloatable(false);        
-        comboBox.addItem("仅显示句子");
-        comboBox.addItem("显示分词");
-        comboBox.addItem("显示分词及词性");
-        comboBox.addItem("显示分词及约束");
-        comboBox.setSelectedIndex(0);
-        comboBox.addItemListener(new ItemListener() {
-            
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                setFLAG(comboBox.getSelectedIndex());
-                EditorBottom.getTextArea().setText(SetLabel.setLabel());
-            }
-        });
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
-        addToggleButton(editor.bind("撤销", new ActionUndo(true),"img/undo.gif"));
-        addToggleButton(editor.bind("重做", new ActionUndo(false),"img/redo.gif"));
-        addToggleButton(editor.bind("上一个", new ActionPre(),"img/pre.gif"));
-        addToggleButton(editor.bind("下一个", new ActionNext(),"img/next.gif"));
-        addToggleButton(editor.bind("整理", new ActionSort(),"img/pan.gif"));
-        addToggleButton(editor.bind("重建", new ActionRebuild()));
-        add(comboBox);
+
+        JButton buttonSave = addButton(editor.bind("保存", new ActionSave(), "img/save.gif"));
         addSeparator();
+
+        addButton(editor.bind("撤销", new ActionUndo(true),"img/undo.gif"));
+        addButton(editor.bind("重做", new ActionUndo(false),"img/redo.gif"));
+        addSeparator();
+
+        addButton(editor.bind("整理", new ActionSort(),"img/pan.gif"));
+        addSeparator();
+
+        addButton(editor.bind("上一个", new ActionPre(),"img/pre.gif"));
+        addButton(editor.bind("下一个", new ActionNext(),"img/next.gif"));
+        textField.setPreferredSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
+        textField.setMaximumSize(  new Dimension( 200, buttonSave.getPreferredSize().height ) );
         add(textField);
         textField.addFocusListener(new FocusListener() {
             
@@ -112,17 +111,61 @@ public class EditorToolBar extends ToggleButtonToolBar{
                 textField.setText("");
             }
         });
-        addToggleButton(editor.bind("GO", new ActionGo()));
+        addButton(editor.bind("GO", new ActionGo()));
+        addSeparator();
+
         int nowCount = EditorTabbedPane.iszH()?TreeParser.ZHCOUNT:TreeParser.ENGCOUNT;
         description.setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+nowCount+"条    ");
         add(description);
-        JToggleButton zoomInButton = addToggleButton(editor.bind("+", mxGraphActions.getZoomInAction()));
-        zoomInButton.setPreferredSize( new Dimension( 40, zoomInButton.getPreferredSize().height ) );
-        JToggleButton zoomOutButton = addToggleButton(editor.bind("-", mxGraphActions.getZoomOutAction()));
-        zoomOutButton.setPreferredSize( new Dimension( 40, zoomInButton.getPreferredSize().height ) );
-        JToggleButton revertZoomButton = addToggleButton(editor.bind("=", mxGraphActions.getZoomActualAction()));
-        revertZoomButton.setPreferredSize( new Dimension( 40, zoomInButton.getPreferredSize().height ) );
+        addSeparator();
 
-        addToggleButton(editor.bind("刷新", new ActionRefresh(),"img/refresh.jpg"));
+        JButton zoomInButton = addButton(editor.bind("+", mxGraphActions.getZoomInAction()));
+        zoomInButton.setPreferredSize( new Dimension( 40, buttonSave.getPreferredSize().height ) );
+        JButton zoomOutButton = addButton(editor.bind("-", mxGraphActions.getZoomOutAction()));
+        zoomOutButton.setPreferredSize( new Dimension( 40, buttonSave.getPreferredSize().height ) );
+        JButton revertZoomButton = addButton(editor.bind("=", mxGraphActions.getZoomActualAction()));
+        revertZoomButton.setPreferredSize( new Dimension( 40, buttonSave.getPreferredSize().height ) );
+
+        add(Box.createHorizontalGlue());
+
+        addButton(editor.bind("重建", new ActionRebuild()));
+
+        comboBox.addItem("仅显示句子");
+        comboBox.addItem("显示分词");
+        comboBox.addItem("显示分词及词性");
+        comboBox.addItem("显示分词及约束");
+        comboBox.setSelectedIndex(0);
+        comboBox.addItemListener(new ItemListener() {
+            
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                setFLAG(comboBox.getSelectedIndex());
+                EditorBottom.getTextArea().setText(SetLabel.setLabel());
+            }
+        });
+        comboBox.setPreferredSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
+        comboBox.setMaximumSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
+        add(comboBox);
+        addSeparator();
+        addButton(editor.bind("刷新", new ActionRefresh(),"img/refresh.jpg"));
     }   
+
+    private JToggleButton addToggleButton(Action a) {
+        JToggleButton tb = new JToggleButton((String)a.getValue(Action.NAME), null);
+        tb.setEnabled(a.isEnabled());
+        tb.setToolTipText((String)a.getValue(Action.SHORT_DESCRIPTION));
+        tb.setAction(a);
+        add(tb);
+        return tb;
+    }
+
+    private JButton addButton(Action a) {
+        JButton button = new JButton((String)a.getValue(Action.NAME), null);
+        button.setEnabled(a.isEnabled());
+        button.setToolTipText((String)a.getValue(Action.SHORT_DESCRIPTION));
+        button.setAction(a);
+        add(button);
+        return button;
+    }
+
 }
