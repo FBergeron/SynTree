@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -22,6 +23,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.plaf.FontUIResource;
 
+import cn.edu.zzu.nlp.readTree.Constraint;
 import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
@@ -293,7 +295,97 @@ public class GraphEditor extends JPanel{
             about.setVisible(true);
         }
     }
-    
+
+    public void setHighlight( int startAndEnd ) {
+        this.highlightStartPos = this.highlightEndPos = startAndEnd;
+    }
+
+    public void setHighlight( int start, int end ) {
+        this.highlightStartPos = start;
+        this.highlightEndPos = end;
+    }
+
+    public void clearHighlight() {
+        this.highlightStartPos = this.highlightEndPos = -1;
+    }
+
+    public String getHighlightedLabel( String label ) {
+        if( highlightStartPos == -1 )
+            return( label );
+        String[] words = label.split( " " );
+        words[ highlightStartPos ] = "<span style=\"background-color: yellow\">" + words[ highlightStartPos ];
+        words[ highlightEndPos ] = words[ highlightEndPos ] + "</span>";
+        return( String.join( " ", words ) );
+    }
+
+    public String getLabelString() {
+        String label = "";
+        if(EditorToolBar.FLAG==2){
+            List<String> splitList = TreeParser.getSplitList();
+            for (String string : splitList) {
+                label += string;
+            }
+            return label;
+        }
+        List<String> temp = TreeParser.getLeaf();
+        int index = 0;
+        for (String string : temp) {
+            if(EditorToolBar.FLAG==0/*&&!EditorTabbedPane.iszH()*/||EditorToolBar.FLAG==3){
+                label += string;
+                label += " ";
+//          }else if(EditorToolBar.FLAG==0&&EditorTabbedPane.iszH()){
+//              label += string;
+            }
+            if(EditorToolBar.FLAG==1){
+                label += String.valueOf(index)+string;
+                label +="  ";
+            }
+            index++;
+        }
+        
+        //读取已有约束并显示
+        if(EditorToolBar.FLAG==0){
+            if(EditorTabbedPane.getPATH().equalsIgnoreCase(EditorTabbedPane.getChinesePath())){
+                if (TreeParser.zhConstraint.get(TreeParser.getNow())!=null
+                        &&TreeParser.zhConstraint.get(TreeParser.getNow()).length()!=0){
+                    label = TreeParser.zhConstraint.get(TreeParser.getNow());
+                    if(!label.contains("@#@#@#")){
+                        label += "@#@#@# ";
+                    }
+                }else if(!label.contains("@#@#@#")){
+                    TreeParser.zhConstraint.put(TreeParser.getNow(), label);
+                    label += "@#@#@# ";
+                }
+            }else if(EditorTabbedPane.getPATH().equalsIgnoreCase(EditorTabbedPane.getEnglishPath())){
+                if (TreeParser.engConstraint.get(TreeParser.getNow())!=null
+                        &&TreeParser.engConstraint.get(TreeParser.getNow()).length()!=0){
+                    label = TreeParser.engConstraint.get(TreeParser.getNow());
+                    if(!label.contains("@#@#@#")){
+                        label += "@#@#@# ";
+                    }
+                }else if(!label.contains("@#@#@#")){
+                    TreeParser.engConstraint.put(TreeParser.getNow(), label);
+                    label += "@#@#@# ";
+                }
+            }
+            else if(!label.contains("@#@#@#")){
+                label += "@#@#@# ";
+            }
+            label = getHighlightedLabel(label);
+        }
+        
+        if(EditorToolBar.FLAG==3){
+//          TreeParser.readData(EditorTabbedPane.getPATH());
+            Constraint.constraint = "";
+            List<String> list = TreeParser.getWord(TreeParser.getNow(), TreeParser.selectData(EditorTabbedPane.getPATH()));
+            Constraint.leafCount = 0;
+            Constraint.creatTree(list);
+            label += "  @#@#@#  " + Constraint.constraint;
+        }
+        return "<html>" + label + "</html>";
+    }
+
+
     /**
      * 设置全局字体
      * @param fnt
@@ -370,5 +462,8 @@ public class GraphEditor extends JPanel{
     }
 
     private EditorTabbedPane tabbedPane;
+
+    private int highlightStartPos = -1;
+    private int highlightEndPos = -1;
 
 }

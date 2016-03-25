@@ -17,7 +17,6 @@ import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
-import cn.edu.zzu.nlp.utopiar.util.SetLabel;
 import cn.edu.zzu.nlp.utopiar.util.UnicodeReader;
 import cn.edu.zzu.nlp.utopiar.util.Util;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
@@ -263,7 +262,7 @@ public class TreeParser extends JPanel {
         countleaf = 1;
         vertex.clear();
         creatTree(editor, graphComponent,list, 0);
-        EditorBottom.getTextArea().setText(SetLabel.setLabel());
+        EditorBottom.getTextArea().setText(editor.getLabelString());
         new mxKeyboardHandler(graphComponent);
         this.setLayout(new BorderLayout());
 

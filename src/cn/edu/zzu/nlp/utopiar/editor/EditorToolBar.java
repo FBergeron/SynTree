@@ -31,7 +31,6 @@ import cn.edu.zzu.nlp.utopiar.action.ActionRefresh;
 import cn.edu.zzu.nlp.utopiar.action.ActionSave;
 import cn.edu.zzu.nlp.utopiar.action.ActionSort;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
-import cn.edu.zzu.nlp.utopiar.util.SetLabel;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
 public class EditorToolBar extends JToolBar {
@@ -140,7 +139,7 @@ public class EditorToolBar extends JToolBar {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 setFLAG(comboBox.getSelectedIndex());
-                EditorBottom.getTextArea().setText(SetLabel.setLabel());
+                EditorBottom.getTextArea().setText(editor.getLabelString());
             }
         });
         comboBox.setPreferredSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );

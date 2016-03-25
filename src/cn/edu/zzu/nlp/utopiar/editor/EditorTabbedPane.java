@@ -6,6 +6,8 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
@@ -23,7 +26,6 @@ import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
-import cn.edu.zzu.nlp.utopiar.util.SetLabel;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
 
@@ -88,6 +90,65 @@ public class EditorTabbedPane extends JTabbedPane{
         ((JTabbedPane)ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, CHINESE_PATH);
         ((JTabbedPane)ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, ENGLISH_PATH);
         drag(this,editor);
+
+        ENG_GRAPH_COMPONENT.getGraphControl().addMouseListener( new GraphMouseListener( ENG_GRAPH_COMPONENT ) );
+        ZH_GRAPH_COMPONENT.getGraphControl().addMouseListener( new GraphMouseListener( ZH_GRAPH_COMPONENT ) );
+    }
+
+    public class GraphMouseListener extends MouseAdapter {
+        public GraphMouseListener( mxGraphComponent gc ) {
+            this.graphComponent = gc;
+        }
+
+        public void mousePressed(MouseEvent e) {
+            if( EditorToolBar.FLAG == 0 ) {
+                Object cell = graphComponent.getCellAt(e.getX(), e.getY());
+                if (cell != null && cell instanceof mxCell) {
+                    mxCell clickedCell = (mxCell)cell;
+                    int[] range = new int[] { Integer.MAX_VALUE, Integer.MIN_VALUE };
+                    findRange( clickedCell, range );
+                    editor.setHighlight( range[ 0 ], range[ 1 ] );
+                    EditorBottom.getTextArea().setText(editor.getLabelString());
+                }
+            }
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            if( EditorToolBar.FLAG == 0 ) {
+                editor.clearHighlight();
+                EditorBottom.getTextArea().setText(editor.getLabelString());
+            }
+        }
+
+        private void findRange( mxCell vertex, int[] range ) {
+            if( vertex == null )
+                return;
+            int outgoingEdgeCount = 0;
+            for( int i = 0; i < vertex.getEdgeCount(); i++ ) {
+                mxCell edge = (mxCell)vertex.getEdgeAt( i );
+                if( edge.getSource() == vertex ) {
+                    mxCell targetVertex = (mxCell)edge.getTarget();
+                    if( targetVertex != null ) {
+                        outgoingEdgeCount++;
+                        findRange( targetVertex, range );
+                    }
+                }
+            }
+            if( outgoingEdgeCount == 0 ) {
+                try {
+                    int pos = Integer.parseInt(TreeParser.vertex.get(vertex));
+                    if( pos < range[ 0 ] )
+                        range[ 0 ] = pos;
+                    if( pos > range[ 1 ] )
+                        range[ 1 ] = pos;
+                }
+                catch(NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        mxGraphComponent graphComponent;
     }
 
     public void update() {
@@ -131,7 +192,7 @@ public class EditorTabbedPane extends JTabbedPane{
             TreeParser.vertex.clear();
             TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,0);
             ValidCell.valid(editor);
-            EditorBottom.getTextArea().setText(SetLabel.setLabel());
+            EditorBottom.getTextArea().setText(editor.getLabelString());
             EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ZHCOUNT+"条    ");
         }else{
             PATH = ENGLISH_PATH;
@@ -153,7 +214,7 @@ public class EditorTabbedPane extends JTabbedPane{
             TreeParser.vertex.clear();
             TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,0);
             ValidCell.valid(editor);
-            EditorBottom.getTextArea().setText(SetLabel.setLabel());
+            EditorBottom.getTextArea().setText(editor.getLabelString());
             EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ENGCOUNT+"条    ");
         }
     }
@@ -256,7 +317,7 @@ public class EditorTabbedPane extends JTabbedPane{
                                     EditorTabbedPane.setPATH(temp);
                                     TreeParser.readData(EditorTabbedPane.getEnglishPath());
                                     ActionGraph.refreshTree(editor, 0);
-                                    EditorBottom.getTextArea().setText(SetLabel.setLabel());
+                                    EditorBottom.getTextArea().setText(editor.getLabelString());
                                     ((JTabbedPane)ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, temp);
                                 }
                             }
@@ -267,7 +328,7 @@ public class EditorTabbedPane extends JTabbedPane{
                                     EditorTabbedPane.setPATH(temp);
                                     TreeParser.readData(EditorTabbedPane.getChinesePath());
                                     ActionGraph.refreshTree(editor, 0);
-                                    EditorBottom.getTextArea().setText(SetLabel.setLabel());
+                                    EditorBottom.getTextArea().setText(editor.getLabelString());
                                     ((JTabbedPane)ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, temp);
                                 }
                             }
