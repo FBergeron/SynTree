@@ -7,13 +7,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.TransferHandler;
 
 import com.mxgraph.swing.util.mxGraphActions;
 
 import cn.edu.zzu.nlp.utopiar.action.ActionAddEdge;
 import cn.edu.zzu.nlp.utopiar.action.ActionAddVertex;
+import cn.edu.zzu.nlp.utopiar.action.ActionDelete;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetting;
 import cn.edu.zzu.nlp.utopiar.action.ActionSave;
+import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 
 public class EditorMenuBar extends JMenuBar{
 
@@ -33,6 +36,18 @@ public class EditorMenuBar extends JMenuBar{
         menu.add(editor.bind("保存", new ActionSave(), "img/save.gif"));
 
         menu = add(new JMenu("Edition"));
+        menu.add(editor.bind("撤销", new ActionUndo(true),"img/undo.gif"));
+        menu.add(editor.bind("重做", new ActionUndo(false),"img/redo.gif"));
+        menu.addSeparator();
+
+        menu.add(editor.bind("Cut", TransferHandler.getCutAction(), "img/cut.gif")); 
+        menu.add(editor.bind("Copy", TransferHandler.getCopyAction(), "img/copy.gif")); 
+        menu.add(editor.bind("Paste", TransferHandler.getPasteAction(), "img/paste.gif")); 
+        menu.addSeparator();
+        
+        menu.add(editor.bind("Delete", new ActionDelete(), "img/delete.gif"));
+        menu.addSeparator();
+
         menu.add(editor.bind("Select All", mxGraphActions.getSelectAllAction()));
         menu.add(editor.bind("Select None", mxGraphActions.getSelectNoneAction()));
         

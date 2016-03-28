@@ -310,7 +310,7 @@ public class GraphEditor extends JPanel{
     }
 
     public String getHighlightedLabel( String label ) {
-        if( highlightStartPos == -1 )
+        if( highlightStartPos == -1 || highlightStartPos == Integer.MAX_VALUE || highlightEndPos == Integer.MIN_VALUE )
             return( label );
         String[] words = label.split( " " );
         words[ highlightStartPos ] = "<span style=\"background-color: yellow\">" + words[ highlightStartPos ];

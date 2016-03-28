@@ -1,6 +1,7 @@
 package cn.edu.zzu.nlp.utopiar.editor;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -43,9 +45,8 @@ public class EditorTabbedPane extends JTabbedPane{
         {
             if(TreeParser.vertex.containsKey(cell))
                 return TreeParser.vertex.get(cell);
-            else {
+            else
                 return convertValueToString(cell);
-            }           
         }
     };
     public static final mxGraphComponent ZH_GRAPH_COMPONENT = new mxGraphComponent(ZH_GRAPH);
@@ -54,9 +55,8 @@ public class EditorTabbedPane extends JTabbedPane{
         {
             if(TreeParser.vertex.containsKey(cell))
                 return TreeParser.vertex.get(cell);
-            else {
+            else
                 return convertValueToString(cell);
-            }           
         }
     };
     public static final mxGraphComponent ENG_GRAPH_COMPONENT = new mxGraphComponent(ENG_GRAPH);
@@ -111,6 +111,9 @@ public class EditorTabbedPane extends JTabbedPane{
                     EditorBottom.getTextArea().setText(editor.getLabelString());
                 }
             }
+
+            if( e.isPopupTrigger() )
+                showGraphPopupMenu( e, graphComponent );
         }
 
         public void mouseReleased(MouseEvent e) {
@@ -118,6 +121,9 @@ public class EditorTabbedPane extends JTabbedPane{
                 editor.clearHighlight();
                 EditorBottom.getTextArea().setText(editor.getLabelString());
             }
+
+            if( e.isPopupTrigger() )
+                showGraphPopupMenu( e, graphComponent );
         }
 
         private void findRange( mxCell vertex, int[] range ) {
@@ -135,20 +141,32 @@ public class EditorTabbedPane extends JTabbedPane{
                 }
             }
             if( outgoingEdgeCount == 0 ) {
-                try {
-                    int pos = Integer.parseInt(TreeParser.vertex.get(vertex));
-                    if( pos < range[ 0 ] )
-                        range[ 0 ] = pos;
-                    if( pos > range[ 1 ] )
-                        range[ 1 ] = pos;
-                }
-                catch(NumberFormatException e) {
-                    e.printStackTrace();
+                String strPos = TreeParser.vertex.get(vertex);
+                if( strPos != null ) {
+                    try {
+                        int pos = Integer.parseInt(strPos);
+                        if( pos < range[ 0 ] )
+                            range[ 0 ] = pos;
+                        if( pos > range[ 1 ] )
+                            range[ 1 ] = pos;
+                    }
+                    catch(NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
         mxGraphComponent graphComponent;
+    }
+
+    protected void showGraphPopupMenu(MouseEvent e, mxGraphComponent graphComponent)
+    {
+        Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), graphComponent);
+        EditorPopupMenu menu = new EditorPopupMenu(editor, graphComponent);
+        menu.show(graphComponent, pt.x, pt.y);
+
+        e.consume();
     }
 
     public void update() {
