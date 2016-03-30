@@ -1,4 +1,18 @@
 Menu.Help.About=About...
 
+Menu.File=File
 Menu.File.Settings=Settings...
+Menu.File.Save=Save
+
+Menu.Edition=Edition
+Menu.Edition.Undo=Undo
+Menu.Edition.Redo=Redo
+Menu.Edition.Cut=Cut
+Menu.Edition.Copy=Copy
+Menu.Edition.Paste=Paste
+Menu.Edition.Delete=Delete
+Menu.Edition.AddVertex=Add Box
+Menu.Edition.AddEdge=Add Link
+Menu.Edition.SelectAll=Select All
+Menu.Edition.SelectNone=Clear Selection
 

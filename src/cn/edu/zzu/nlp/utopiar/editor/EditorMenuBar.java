@@ -38,30 +38,43 @@ public class EditorMenuBar extends JMenuBar{
         JMenu menu = null;
         this.editor = editor;
         
-        menu = add(new JMenu("文件"));
+        menuFile = new JMenu();
+        menu = add(menuFile);
         actionSettings = editor.bind("", new ActionSetting(), "img/gear.png");
         menu.add( actionSettings );
-        menu.add(editor.bind("保存", new ActionSave(), "img/save.gif"));
+        actionSave = editor.bind("", new ActionSave(), "img/save.gif");
+        menu.add( actionSave );
 
-        menu = add(new JMenu("Edition"));
-        menu.add(editor.bind("撤销", new ActionUndo(true),"img/undo.gif"));
-        menu.add(editor.bind("重做", new ActionUndo(false),"img/redo.gif"));
+        menuEdition = new JMenu();
+        menu = add( menuEdition );
+        actionUndo = editor.bind("", new ActionUndo(true),"img/undo.gif");
+        menu.add( actionUndo );
+        actionRedo = editor.bind("", new ActionUndo(false),"img/redo.gif");
+        menu.add( actionRedo );
         menu.addSeparator();
 
-        menu.add(editor.bind("Cut", TransferHandler.getCutAction(), "img/cut.gif")); 
-        menu.add(editor.bind("Copy", TransferHandler.getCopyAction(), "img/copy.gif")); 
-        menu.add(editor.bind("Paste", TransferHandler.getPasteAction(), "img/paste.gif")); 
+        actionCut = editor.bind("", TransferHandler.getCutAction(), "img/cut.gif");
+        menu.add( actionCut ); 
+        actionCopy = editor.bind("", TransferHandler.getCopyAction(), "img/copy.gif");
+        menu.add( actionCopy ); 
+        actionPaste = editor.bind("", TransferHandler.getPasteAction(), "img/paste.gif");
+        menu.add( actionPaste ); 
         menu.addSeparator();
         
-        menu.add(editor.bind("Delete", new ActionDelete(), "img/delete.gif"));
+        actionDelete = editor.bind("", new ActionDelete(), "img/delete.gif");
+        menu.add( actionDelete );
         menu.addSeparator();
 
-        menu.add(editor.bind("Select All", mxGraphActions.getSelectAllAction()));
-        menu.add(editor.bind("Select None", mxGraphActions.getSelectNoneAction()));
+        actionAddVertex = editor.bind("", new ActionAddVertex(), "img/vertex.gif");
+        menu.add( actionAddVertex );
+        actionAddEdge = editor.bind("", new ActionAddEdge(), "img/edge.gif");
+        menu.add( actionAddEdge );
+        menu.addSeparator();
         
-        menu = add(new JMenu("编辑"));
-        menu.add(editor.bind("添加结点", new ActionAddVertex(), "img/vertex.gif"));
-        menu.add(editor.bind("添加连接", new ActionAddEdge(), "img/edge.gif"));
+        actionSelectAll = editor.bind("", mxGraphActions.getSelectAllAction());
+        menu.add( actionSelectAll );
+        actionSelectNone = editor.bind("Select None", mxGraphActions.getSelectNoneAction());
+        menu.add( actionSelectNone );
         
         menu = add(new JMenu("?"));
 
@@ -109,17 +122,46 @@ public class EditorMenuBar extends JMenuBar{
         super.setLocale( locale );
         
         ResourceBundle bundle = ResourceBundle.getBundle( "Strings", locale );
-        if( actionSettings != null )
-            actionSettings.putValue( Action.NAME, bundle.getString( "Menu.File.Settings" ) );
-        if( menuItemAbout != null )
-            menuItemAbout.setText( bundle.getString( "Menu.Help.About" ) );
+
+        menuFile.setText( bundle.getString( "Menu.File" ) );
+        actionSettings.putValue( Action.NAME, bundle.getString( "Menu.File.Settings" ) );
+        actionSave.putValue( Action.NAME, bundle.getString( "Menu.File.Save" ) );
+
+        menuEdition.setText( bundle.getString( "Menu.Edition" ) );
+        actionUndo.putValue( Action.NAME, bundle.getString( "Menu.Edition.Undo" ) );
+        actionRedo.putValue( Action.NAME, bundle.getString( "Menu.Edition.Redo" ) );
+        actionCut.putValue( Action.NAME, bundle.getString( "Menu.Edition.Cut" ) );
+        actionCopy.putValue( Action.NAME, bundle.getString( "Menu.Edition.Copy" ) );
+        actionPaste.putValue( Action.NAME, bundle.getString( "Menu.Edition.Paste" ) );
+        actionDelete.putValue( Action.NAME, bundle.getString( "Menu.Edition.Delete" ) );
+        actionAddVertex.putValue( Action.NAME, bundle.getString( "Menu.Edition.AddVertex" ) );
+        actionAddEdge.putValue( Action.NAME, bundle.getString( "Menu.Edition.AddEdge" ) );
+        actionSelectAll.putValue( Action.NAME, bundle.getString( "Menu.Edition.SelectAll" ) );
+        actionSelectNone.putValue( Action.NAME, bundle.getString( "Menu.Edition.SelectNone" ) );
+
+        menuItemAbout.setText( bundle.getString( "Menu.Help.About" ) );
     }
 
     public GraphEditor getEditor() {
         return editor;
     }
 
+    private JMenu menuFile;
     private Action actionSettings;
+    private Action actionSave;
+
+    private JMenu menuEdition;
+    private Action actionUndo;
+    private Action actionRedo;
+    private Action actionCut;
+    private Action actionCopy;
+    private Action actionPaste;
+    private Action actionDelete;
+    private Action actionAddVertex;
+    private Action actionAddEdge;
+    private Action actionSelectAll;
+    private Action actionSelectNone;
+
     private JMenuItem menuItemAbout;
 
 }

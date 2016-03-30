@@ -1,4 +1,18 @@
 Menu.Help.About=À propos...
 
+Menu.File=Fichier
 Menu.File.Settings=Paramètres...
+Menu.File.Save=Enregistrer
+
+Menu.Edition=Édition
+Menu.Edition.Undo=Annuler
+Menu.Edition.Redo=Rétablir
+Menu.Edition.Cut=Couper
+Menu.Edition.Copy=Copier
+Menu.Edition.Paste=Coller
+Menu.Edition.Delete=Effacer
+Menu.Edition.AddVertex=Ajouter une boîte
+Menu.Edition.AddEdge=Ajouter un lien
+Menu.Edition.SelectAll=Tout sélectionner
+Menu.Edition.SelectNone=Annuler la sélection
 
