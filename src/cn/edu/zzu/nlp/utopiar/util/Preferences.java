@@ -103,6 +103,15 @@ public class Preferences {
         save();
     }
 
+    public String getLanguage() {
+        return( language == null ? "en" : language );
+    }
+
+    public void setLanguage( String language ) throws Exception {
+        this.language = language;
+        save();
+    }
+
     public String getLookAndFeel() {
         return( lookAndFeel );
     }
@@ -185,6 +194,8 @@ public class Preferences {
                 edgeColor.getGreen() + "," + edgeColor.getBlue();
             xml += "  <pref " + getKeyValueAsXmlAttributes( "edgeColor", edgeColorStr ) + "/>\n";
         }
+        if( language != null )
+            xml += "  <pref " + getKeyValueAsXmlAttributes( "language", language + "" ) + "/>\n";
         if( lookAndFeel != null )
             xml += "  <pref " + getKeyValueAsXmlAttributes( "lookAndFeel", lookAndFeel + "" ) + "/>\n";
         if( boxWidth != null )
@@ -267,6 +278,8 @@ public class Preferences {
                                 edgeColor = new Color( red, green, blue );
                             }
                         }
+                        else if( "language".equals( key ) )
+                            language = value;
                         else if( "lookAndFeel".equals( key ) )
                             lookAndFeel = value;
                         else if( "boxWidth".equals( key ) )
@@ -297,6 +310,7 @@ public class Preferences {
     private Color   boxForegroundColor;
     private Color   boxBorderColor;
     private Color   edgeColor;
+    private String  language;
     private String  lookAndFeel;
     private Integer boxWidth;
     private Integer boxHeight;

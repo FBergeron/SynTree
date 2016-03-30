@@ -2,6 +2,7 @@
 
     <property name="version" value="1.8"/>
     <property name="src" value="src"/>
+    <property name="strings" value="strings"/>
     <property name="lib" value="lib"/>
     <property name="classes" value="classes"/>
 
@@ -23,9 +24,13 @@
 
     <target name="build" depends="compile">
         <mkdir dir="tmp"/>
+        <native2ascii encoding="utf-8" src="${strings}" dest="tmp" includes="**/*.utf8" ext=".properties"/>
         <copy todir="tmp">
             <fileset dir="${classes}"/>
             <fileset dir="img"/>
+            <fileset dir="${strings}">
+                <include name="**/*.properties"/>
+            </fileset>
         </copy>  
         <unjar dest="tmp">
             <fileset dir="${lib}">
