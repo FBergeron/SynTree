@@ -258,8 +258,7 @@ public class GraphEditor extends JPanel{
     {
         JFrame frame = (JFrame) SwingUtilities.windowForComponent(this);
 
-        if (frame != null)
-        {
+        if (frame != null) {
             EditorSettingFrame setting = new EditorSettingFrame(frame, this);
             setting.setModal(true);
             setting.setResizable(true);

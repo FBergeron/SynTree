@@ -123,23 +123,23 @@ public class EditorMenuBar extends JMenuBar{
         
         ResourceBundle bundle = ResourceBundle.getBundle( "Strings", locale );
 
-        menuFile.setText( bundle.getString( "Menu.File" ) );
-        actionSettings.putValue( Action.NAME, bundle.getString( "Menu.File.Settings" ) );
-        actionSave.putValue( Action.NAME, bundle.getString( "Menu.File.Save" ) );
+        menuFile.setText( Languages.getInstance().getString( "Menu.File" ) );
+        actionSettings.putValue( Action.NAME, Languages.getInstance().getString( "Menu.File.Settings" ) );
+        actionSave.putValue( Action.NAME, Languages.getInstance().getString( "Menu.File.Save" ) );
 
-        menuEdition.setText( bundle.getString( "Menu.Edition" ) );
-        actionUndo.putValue( Action.NAME, bundle.getString( "Menu.Edition.Undo" ) );
-        actionRedo.putValue( Action.NAME, bundle.getString( "Menu.Edition.Redo" ) );
-        actionCut.putValue( Action.NAME, bundle.getString( "Menu.Edition.Cut" ) );
-        actionCopy.putValue( Action.NAME, bundle.getString( "Menu.Edition.Copy" ) );
-        actionPaste.putValue( Action.NAME, bundle.getString( "Menu.Edition.Paste" ) );
-        actionDelete.putValue( Action.NAME, bundle.getString( "Menu.Edition.Delete" ) );
-        actionAddVertex.putValue( Action.NAME, bundle.getString( "Menu.Edition.AddVertex" ) );
-        actionAddEdge.putValue( Action.NAME, bundle.getString( "Menu.Edition.AddEdge" ) );
-        actionSelectAll.putValue( Action.NAME, bundle.getString( "Menu.Edition.SelectAll" ) );
-        actionSelectNone.putValue( Action.NAME, bundle.getString( "Menu.Edition.SelectNone" ) );
+        menuEdition.setText( Languages.getInstance().getString( "Menu.Edition" ) );
+        actionUndo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Undo" ) );
+        actionRedo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Redo" ) );
+        actionCut.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Cut" ) );
+        actionCopy.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Copy" ) );
+        actionPaste.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Paste" ) );
+        actionDelete.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Delete" ) );
+        actionAddVertex.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddVertex" ) );
+        actionAddEdge.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddEdge" ) );
+        actionSelectAll.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectAll" ) );
+        actionSelectNone.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectNone" ) );
 
-        menuItemAbout.setText( bundle.getString( "Menu.Help.About" ) );
+        menuItemAbout.setText( Languages.getInstance().getString( "Menu.Help.About" ) );
     }
 
     public GraphEditor getEditor() {

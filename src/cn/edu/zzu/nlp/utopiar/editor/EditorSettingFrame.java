@@ -6,13 +6,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -41,27 +39,24 @@ import javax.swing.event.ChangeListener;
 
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.util.ColorField;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.LookAndFeelNiceInfo;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.SpinnerField;
 
 public class EditorSettingFrame extends JDialog {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -5938480800710447552L;
     
     public EditorSettingFrame(JFrame owner, GraphEditor editor) {
         super(owner);
         this.editor = editor;
-        setTitle("设置");
         setLayout(new BorderLayout());
     
-        JTabbedPane tabPanel = new JTabbedPane();
+        tabPanel = new JTabbedPane();
 
         JPanel visualPrefsPanel = new JPanel( new FlowLayout( FlowLayout.CENTER, 20, 0 ) );
-        JLabel lookAndFeelLabel = new JLabel( "Look and Feel" );
+        lookAndFeelLabel = new JLabel();
         lookAndFeelComboBox = new JComboBox<LookAndFeelNiceInfo>();
         UIManager.LookAndFeelInfo[] lnfInfo = UIManager.getInstalledLookAndFeels();
         LookAndFeelNiceInfo lnfToSelect = null;
@@ -80,7 +75,9 @@ public class EditorSettingFrame extends JDialog {
                 public void actionPerformed( ActionEvent evt ) {
                     lookAndFeelComboBox.hidePopup();
                     if( !hasShownPrefChangeWarning ) {
-                        JOptionPane.showOptionDialog(EditorSettingFrame.this, "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
+                        JOptionPane.showOptionDialog(EditorSettingFrame.this, 
+                            "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", 
+                                "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
                         hasShownPrefChangeWarning = true;
                     }
 
@@ -111,48 +108,48 @@ public class EditorSettingFrame extends JDialog {
             }
         };
 
-        JLabel graphBackgroundColorLabel = new JLabel( "Graph Background Color" );
+        graphBackgroundColorLabel = new JLabel();
         graphBackgroundColorField = new ColorField( Preferences.getInstance().getGraphBackgroundColor(), (Color)UIManager.get( "ScrollPane.background" ) );
         graphBackgroundColorField.setPreferredSize( new Dimension( 240, graphBackgroundColorField.getPreferredSize().height ) );
         graphBackgroundColorField.addActionListener( actionListener );
 
-        JLabel boxBackgroundColorLabel = new JLabel( "Box Background Color" );
+        boxBackgroundColorLabel = new JLabel( "XXXXXXXXXXXXXXXXXXXXXXXXXXX" );
         boxBackgroundColorField = new ColorField( Preferences.getInstance().getBoxBackgroundColor(), new Color( 195, 217, 255 ) );
         boxBackgroundColorField.setPreferredSize( new Dimension( 240, boxBackgroundColorField.getPreferredSize().height ) );
         boxBackgroundColorField.addActionListener( actionListener );
 
-        JLabel boxForegroundColorLabel = new JLabel( "Box Foreground Color" );
+        boxForegroundColorLabel = new JLabel();
         boxForegroundColorField = new ColorField( Preferences.getInstance().getBoxForegroundColor(), new Color( 119, 68, 0 ) );
         boxForegroundColorField.setPreferredSize( new Dimension( 240, boxForegroundColorField.getPreferredSize().height ) );
         boxForegroundColorField.addActionListener( actionListener );
 
-        JLabel boxBorderColorLabel = new JLabel( "Box Border Color" );
+        boxBorderColorLabel = new JLabel();
         boxBorderColorField = new ColorField( Preferences.getInstance().getBoxBorderColor(), new Color( 100, 130, 185 ) );
         boxBorderColorField.setPreferredSize( new Dimension( 240, boxBorderColorField.getPreferredSize().height ) );
         boxBorderColorField.addActionListener( actionListener );
 
-        JLabel edgeColorLabel = new JLabel( "Box Edge Color" );
+        edgeColorLabel = new JLabel();
         edgeColorField = new ColorField( Preferences.getInstance().getEdgeColor(), new Color( 100, 130, 185 ) );
         edgeColorField.setPreferredSize( new Dimension( 240, edgeColorField.getPreferredSize().height ) );
         edgeColorField.addActionListener( actionListener );
 
-        JLabel boxWidthLabel = new JLabel( "Box Width" );
+        boxWidthLabel = new JLabel();
         boxWidthSpinner = new SpinnerField( Preferences.getInstance().getBoxWidth(), 50 );
         boxWidthSpinner.addChangeListener( changeListener );
 
-        JLabel boxHeightLabel = new JLabel( "Box Height" );
+        boxHeightLabel = new JLabel();
         boxHeightSpinner = new SpinnerField( Preferences.getInstance().getBoxHeight(), 30 );
         boxHeightSpinner.addChangeListener( changeListener );
 
-        JLabel horizontalInterBoxGapLabel = new JLabel( "Inter Box Gap Width" );
+        horizontalInterBoxGapLabel = new JLabel();
         horizontalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getHorizontalInterBoxGap(), 10 );
         horizontalInterBoxGapSpinner.addChangeListener( changeListener );
 
-        JLabel verticalInterBoxGapLabel = new JLabel( "Inter Box Gap Height" );
+        verticalInterBoxGapLabel = new JLabel();
         verticalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getVerticalInterBoxGap(), 40 );
         verticalInterBoxGapSpinner.addChangeListener( changeListener );
 
-        JLabel boxFontSizeLabel = new JLabel( "Box Font Size" );
+        boxFontSizeLabel = new JLabel();
         boxFontSizeSpinner = new SpinnerField( Preferences.getInstance().getBoxFontSize(), 18 );
         boxFontSizeSpinner.addChangeListener( changeListener );
 
@@ -219,36 +216,12 @@ public class EditorSettingFrame extends JDialog {
         visualPrefsPanel.add(leftPanel);
         visualPrefsPanel.add(rightPanel);
 
-        // Creates the gradient panel
-        JPanel gradientPanel = new JPanel(new BorderLayout())
-        {
-
-            /**
-             * 
-             */
-            private static final long serialVersionUID = -5062895855016210947L;
-
-            /**
-             * 
-             */
-            public void paintComponent(Graphics g)
-            {
-                super.paintComponent(g);
-
-                // Paint gradient background
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setPaint(new GradientPaint(0, 0, Color.WHITE, getWidth(),
-                        0, getBackground()));
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-            }
-
-        };
-        gradientPanel.setLayout(new BorderLayout());
-        PathSelectionSettingPanel pathSelectPanel = new PathSelectionSettingPanel();
-        gradientPanel.add(pathSelectPanel,BorderLayout.CENTER);
+        JPanel pathSelectPanel = new JPanel(new BorderLayout());
+        PathSelectionSettingPanel pathSelectionPanel = new PathSelectionSettingPanel();
+        pathSelectPanel.add(pathSelectionPanel,BorderLayout.CENTER);
         
-        tabPanel.addTab("Visual", visualPrefsPanel);
-        tabPanel.addTab("路径选择", gradientPanel);
+        tabPanel.addTab(null, visualPrefsPanel);
+        tabPanel.addTab(null, pathSelectPanel);
 
         getContentPane().add(tabPanel, BorderLayout.CENTER);
         
@@ -258,8 +231,7 @@ public class EditorSettingFrame extends JDialog {
                 .createEmptyBorder(16, 8, 8, 8)));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        // Adds OK button to close window
-        JButton closeButton = new JButton(
+        closeButton = new JButton(
             new AbstractAction() {
                 public void actionPerformed( ActionEvent evt ) {
                     EditorSettingFrame.this.setVisible( false );
@@ -267,7 +239,6 @@ public class EditorSettingFrame extends JDialog {
             }
         );
 
-        closeButton.setText("关闭");
         buttonPanel.add(closeButton);
 
         // Sets default button for enter key
@@ -275,6 +246,42 @@ public class EditorSettingFrame extends JDialog {
 
         setResizable(false);
         setSize(750, 550);
+
+        setLocale( Languages.getInstance().getCurrent() );
+    }
+
+    public void setLocale( Locale locale ) {
+        super.setLocale( locale );
+         
+        setTitle( Languages.getInstance().getString( "Frame.Settings.Title" ) );
+        if( tabPanel != null ) {
+            tabPanel.setTitleAt( 0, Languages.getInstance().getString( "Frame.Settings.TabPanel.Visual" ) );
+            tabPanel.setTitleAt( 1, Languages.getInstance().getString( "Frame.Settings.TabPanel.PathSelection" ) );
+        }
+        if( lookAndFeelLabel != null )
+            lookAndFeelLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.LookAndFeel" ) );
+        if( graphBackgroundColorLabel != null )
+            graphBackgroundColorLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.GraphBackgroundColor" ) );
+        if( boxBackgroundColorLabel != null )
+            boxBackgroundColorLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.BoxBackgroundColor" ) );
+        if( boxForegroundColorLabel != null )
+            boxForegroundColorLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.BoxForegroundColor" ) );
+        if( boxBorderColorLabel != null )
+            boxBorderColorLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.BoxBorderColor" ) );
+        if( edgeColorLabel != null )
+            edgeColorLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.EdgeColor" ) );
+        if( boxWidthLabel != null )
+            boxWidthLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.BoxWidth" ) );
+        if( boxHeightLabel != null )
+            boxHeightLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.BoxHeight" ) );
+        if( horizontalInterBoxGapLabel != null )
+            horizontalInterBoxGapLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.InterBoxGapWidth" ) );
+        if( verticalInterBoxGapLabel != null )
+            verticalInterBoxGapLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.InterBoxGapHeight" ) );
+        if( boxFontSizeLabel != null )
+            boxFontSizeLabel.setText( Languages.getInstance().getString( "Frame.Settings.Visual.BoxFontSize" ) );
+        if( closeButton != null )
+            closeButton.setText( Languages.getInstance().getString( "Frame.Settings.Button.Ok" ) );
     }
 
     public void update() {
@@ -400,30 +407,22 @@ public class EditorSettingFrame extends JDialog {
         final JFileChooser zhFileChooser = new JFileChooser();
         final JFileChooser engFileChooser = new JFileChooser();
         PathSelectionSettingPanel(){
-            JPanel zhPanel = new JPanel(){
-                /**
-                 * 
-                 */
-                private static final long serialVersionUID = 3279239724020827282L;
-
-                public void paint(Graphics g){
-                    super.paint(g);
-                    g.drawImage(new ImageIcon("img/zh.png").getImage(), 0, 0, null);
-                }
-            };
-            JPanel engPanel = new JPanel(){
-                /**
-                 * 
-                 */
-                private static final long serialVersionUID = -146649402418814022L;
-
-                public void paint(Graphics g){
-                    super.paint(g);
-                    g.drawImage(new ImageIcon("img/eng.png").getImage(), 0, 0, null);
-                }
-            };
+            Box zhPanel = Box.createVerticalBox();
+            zhPanel.add( Box.createVerticalGlue() );
+            JLabel zhImg = new JLabel( new ImageIcon( "img/zh.png" ) );
+            zhImg.setAlignmentX( JComponent.CENTER_ALIGNMENT );
+            zhPanel.add( zhImg );
+            zhPanel.add( Box.createRigidArea( new Dimension( 10, 10 ) ) );
+            Box engPanel = Box.createVerticalBox();
+            engPanel.add( Box.createVerticalGlue() );
+            JLabel engImg = new JLabel( new ImageIcon( "img/eng.png" ) );
+            engImg.setAlignmentX( JComponent.CENTER_ALIGNMENT );
+            engPanel.add( engImg );
+            engPanel.add( Box.createRigidArea( new Dimension( 10, 10 ) ) );
             JButton zhButton = new JButton("选择");
+            zhButton.setAlignmentX( JComponent.CENTER_ALIGNMENT );
             JButton engButton = new JButton("选择");
+            engButton.setAlignmentX( JComponent.CENTER_ALIGNMENT );
             engButton.addActionListener(new ActionListener() {
                 
                 @Override
@@ -457,30 +456,42 @@ public class EditorSettingFrame extends JDialog {
                     }
                 }
             });
-            zhButton.setBounds(350, 300, 50, 30);
-            zhPanel.setLayout(null);
             zhPanel.add(zhButton);
-            engButton.setBounds(350, 300, 50, 30);
-            engPanel.setLayout(null);
+            zhPanel.add( Box.createVerticalGlue() );
             engPanel.add(engButton);
+            engPanel.add( Box.createVerticalGlue() );
             this.add("中文路径选择",zhPanel);
             this.add("英文路径选择",engPanel);
         }
         
     }
 
+    private JLabel                          lookAndFeelLabel;
     private JComboBox<LookAndFeelNiceInfo>  lookAndFeelComboBox;
 
+    private JTabbedPane     tabPanel;
+    private JLabel          graphBackgroundColorLabel;
     private ColorField      graphBackgroundColorField;
+    private JLabel          boxBackgroundColorLabel;
     private ColorField      boxBackgroundColorField;
+    private JLabel          boxForegroundColorLabel;
     private ColorField      boxForegroundColorField;
+    private JLabel          boxBorderColorLabel;
     private ColorField      boxBorderColorField;
+    private JLabel          edgeColorLabel;
     private ColorField      edgeColorField;
+    private JLabel          boxWidthLabel;
     private SpinnerField    boxWidthSpinner;
+    private JLabel          boxHeightLabel;
     private SpinnerField    boxHeightSpinner;
+    private JLabel          horizontalInterBoxGapLabel;
     private SpinnerField    horizontalInterBoxGapSpinner;
+    private JLabel          verticalInterBoxGapLabel;
     private SpinnerField    verticalInterBoxGapSpinner;
+    private JLabel          boxFontSizeLabel;
     private SpinnerField    boxFontSizeSpinner;
+
+    private JButton         closeButton;
 
     private boolean hasShownPrefChangeWarning = false;
 

@@ -1,7 +1,6 @@
 package cn.edu.zzu.nlp.utopiar.editor;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
@@ -58,18 +57,16 @@ public class EditorPopupMenu extends JPopupMenu {
     public void setLocale( Locale locale ) {
         super.setLocale( locale );
         
-        ResourceBundle bundle = ResourceBundle.getBundle( "Strings", locale );
-
-        actionUndo.putValue( Action.NAME, bundle.getString( "Menu.Edition.Undo" ) );
-        actionRedo.putValue( Action.NAME, bundle.getString( "Menu.Edition.Redo" ) );
-        actionCut.putValue( Action.NAME, bundle.getString( "Menu.Edition.Cut" ) );
-        actionCopy.putValue( Action.NAME, bundle.getString( "Menu.Edition.Copy" ) );
-        actionPaste.putValue( Action.NAME, bundle.getString( "Menu.Edition.Paste" ) );
-        actionDelete.putValue( Action.NAME, bundle.getString( "Menu.Edition.Delete" ) );
-        actionAddVertex.putValue( Action.NAME, bundle.getString( "Menu.Edition.AddVertex" ) );
-        actionAddEdge.putValue( Action.NAME, bundle.getString( "Menu.Edition.AddEdge" ) );
-        actionSelectAll.putValue( Action.NAME, bundle.getString( "Menu.Edition.SelectAll" ) );
-        actionSelectNone.putValue( Action.NAME, bundle.getString( "Menu.Edition.SelectNone" ) );
+        actionUndo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Undo" ) );
+        actionRedo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Redo" ) );
+        actionCut.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Cut" ) );
+        actionCopy.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Copy" ) );
+        actionPaste.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Paste" ) );
+        actionDelete.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Delete" ) );
+        actionAddVertex.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddVertex" ) );
+        actionAddEdge.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddEdge" ) );
+        actionSelectAll.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectAll" ) );
+        actionSelectNone.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectNone" ) );
     }
 
     private Action actionUndo;

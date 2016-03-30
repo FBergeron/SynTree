@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Languages implements ItemSelectable {
 
@@ -27,11 +28,16 @@ public class Languages implements ItemSelectable {
 
     public void setCurrent( Locale locale ) {
         current = locale;
+        bundle = ResourceBundle.getBundle( "Strings", current );
         ItemEvent evt = new ItemEvent( this, ItemEvent.ITEM_STATE_CHANGED, locale, ItemEvent.SELECTED );
         for( Iterator it = itemListeners.iterator(); it.hasNext(); ) {
             ItemListener listener = (ItemListener)it.next();
             listener.itemStateChanged( evt );
         }
+    }
+
+    public String getString( String key ) {
+        return( bundle.getString( key ) );
     }
 
     public synchronized void addItemListener( ItemListener listener ) {
@@ -49,6 +55,7 @@ public class Languages implements ItemSelectable {
     private List<ItemListener> itemListeners = new ArrayList<ItemListener>();
 
     private Locale current;
+    private ResourceBundle bundle;
 
     private static Languages instance = new Languages();
 
