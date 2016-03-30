@@ -209,9 +209,6 @@ public class EditorTabbedPane extends JTabbedPane{
             TreeParser.getSplitList().clear();
             TreeParser.vertex.clear();
             TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,0);
-            ValidCell.valid(editor);
-            EditorBottom.getTextArea().setText(editor.getLabelString());
-            EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ZHCOUNT+"条    ");
         }else{
             PATH = ENGLISH_PATH;
             OR_GRAPH = ZH_GRAPH;
@@ -231,10 +228,10 @@ public class EditorTabbedPane extends JTabbedPane{
             TreeParser.getSplitList().clear();
             TreeParser.vertex.clear();
             TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,0);
-            ValidCell.valid(editor);
-            EditorBottom.getTextArea().setText(editor.getLabelString());
-            EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+TreeParser.ENGCOUNT+"条    ");
         }
+        ValidCell.valid(editor);
+        EditorBottom.getTextArea().setText(editor.getLabelString());
+        editor.update();
     }
 
     public static String getPATH() {

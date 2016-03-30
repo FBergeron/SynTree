@@ -16,6 +16,22 @@ Menu.Edition.AddEdge=Add Link
 Menu.Edition.SelectAll=Select All
 Menu.Edition.SelectNone=Clear Selection
 
+Toolbar.EnterSentenceNumber=Enter Sentence #
+Toolbar.Save=Save
+Toolbar.Undo=Undo
+Toolbar.Redo=Redo
+Toolbar.Sort=Layout
+Toolbar.PrevGraph=Prev.
+Toolbar.NextGraph=Next
+Toolbar.Go=Go
+Toolbar.Desc=Sentence {0} of {1}
+Toolbar.Rebuild=Rebuild
+Toolbar.ShowOption.ShowOnlySentence=View Sentence Only
+Toolbar.ShowOption.DisplayWords=View Words
+Toolbar.ShowOption.DisplayWordsAndPOS=View Words and POS
+Toolbar.ShowOption.DisplayWordsAndConstraints=View Words and Constraints
+Toolbar.Refresh=Refresh
+
 Frame.Settings.Title=Settings
 Frame.Settings.TabPanel.Visual=Visual
 Frame.Settings.TabPanel.PathSelection=Path Selection

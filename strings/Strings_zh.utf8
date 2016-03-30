@@ -16,6 +16,22 @@ Menu.Edition.AddEdge=添加连接
 Menu.Edition.SelectAll=全部选中
 Menu.Edition.SelectNone=摒弃选区
 
+Toolbar.EnterSentenceNumber=请输入数字~
+Toolbar.Save=保存
+Toolbar.Undo=撤消
+Toolbar.Redo=重做
+Toolbar.Sort=整理
+Toolbar.PrevGraph=上一个
+Toolbar.NextGraph=下一个
+Toolbar.Go=GO
+Toolbar.Desc=当前第{0}条,共{1}条
+Toolbar.Rebuild=重建
+Toolbar.ShowOption.ShowOnlySentence=Voir seulement la phrase
+Toolbar.ShowOption.DisplayWords=Voir les mots
+Toolbar.ShowOption.DisplayWordsAndPOS=Voir les mots et leur classe
+Toolbar.ShowOption.DisplayWordsAndConstraints=Voir les mots et les contraintes
+Toolbar.Refresh=刷新
+
 Frame.Settings.Title=设置
 Frame.Settings.TabPanel.Visual=外观和感觉
 Frame.Settings.TabPanel.PathSelection=路径选择

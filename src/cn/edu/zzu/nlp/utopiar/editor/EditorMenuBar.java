@@ -121,8 +121,6 @@ public class EditorMenuBar extends JMenuBar{
     public void setLocale( Locale locale ) {
         super.setLocale( locale );
         
-        ResourceBundle bundle = ResourceBundle.getBundle( "Strings", locale );
-
         menuFile.setText( Languages.getInstance().getString( "Menu.File" ) );
         actionSettings.putValue( Action.NAME, Languages.getInstance().getString( "Menu.File.Settings" ) );
         actionSave.putValue( Action.NAME, Languages.getInstance().getString( "Menu.File.Save" ) );

@@ -6,6 +6,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -31,6 +33,7 @@ import cn.edu.zzu.nlp.utopiar.action.ActionRefresh;
 import cn.edu.zzu.nlp.utopiar.action.ActionSave;
 import cn.edu.zzu.nlp.utopiar.action.ActionSort;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
 public class EditorToolBar extends JToolBar {
@@ -49,8 +52,6 @@ public class EditorToolBar extends JToolBar {
     
     public static final JTextField textField = new JTextField(10);
     
-    public static JLabel description = N9ComponentFactory.createLabel_style2("");
-    
     public static JComboBox getCombobox() {
         return comboBox;
     }
@@ -62,11 +63,6 @@ public class EditorToolBar extends JToolBar {
     public static void setFLAG(int fLAG) {
         FLAG = fLAG;
     }
-    
-
-    public static JLabel getDescription() {
-        return description;
-    }
 
     public static JTextField getTextfield() {
         return textField;
@@ -74,23 +70,28 @@ public class EditorToolBar extends JToolBar {
 
     public EditorToolBar(final GraphEditor editor,int orientation){     
         super(orientation);
-        textField.setText("请输入数字~");
         setBorder(BorderFactory.createCompoundBorder(BorderFactory
                 .createEmptyBorder(3, 3, 3, 3), getBorder()));
         setFloatable(false);        
 
-        JButton buttonSave = addButton(editor.bind("保存", new ActionSave(), "img/save.gif"));
+        actionSave = editor.bind(null, new ActionSave(), "img/save.gif");
+        JButton buttonSave = addButton( actionSave );
         addSeparator();
 
-        addButton(editor.bind("撤销", new ActionUndo(true),"img/undo.gif"));
-        addButton(editor.bind("重做", new ActionUndo(false),"img/redo.gif"));
+        actionUndo = editor.bind(null, new ActionUndo(true),"img/undo.gif");
+        addButton( actionUndo );
+        actionRedo = editor.bind(null, new ActionUndo(false),"img/redo.gif");
+        addButton( actionRedo );
         addSeparator();
 
-        addButton(editor.bind("整理", new ActionSort(),"img/pan.gif"));
+        actionSort = editor.bind(null, new ActionSort(),"img/pan.gif");
+        addButton( actionSort );
         addSeparator();
 
-        addButton(editor.bind("上一个", new ActionPre(),"img/pre.gif"));
-        addButton(editor.bind("下一个", new ActionNext(),"img/next.gif"));
+        actionPrev = editor.bind(null, new ActionPre(),"img/pre.gif");
+        addButton( actionPrev );
+        actionNext = editor.bind(null, new ActionNext(),"img/next.gif");
+        addButton( actionNext );
         textField.setPreferredSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
         textField.setMaximumSize(  new Dimension( 200, buttonSave.getPreferredSize().height ) );
         add(textField);
@@ -110,11 +111,11 @@ public class EditorToolBar extends JToolBar {
                 textField.setText("");
             }
         });
-        addButton(editor.bind("GO", new ActionGo()));
+        actionGo = editor.bind(null, new ActionGo());
+        addButton(actionGo);
         addSeparator();
 
         int nowCount = EditorTabbedPane.iszH()?TreeParser.ZHCOUNT:TreeParser.ENGCOUNT;
-        description.setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+nowCount+"条    ");
         add(description);
         addSeparator();
 
@@ -127,7 +128,8 @@ public class EditorToolBar extends JToolBar {
 
         add(Box.createHorizontalGlue());
 
-        addButton(editor.bind("重建", new ActionRebuild()));
+        actionRebuild = editor.bind(null, new ActionRebuild());
+        addButton( actionRebuild );
 
         comboBox.addItem("仅显示句子");
         comboBox.addItem("显示分词");
@@ -146,8 +148,44 @@ public class EditorToolBar extends JToolBar {
         comboBox.setMaximumSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
         add(comboBox);
         addSeparator();
-        addButton(editor.bind("刷新", new ActionRefresh(),"img/refresh.jpg"));
+        actionRefresh = editor.bind(null, new ActionRefresh(),"img/refresh.jpg");
+        addButton( actionRefresh );
+        
+        Languages.getInstance().addItemListener(
+            new ItemListener() {
+                public void itemStateChanged( ItemEvent evt ) {
+                    Locale locale = (Locale)evt.getItem();
+                    setLocale( locale );
+                }
+            }
+        );
     }   
+
+    public void setLocale( Locale locale ) {
+        super.setLocale( locale );
+        
+        textField.setText( Languages.getInstance().getString( "Toolbar.EnterSentenceNumber" ) );
+        actionSave.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Save" ) );
+        actionUndo.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Undo" ) );
+        actionRedo.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Redo" ) );
+        actionSort.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Sort" ) );
+        actionPrev.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.PrevGraph" ) );
+        actionNext.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.NextGraph" ) );
+        actionGo.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Go" ) );
+        actionRebuild.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Rebuild" ) );
+        actionRefresh.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Refresh" ) );
+       
+        update();
+    }
+
+    public void update() {
+        int nowCount = EditorTabbedPane.iszH()?TreeParser.ZHCOUNT:TreeParser.ENGCOUNT;
+        String strFormat = Languages.getInstance().getString( "Toolbar.Desc" );
+        if( strFormat != null ) {
+            String strDesc = MessageFormat.format( strFormat, TreeParser.getNow() + 1, nowCount );
+            description.setText( "   " + strDesc + "   ");
+        }
+    }
 
     private JToggleButton addToggleButton(Action a) {
         JToggleButton tb = new JToggleButton((String)a.getValue(Action.NAME), null);
@@ -167,4 +205,16 @@ public class EditorToolBar extends JToolBar {
         return button;
     }
 
+    private Action actionSave;
+    private Action actionUndo;
+    private Action actionRedo;
+    private Action actionSort;
+    private Action actionPrev;
+    private Action actionNext;
+    private Action actionGo;
+    private Action actionRebuild;
+    private Action actionRefresh;
+
+    private JLabel description = N9ComponentFactory.createLabel_style2("");
+    
 }

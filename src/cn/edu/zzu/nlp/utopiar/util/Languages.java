@@ -37,7 +37,7 @@ public class Languages implements ItemSelectable {
     }
 
     public String getString( String key ) {
-        return( bundle.getString( key ) );
+        return( bundle == null ? null : bundle.getString( key ) );
     }
 
     public synchronized void addItemListener( ItemListener listener ) {

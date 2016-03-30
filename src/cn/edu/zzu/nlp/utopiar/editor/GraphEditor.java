@@ -109,7 +109,11 @@ public class GraphEditor extends JPanel{
         
         rubberband = new mxRubberband(graphComponent);
     }
-    
+   
+    public void update() {
+        if( toolbar != null )
+            toolbar.update();
+    }
 
     /**
      * 
@@ -184,7 +188,8 @@ public class GraphEditor extends JPanel{
 
     protected void installToolBar()
     {
-        add(new EditorToolBar(this,JToolBar.HORIZONTAL), BorderLayout.NORTH);
+        toolbar = new EditorToolBar(this,JToolBar.HORIZONTAL);
+        add(toolbar, BorderLayout.NORTH);
     }
     
     protected void installTabbedPane() throws IOException
@@ -455,8 +460,6 @@ public class GraphEditor extends JPanel{
 
         setGraphComponent(EditorTabbedPane.ZH_GRAPH_COMPONENT);
         GraphEditor editor = new GraphEditor(graphComponent);
-        int nowCount = EditorTabbedPane.iszH()?TreeParser.ZHCOUNT:TreeParser.ENGCOUNT;
-        EditorToolBar.getDescription().setText("   当前第"+(TreeParser.getNow()+1)+"条,共"+nowCount+"条    ");
         editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
     }
 
@@ -465,4 +468,5 @@ public class GraphEditor extends JPanel{
     private int highlightStartPos = -1;
     private int highlightEndPos = -1;
 
+    private EditorToolBar toolbar;
 }

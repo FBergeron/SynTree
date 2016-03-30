@@ -16,6 +16,22 @@ Menu.Edition.AddEdge=Ajouter un lien
 Menu.Edition.SelectAll=Tout sélectionner
 Menu.Edition.SelectNone=Annuler la sélection
 
+Toolbar.EnterSentenceNumber=Entrez un # de phrase
+Toolbar.Save=Enregistrer
+Toolbar.Undo=Annuler
+Toolbar.Redo=Rétablir
+Toolbar.Sort=Redisposer
+Toolbar.PrevGraph=Préc.
+Toolbar.NextGraph=Suiv.
+Toolbar.Go=Voir
+Toolbar.Desc=Phrase {0} de {1}
+Toolbar.Rebuild=Rebâtir
+Toolbar.ShowOption.ShowOnlySentence=Voir seulement la phrase
+Toolbar.ShowOption.DisplayWords=Voir les mots
+Toolbar.ShowOption.DisplayWordsAndPOS=Voir les mots et leur classe
+Toolbar.ShowOption.DisplayWordsAndConstraints=Voir les mots et les contraintes
+Toolbar.Refresh=Rafraîchir
+
 Frame.Settings.Title=Paramètres
 Frame.Settings.TabPanel.Visual=Apparence
 Frame.Settings.TabPanel.PathSelection=Emplacement des données
