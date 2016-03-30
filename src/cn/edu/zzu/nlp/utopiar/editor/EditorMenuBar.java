@@ -40,40 +40,40 @@ public class EditorMenuBar extends JMenuBar{
         
         menuFile = new JMenu();
         menu = add(menuFile);
-        actionSettings = editor.bind("", new ActionSetting(), "img/gear.png");
+        actionSettings = editor.bind(null, new ActionSetting(), "img/gear.png");
         menu.add( actionSettings );
-        actionSave = editor.bind("", new ActionSave(), "img/save.gif");
+        actionSave = editor.bind(null, new ActionSave(), "img/save.gif");
         menu.add( actionSave );
 
         menuEdition = new JMenu();
         menu = add( menuEdition );
-        actionUndo = editor.bind("", new ActionUndo(true),"img/undo.gif");
+        actionUndo = editor.bind(null, new ActionUndo(true),"img/undo.gif");
         menu.add( actionUndo );
-        actionRedo = editor.bind("", new ActionUndo(false),"img/redo.gif");
+        actionRedo = editor.bind(null, new ActionUndo(false),"img/redo.gif");
         menu.add( actionRedo );
         menu.addSeparator();
 
-        actionCut = editor.bind("", TransferHandler.getCutAction(), "img/cut.gif");
+        actionCut = editor.bind(null, TransferHandler.getCutAction(), "img/cut.gif");
         menu.add( actionCut ); 
-        actionCopy = editor.bind("", TransferHandler.getCopyAction(), "img/copy.gif");
+        actionCopy = editor.bind(null, TransferHandler.getCopyAction(), "img/copy.gif");
         menu.add( actionCopy ); 
-        actionPaste = editor.bind("", TransferHandler.getPasteAction(), "img/paste.gif");
+        actionPaste = editor.bind(null, TransferHandler.getPasteAction(), "img/paste.gif");
         menu.add( actionPaste ); 
         menu.addSeparator();
         
-        actionDelete = editor.bind("", new ActionDelete(), "img/delete.gif");
+        actionDelete = editor.bind(null, new ActionDelete(), "img/delete.gif");
         menu.add( actionDelete );
         menu.addSeparator();
 
-        actionAddVertex = editor.bind("", new ActionAddVertex(), "img/vertex.gif");
+        actionAddVertex = editor.bind(null, new ActionAddVertex(), "img/vertex.gif");
         menu.add( actionAddVertex );
-        actionAddEdge = editor.bind("", new ActionAddEdge(), "img/edge.gif");
+        actionAddEdge = editor.bind(null, new ActionAddEdge(), "img/edge.gif");
         menu.add( actionAddEdge );
         menu.addSeparator();
         
-        actionSelectAll = editor.bind("", mxGraphActions.getSelectAllAction());
+        actionSelectAll = editor.bind(null, mxGraphActions.getSelectAllAction());
         menu.add( actionSelectAll );
-        actionSelectNone = editor.bind("Select None", mxGraphActions.getSelectNoneAction());
+        actionSelectNone = editor.bind(null, mxGraphActions.getSelectNoneAction());
         menu.add( actionSelectNone );
         
         menu = add(new JMenu("?"));
