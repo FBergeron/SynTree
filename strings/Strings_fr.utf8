@@ -18,19 +18,19 @@ Menu.Edition.SelectNone=Annuler la sélection
 
 Toolbar.EnterSentenceNumber=Entrez un # de phrase
 Toolbar.Save=Enregistrer
-Toolbar.Undo=Annuler
-Toolbar.Redo=Rétablir
+Toolbar.Undo=
+Toolbar.Redo=
 Toolbar.Sort=Redisposer
-Toolbar.PrevGraph=Préc.
-Toolbar.NextGraph=Suiv.
-Toolbar.Go=Voir
+Toolbar.PrevGraph=
+Toolbar.NextGraph=
+Toolbar.Go=
 Toolbar.Desc=Phrase {0} de {1}
 Toolbar.Rebuild=Rebâtir
 Toolbar.ShowOption.ShowOnlySentence=Voir seulement la phrase
 Toolbar.ShowOption.DisplayWords=Voir les mots
 Toolbar.ShowOption.DisplayWordsAndPOS=Voir les mots et leur classe
 Toolbar.ShowOption.DisplayWordsAndConstraints=Voir les mots et les contraintes
-Toolbar.Refresh=Rafraîchir
+Toolbar.Refresh=Revenir
 
 Frame.Settings.Title=Paramètres
 Frame.Settings.TabPanel.Visual=Apparence
@@ -47,3 +47,6 @@ Frame.Settings.Visual.InterBoxGapWidth=Espace horizontal entre les boîtes
 Frame.Settings.Visual.InterBoxGapHeight=Espace vertical entre les boîtes
 Frame.Settings.Visual.BoxFontSize=Taille des caractères des boîtes
 Frame.Settings.Button.Ok=Ok
+
+EditorTabbedPane.Tab.Chinese.Title=Chinois
+EditorTabbedPane.Tab.English.Title=Anglais

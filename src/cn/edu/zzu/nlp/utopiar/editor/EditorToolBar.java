@@ -111,7 +111,7 @@ public class EditorToolBar extends JToolBar {
                 textField.setText("");
             }
         });
-        actionGo = editor.bind(null, new ActionGo());
+        actionGo = editor.bind(null, new ActionGo(), "img/go.png");
         addButton(actionGo);
         addSeparator();
 
@@ -131,10 +131,10 @@ public class EditorToolBar extends JToolBar {
         actionRebuild = editor.bind(null, new ActionRebuild());
         addButton( actionRebuild );
 
-        comboBox.addItem("仅显示句子");
-        comboBox.addItem("显示分词");
-        comboBox.addItem("显示分词及词性");
-        comboBox.addItem("显示分词及约束");
+        comboBox.addItem(""); // ShowOnlySentence
+        comboBox.addItem(""); // DisplayWords
+        comboBox.addItem(""); // DisplayWordsAndPOS
+        comboBox.addItem(""); // DisplayWordsAndConstraints
         comboBox.setSelectedIndex(0);
         comboBox.addItemListener(new ItemListener() {
             
@@ -175,6 +175,14 @@ public class EditorToolBar extends JToolBar {
         actionRebuild.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Rebuild" ) );
         actionRefresh.putValue( Action.NAME, Languages.getInstance().getString( "Toolbar.Refresh" ) );
        
+        int selectedIndex = comboBox.getSelectedIndex();
+        comboBox.removeAllItems();
+        comboBox.addItem( Languages.getInstance().getString( "Toolbar.ShowOption.ShowOnlySentence" ) );
+        comboBox.addItem( Languages.getInstance().getString( "Toolbar.ShowOption.DisplayWords" ) );
+        comboBox.addItem( Languages.getInstance().getString( "Toolbar.ShowOption.DisplayWordsAndPOS" ) );
+        comboBox.addItem( Languages.getInstance().getString( "Toolbar.ShowOption.DisplayWordsAndConstraints" ) );
+        comboBox.setSelectedIndex( selectedIndex == -1 ? 0 : selectedIndex );
+
         update();
     }
 

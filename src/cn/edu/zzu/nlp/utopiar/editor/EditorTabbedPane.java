@@ -7,10 +7,13 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -27,6 +30,7 @@ import com.mxgraph.view.mxGraph;
 import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
@@ -93,6 +97,22 @@ public class EditorTabbedPane extends JTabbedPane{
 
         ENG_GRAPH_COMPONENT.getGraphControl().addMouseListener( new GraphMouseListener( ENG_GRAPH_COMPONENT ) );
         ZH_GRAPH_COMPONENT.getGraphControl().addMouseListener( new GraphMouseListener( ZH_GRAPH_COMPONENT ) );
+        
+        Languages.getInstance().addItemListener(
+            new ItemListener() {
+                public void itemStateChanged( ItemEvent evt ) {
+                    Locale locale = (Locale)evt.getItem();
+                    setLocale( locale );
+                }
+            }
+        );
+    }
+
+    public void setLocale( Locale locale ) {
+        super.setLocale( locale );
+        
+        setTitleAt( 0, Languages.getInstance().getString( "EditorTabbedPane.Tab.Chinese.Title" ) );
+        setTitleAt( 1, Languages.getInstance().getString( "EditorTabbedPane.Tab.English.Title" ) );
     }
 
     public class GraphMouseListener extends MouseAdapter {

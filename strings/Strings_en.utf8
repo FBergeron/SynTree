@@ -21,16 +21,16 @@ Toolbar.Save=Save
 Toolbar.Undo=Undo
 Toolbar.Redo=Redo
 Toolbar.Sort=Layout
-Toolbar.PrevGraph=Prev.
-Toolbar.NextGraph=Next
-Toolbar.Go=Go
+Toolbar.PrevGraph=
+Toolbar.NextGraph=
+Toolbar.Go=
 Toolbar.Desc=Sentence {0} of {1}
 Toolbar.Rebuild=Rebuild
 Toolbar.ShowOption.ShowOnlySentence=View Sentence Only
 Toolbar.ShowOption.DisplayWords=View Words
 Toolbar.ShowOption.DisplayWordsAndPOS=View Words and POS
 Toolbar.ShowOption.DisplayWordsAndConstraints=View Words and Constraints
-Toolbar.Refresh=Refresh
+Toolbar.Refresh=Revert
 
 Frame.Settings.Title=Settings
 Frame.Settings.TabPanel.Visual=Visual
@@ -47,3 +47,6 @@ Frame.Settings.Visual.InterBoxGapWidth=Horizontal Space between Boxes
 Frame.Settings.Visual.InterBoxGapHeight=Vertical Space between Boxes
 Frame.Settings.Visual.BoxFontSize=Box Font Size
 Frame.Settings.Button.Ok=Ok
+
+EditorTabbedPane.Tab.Chinese.Title=Chinese
+EditorTabbedPane.Tab.English.Title=English
