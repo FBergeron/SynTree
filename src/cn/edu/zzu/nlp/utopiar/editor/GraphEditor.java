@@ -7,9 +7,18 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -218,13 +227,14 @@ public class GraphEditor extends JPanel{
         frame.setJMenuBar(menuBar);
         setFrameCenter(frame);
         frame.setSize(1200, 750);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e){
+            public void windowClosing(WindowEvent e) {
                 int flag = JOptionPane.showConfirmDialog(null, "是否保存？","确认", JOptionPane.YES_NO_CANCEL_OPTION);   
                 GraphEditor editor = menuBar.getEditor();
                 mxGraphComponent graphComponent = GraphEditor.getGraphComponent();
                 mxGraph graph = graphComponent.getGraph();
-                if(flag == 0){
+                if(flag == JOptionPane.YES_OPTION){
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     String str = null;
                     try {
@@ -244,11 +254,16 @@ public class GraphEditor extends JPanel{
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                }else if(flag == 1){
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                }else if(flag == 2){
-                    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);  //阻止关闭窗口
-                    return;
+                }
+                if( flag == JOptionPane.YES_OPTION || flag == JOptionPane.NO_OPTION ) {
+                    try {
+                        backupTrainData();
+                    }
+                    catch( Exception ex ) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog( frame, "<html>An error occurred when performing backup.<br>Data has not been backed up.</html>", "Error", JOptionPane.ERROR_MESSAGE );
+                    }
+                    System.exit( 0 );
                 }
             }
         });
@@ -463,10 +478,34 @@ public class GraphEditor extends JPanel{
         editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
     }
 
+    private void backupTrainData() throws IOException {
+        SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd_HH-mm-ss" );
+        Calendar now = Calendar.getInstance();
+        String timestamp = formatter.format( now.getTime() );
+        
+        ZipOutputStream output = new ZipOutputStream(
+            new BufferedOutputStream( new FileOutputStream( "data/backupـ" + timestamp + ".zip" ) ) );
+        byte data[] = new byte[ BUFFER_SIZE ];
+        String[] files = { "data/train.ch.parse", "data/train.en.parse" };
+        for( String file : files ) {
+            BufferedInputStream input = new BufferedInputStream( new FileInputStream( file ) );
+            ZipEntry entry = new ZipEntry( file );
+            output.putNextEntry( entry );
+            int bytesRead;
+            while ( ( bytesRead = input.read( data, 0, BUFFER_SIZE ) ) != -1 )
+                output.write( data, 0, bytesRead );
+            input.close();
+        }
+        output.close();
+    }
+
     private EditorTabbedPane tabbedPane;
 
     private int highlightStartPos = -1;
     private int highlightEndPos = -1;
 
     private EditorToolBar toolbar;
+
+    private static final int BUFFER_SIZE = 8192;
+
 }
