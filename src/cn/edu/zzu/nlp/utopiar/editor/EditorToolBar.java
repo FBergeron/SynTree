@@ -74,23 +74,23 @@ public class EditorToolBar extends JToolBar {
                 .createEmptyBorder(3, 3, 3, 3), getBorder()));
         setFloatable(false);        
 
-        actionSave = editor.bind(null, new ActionSave(), "img/save.gif");
+        actionSave = editor.bind(null, new ActionSave(), "/img/save.gif");
         JButton buttonSave = addButton( actionSave );
         addSeparator();
 
-        actionUndo = editor.bind(null, new ActionUndo(true),"img/undo.gif");
+        actionUndo = editor.bind(null, new ActionUndo(true),"/img/undo.gif");
         addButton( actionUndo );
-        actionRedo = editor.bind(null, new ActionUndo(false),"img/redo.gif");
+        actionRedo = editor.bind(null, new ActionUndo(false),"/img/redo.gif");
         addButton( actionRedo );
         addSeparator();
 
-        actionSort = editor.bind(null, new ActionSort(),"img/pan.gif");
+        actionSort = editor.bind(null, new ActionSort(),"/img/pan.gif");
         addButton( actionSort );
         addSeparator();
 
-        actionPrev = editor.bind(null, new ActionPre(),"img/pre.gif");
+        actionPrev = editor.bind(null, new ActionPre(),"/img/pre.gif");
         addButton( actionPrev );
-        actionNext = editor.bind(null, new ActionNext(),"img/next.gif");
+        actionNext = editor.bind(null, new ActionNext(),"/img/next.gif");
         addButton( actionNext );
         textField.setPreferredSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
         textField.setMaximumSize(  new Dimension( 200, buttonSave.getPreferredSize().height ) );
@@ -111,7 +111,7 @@ public class EditorToolBar extends JToolBar {
                 textField.setText("");
             }
         });
-        actionGo = editor.bind(null, new ActionGo(), "img/go.png");
+        actionGo = editor.bind(null, new ActionGo(), "/img/go.png");
         addButton(actionGo);
         addSeparator();
 
@@ -148,7 +148,7 @@ public class EditorToolBar extends JToolBar {
         comboBox.setMaximumSize( new Dimension( 200, buttonSave.getPreferredSize().height ) );
         add(comboBox);
         addSeparator();
-        actionRefresh = editor.bind(null, new ActionRefresh(),"img/refresh.jpg");
+        actionRefresh = editor.bind(null, new ActionRefresh(),"/img/refresh.jpg");
         addButton( actionRefresh );
         
         Languages.getInstance().addItemListener(

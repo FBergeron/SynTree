@@ -27,11 +27,13 @@
         <native2ascii encoding="utf-8" src="${strings}" dest="tmp" includes="**/*.utf8" ext=".properties"/>
         <copy todir="tmp">
             <fileset dir="${classes}"/>
-            <fileset dir="img"/>
             <fileset dir="${strings}">
                 <include name="**/*.properties"/>
             </fileset>
         </copy>  
+        <copy todir="tmp/img">
+            <fileset dir="img"/>
+        </copy>
         <unjar dest="tmp">
             <fileset dir="${lib}">
                 <include name="**/*.jar"/>

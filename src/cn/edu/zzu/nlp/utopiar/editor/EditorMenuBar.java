@@ -24,9 +24,11 @@ import cn.edu.zzu.nlp.utopiar.action.ActionDelete;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetting;
 import cn.edu.zzu.nlp.utopiar.action.ActionSave;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetLocale;
+import cn.edu.zzu.nlp.utopiar.action.ActionSetVertexBackgroundColor;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
+import cn.edu.zzu.nlp.utopiar.util.Util;
 
 public class EditorMenuBar extends JMenuBar{
 
@@ -40,37 +42,41 @@ public class EditorMenuBar extends JMenuBar{
         
         menuFile = new JMenu();
         menu = add(menuFile);
-        actionSettings = editor.bind(null, new ActionSetting(), "img/gear.png");
+        actionSettings = editor.bind(null, new ActionSetting(), "/img/gear.png");
         menu.add( actionSettings );
-        actionSave = editor.bind(null, new ActionSave(), "img/save.gif");
+        actionSave = editor.bind(null, new ActionSave(), "/img/save.gif");
         menu.add( actionSave );
 
         menuEdition = new JMenu();
         menu = add( menuEdition );
-        actionUndo = editor.bind(null, new ActionUndo(true),"img/undo.gif");
+        actionUndo = editor.bind(null, new ActionUndo(true),"/img/undo.gif");
         menu.add( actionUndo );
-        actionRedo = editor.bind(null, new ActionUndo(false),"img/redo.gif");
+        actionRedo = editor.bind(null, new ActionUndo(false),"/img/redo.gif");
         menu.add( actionRedo );
         menu.addSeparator();
 
-        actionCut = editor.bind(null, TransferHandler.getCutAction(), "img/cut.gif");
+        actionCut = editor.bind(null, TransferHandler.getCutAction(), "/img/cut.gif");
         menu.add( actionCut ); 
-        actionCopy = editor.bind(null, TransferHandler.getCopyAction(), "img/copy.gif");
+        actionCopy = editor.bind(null, TransferHandler.getCopyAction(), "/img/copy.gif");
         menu.add( actionCopy ); 
-        actionPaste = editor.bind(null, TransferHandler.getPasteAction(), "img/paste.gif");
+        actionPaste = editor.bind(null, TransferHandler.getPasteAction(), "/img/paste.gif");
         menu.add( actionPaste ); 
         menu.addSeparator();
         
-        actionDelete = editor.bind(null, new ActionDelete(), "img/delete.gif");
+        actionDelete = editor.bind(null, new ActionDelete(), "/img/delete.gif");
         menu.add( actionDelete );
         menu.addSeparator();
 
-        actionAddVertex = editor.bind(null, new ActionAddVertex(), "img/vertex.gif");
+        actionAddVertex = editor.bind(null, new ActionAddVertex(), "/img/vertex.gif");
         menu.add( actionAddVertex );
-        actionAddEdge = editor.bind(null, new ActionAddEdge(), "img/edge.gif");
+        actionAddEdge = editor.bind(null, new ActionAddEdge(), "/img/edge.gif");
         menu.add( actionAddEdge );
         menu.addSeparator();
-        
+
+        actionSetVertexBackgroundColor = editor.bind(null, new ActionSetVertexBackgroundColor(), "/img/setColor.png");
+        menu.add( actionSetVertexBackgroundColor );
+        menu.addSeparator();
+
         actionSelectAll = editor.bind(null, mxGraphActions.getSelectAllAction());
         menu.add( actionSelectAll );
         actionSelectNone = editor.bind(null, mxGraphActions.getSelectNoneAction());
@@ -85,8 +91,9 @@ public class EditorMenuBar extends JMenuBar{
         ButtonGroup buttonGroupLoc = new ButtonGroup();
         for( Locale locale : Languages.supported ) {
             String label = bundle.getString("Language." + locale.getLanguage());
-            String img = "img/flag_" + locale.getLanguage() + ".png";
-            ActionSetLocale actionSetLocale = new ActionSetLocale( locale.getLanguage(), label, new ImageIcon(img) );
+            String img = "/img/flag_" + locale.getLanguage() + ".png";
+            ActionSetLocale actionSetLocale = new ActionSetLocale( locale.getLanguage(), label, 
+                new ImageIcon( Util.getImageResourceFile( img, getClass() ) ) );
             JRadioButtonMenuItem itemLoc = new JRadioButtonMenuItem( actionSetLocale );
             if( prefLang.equals( locale.getLanguage() ) ) {
                 itemLoc.setSelected( true );
@@ -98,7 +105,7 @@ public class EditorMenuBar extends JMenuBar{
         menu.addSeparator();
 
         menuItemAbout = new JMenuItem();
-        menuItemAbout.setIcon(new ImageIcon("img/about.gif"));
+        menuItemAbout.setIcon(new ImageIcon(Util.getImageResourceFile("/img/about.gif", getClass())));
         menuItemAbout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 editor.about();
@@ -134,6 +141,7 @@ public class EditorMenuBar extends JMenuBar{
         actionDelete.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Delete" ) );
         actionAddVertex.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddVertex" ) );
         actionAddEdge.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddEdge" ) );
+        actionSetVertexBackgroundColor.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SetVertexBackgroundColor" ) );
         actionSelectAll.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectAll" ) );
         actionSelectNone.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectNone" ) );
 
@@ -157,6 +165,7 @@ public class EditorMenuBar extends JMenuBar{
     private Action actionDelete;
     private Action actionAddVertex;
     private Action actionAddEdge;
+    private Action actionSetVertexBackgroundColor;
     private Action actionSelectAll;
     private Action actionSelectNone;
 

@@ -164,8 +164,8 @@ public class GraphEditor extends JPanel{
     @SuppressWarnings("serial")
     public Action bind(String name, final Action action, String iconUrl)
     {
-        AbstractAction newAction = new AbstractAction(name, (iconUrl != null) ? new ImageIcon(
-                iconUrl) : null)
+        ImageIcon img = ( iconUrl == null ? null : new ImageIcon( Util.getImageResourceFile( iconUrl, Util.class ) ) );
+        AbstractAction newAction = new AbstractAction(name, img)
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -484,7 +484,7 @@ public class GraphEditor extends JPanel{
         String timestamp = formatter.format( now.getTime() );
         
         ZipOutputStream output = new ZipOutputStream(
-            new BufferedOutputStream( new FileOutputStream( "data/backupـ" + timestamp + ".zip" ) ) );
+            new BufferedOutputStream( new FileOutputStream( "data/backup_" + timestamp + ".zip" ) ) );
         byte data[] = new byte[ BUFFER_SIZE ];
         String[] files = { "data/train.ch.parse", "data/train.en.parse" };
         for( String file : files ) {

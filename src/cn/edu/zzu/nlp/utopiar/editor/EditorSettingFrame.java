@@ -43,6 +43,7 @@ import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.LookAndFeelNiceInfo;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.SpinnerField;
+import cn.edu.zzu.nlp.utopiar.util.Util;
 
 public class EditorSettingFrame extends JDialog {
 
@@ -409,13 +410,13 @@ public class EditorSettingFrame extends JDialog {
         PathSelectionSettingPanel(){
             Box zhPanel = Box.createVerticalBox();
             zhPanel.add( Box.createVerticalGlue() );
-            JLabel zhImg = new JLabel( new ImageIcon( "img/zh.png" ) );
+            JLabel zhImg = new JLabel( new ImageIcon( Util.getImageResourceFile( "/img/zh.png", getClass() ) ) );
             zhImg.setAlignmentX( JComponent.CENTER_ALIGNMENT );
             zhPanel.add( zhImg );
             zhPanel.add( Box.createRigidArea( new Dimension( 10, 10 ) ) );
             Box engPanel = Box.createVerticalBox();
             engPanel.add( Box.createVerticalGlue() );
-            JLabel engImg = new JLabel( new ImageIcon( "img/eng.png" ) );
+            JLabel engImg = new JLabel( new ImageIcon( Util.getImageResourceFile( "/img/eng.png", getClass() ) ) );
             engImg.setAlignmentX( JComponent.CENTER_ALIGNMENT );
             engPanel.add( engImg );
             engPanel.add( Box.createRigidArea( new Dimension( 10, 10 ) ) );
