@@ -24,7 +24,6 @@ import cn.edu.zzu.nlp.utopiar.action.ActionDelete;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetting;
 import cn.edu.zzu.nlp.utopiar.action.ActionSave;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetLocale;
-import cn.edu.zzu.nlp.utopiar.action.ActionSetVertexBackgroundColor;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
@@ -71,10 +70,6 @@ public class EditorMenuBar extends JMenuBar{
         menu.add( actionAddVertex );
         actionAddEdge = editor.bind(null, new ActionAddEdge(), "/img/edge.gif");
         menu.add( actionAddEdge );
-        menu.addSeparator();
-
-        actionSetVertexBackgroundColor = editor.bind(null, new ActionSetVertexBackgroundColor(), "/img/setColor.png");
-        menu.add( actionSetVertexBackgroundColor );
         menu.addSeparator();
 
         actionSelectAll = editor.bind(null, mxGraphActions.getSelectAllAction());
@@ -141,7 +136,6 @@ public class EditorMenuBar extends JMenuBar{
         actionDelete.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Delete" ) );
         actionAddVertex.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddVertex" ) );
         actionAddEdge.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddEdge" ) );
-        actionSetVertexBackgroundColor.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SetVertexBackgroundColor" ) );
         actionSelectAll.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectAll" ) );
         actionSelectNone.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectNone" ) );
 
@@ -165,7 +159,6 @@ public class EditorMenuBar extends JMenuBar{
     private Action actionDelete;
     private Action actionAddVertex;
     private Action actionAddEdge;
-    private Action actionSetVertexBackgroundColor;
     private Action actionSelectAll;
     private Action actionSelectNone;
 

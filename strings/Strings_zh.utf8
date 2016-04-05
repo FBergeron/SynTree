@@ -13,7 +13,6 @@ Menu.Edition.Paste=粘贴
 Menu.Edition.Delete=删除
 Menu.Edition.AddVertex=添加结点
 Menu.Edition.AddEdge=添加连接
-Menu.Edition.SetVertexBackgroundColor=更改颜色
 Menu.Edition.SelectAll=全部选中
 Menu.Edition.SelectNone=摒弃选区
 

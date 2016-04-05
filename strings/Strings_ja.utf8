@@ -13,7 +13,6 @@ Menu.Edition.Paste=貼り付け
 Menu.Edition.Delete=削除
 Menu.Edition.AddVertex=箱を追加
 Menu.Edition.AddEdge=接続を追加
-Menu.Edition.SetVertexBackgroundColor=色を変更します
 Menu.Edition.SelectAll=すべて選択
 Menu.Edition.SelectNone=現在の選択範囲を解除します
 

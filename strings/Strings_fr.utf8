@@ -13,7 +13,6 @@ Menu.Edition.Paste=Coller
 Menu.Edition.Delete=Effacer
 Menu.Edition.AddVertex=Ajouter une boîte
 Menu.Edition.AddEdge=Ajouter un lien
-Menu.Edition.SetVertexBackgroundColor=Changer la couleur
 Menu.Edition.SelectAll=Tout sélectionner
 Menu.Edition.SelectNone=Annuler la sélection
 

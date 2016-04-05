@@ -14,7 +14,6 @@ import com.mxgraph.util.mxResources;
 import cn.edu.zzu.nlp.utopiar.action.ActionAddEdge;
 import cn.edu.zzu.nlp.utopiar.action.ActionAddVertex;
 import cn.edu.zzu.nlp.utopiar.action.ActionDelete;
-import cn.edu.zzu.nlp.utopiar.action.ActionSetVertexBackgroundColor;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
 
@@ -47,10 +46,6 @@ public class EditorPopupMenu extends JPopupMenu {
         add( actionAddEdge );
         addSeparator();
         
-        actionSetVertexBackgroundColor = graphEditor.bind(null, new ActionSetVertexBackgroundColor(), "/img/setColor.png");
-        add( actionSetVertexBackgroundColor );
-        addSeparator();
-
         actionSelectAll = graphEditor.bind(null, mxGraphActions.getSelectAllAction());
         add( actionSelectAll );
         actionSelectNone = graphEditor.bind(null, mxGraphActions.getSelectNoneAction());
@@ -70,7 +65,6 @@ public class EditorPopupMenu extends JPopupMenu {
         actionDelete.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Delete" ) );
         actionAddVertex.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddVertex" ) );
         actionAddEdge.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.AddEdge" ) );
-        actionSetVertexBackgroundColor.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SetVertexBackgroundColor" ) );
         actionSelectAll.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectAll" ) );
         actionSelectNone.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectNone" ) );
     }
@@ -83,7 +77,6 @@ public class EditorPopupMenu extends JPopupMenu {
     private Action actionDelete;
     private Action actionAddVertex;
     private Action actionAddEdge;
-    private Action actionSetVertexBackgroundColor;
     private Action actionSelectAll;
     private Action actionSelectNone;
 
