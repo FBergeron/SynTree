@@ -274,7 +274,7 @@ public class TreeParser extends JPanel {
     public static List<Object> creatTree(GraphEditor editor, final mxGraphComponent graphComponent,List<String> list,
             int vertexY) {
         Integer verticalInterBoxGap = Preferences.getInstance().getVerticalInterBoxGap();
-        vertexY += ( verticalInterBoxGap == null ? 40 : verticalInterBoxGap.intValue() );
+        vertexY += ( verticalInterBoxGap == null ? Preferences.DEFAULT_VERT_INTERBOX_GAP : verticalInterBoxGap.intValue() );
         mxGraph graph = graphComponent.getGraph();
         graphComponent.setToolTips(true);
         Object parent = graph.getDefaultParent();
@@ -298,7 +298,7 @@ public class TreeParser extends JPanel {
             Integer boxWidth = Preferences.getInstance().getBoxWidth();
             Integer boxHeight = Preferences.getInstance().getBoxHeight();
             Integer horizontalInterBoxGap = Preferences.getInstance().getHorizontalInterBoxGap();
-            pointX = countleaf * ( (boxWidth == null ? 50 : boxWidth.intValue() ) + ( horizontalInterBoxGap == null ? 10 : horizontalInterBoxGap ) );
+            pointX = countleaf * ( (boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth.intValue() ) + ( horizontalInterBoxGap == null ? Preferences.DEFAULT_HORIZ_INTERBOX_GAP : horizontalInterBoxGap ) );
             leaf.add(list.get(0));
             countleaf++;
             try {
@@ -316,7 +316,7 @@ public class TreeParser extends JPanel {
                 if( boxBorderColor != null ) 
                     strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
                 Object ob = graph.insertVertex(parent, null, list.get(0), pointX,
-                        vertexY, boxWidth == null ? 50 : boxWidth.intValue(), boxHeight == null ? 30 : boxHeight.intValue(), strStyle.toString());
+                        vertexY, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth.intValue(), boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight.intValue(), strStyle.toString());
                 vertex.put(ob, String.valueOf(countleaf-2));
                 rtList.add(ob);
             } catch (Exception e) {
@@ -357,13 +357,6 @@ public class TreeParser extends JPanel {
         }
         graph.getModel().beginUpdate();
         try {
-            List<Object> os = new ArrayList<Object>();
-            for (List<String> list2 : lists) {
-                rtList = creatTree(editor, graphComponent,list2, vertexY + 30);
-                os.add(rtList.get(0));          
-                pointX += (Integer) rtList.get(1);
-            }
-            pointX = pointX / os.size();
             StringBuilder strStyle = new StringBuilder();
             Integer boxFontSize = Preferences.getInstance().getBoxFontSize();
             if( boxFontSize != null )
@@ -379,8 +372,16 @@ public class TreeParser extends JPanel {
                 strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
             Integer boxWidth = Preferences.getInstance().getBoxWidth();
             Integer boxHeight = Preferences.getInstance().getBoxHeight();
+
+            List<Object> os = new ArrayList<Object>();
+            for (List<String> list2 : lists) {
+                rtList = creatTree(editor, graphComponent,list2, vertexY + ( boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight.intValue() ));
+                os.add(rtList.get(0));          
+                pointX += (Integer) rtList.get(1);
+            }
+            pointX = pointX / os.size();
             Object v1 = graph.insertVertex(parent, null, list.get(1), pointX,
-                    vertexY, boxWidth == null ? 50 : boxWidth.intValue(), boxHeight == null ? 30 : boxHeight.intValue(), strStyle.toString());
+                    vertexY, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth.intValue(), boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight.intValue(), strStyle.toString());
             rtList.set(0, v1);
             rtList.set(1, pointX);
             for (Object object : os) {

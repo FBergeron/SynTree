@@ -21,6 +21,19 @@ import org.w3c.dom.NodeList;
 
 public class Preferences {
 
+    public static final Color DEFAULT_BOX_BACKGROUND_COLOR = new Color( 195, 217, 255 );
+    public static final Color DEFAULT_BOX_FOREGROUND_COLOR = new Color( 119, 68, 0 );
+    public static final Color DEFAULT_BOX_BORDER_COLOR = new Color( 100, 130, 185 );
+    public static final Color DEFAULT_EDGE_COLOR = new Color( 100, 130, 185 );
+
+    public static final int DEFAULT_BOX_WIDTH = 50;
+    public static final int DEFAULT_BOX_HEIGHT = 30;
+    
+    public static final int DEFAULT_HORIZ_INTERBOX_GAP = 10;
+    public static final int DEFAULT_VERT_INTERBOX_GAP = 40;
+
+    public static final int DEFAULT_BOX_FONT_SIZE = 18;
+
     public static Preferences getInstance() {
         if( instance == null )
             instance = new Preferences();

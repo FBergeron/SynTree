@@ -37,7 +37,9 @@ public class ActionAddVertex extends ActionGraph{
             Color boxBorderColor = Preferences.getInstance().getBoxBorderColor();
             if( boxBorderColor != null ) 
                 strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
-            graph.insertVertex(parent, null, "我来了~", 0, 0, 50, 30, strStyle.toString());
+            Integer boxWidth = Preferences.getInstance().getBoxWidth();
+            Integer boxHeight = Preferences.getInstance().getBoxHeight();
+            graph.insertVertex(parent, null, "我来了~", 0, 0, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth, boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight, strStyle.toString());
         }
         finally
         {

@@ -115,43 +115,43 @@ public class EditorSettingFrame extends JDialog {
         graphBackgroundColorField.addActionListener( actionListener );
 
         boxBackgroundColorLabel = new JLabel( "XXXXXXXXXXXXXXXXXXXXXXXXXXX" );
-        boxBackgroundColorField = new ColorField( Preferences.getInstance().getBoxBackgroundColor(), new Color( 195, 217, 255 ) );
+        boxBackgroundColorField = new ColorField( Preferences.getInstance().getBoxBackgroundColor(), Preferences.DEFAULT_BOX_BACKGROUND_COLOR );
         boxBackgroundColorField.setPreferredSize( new Dimension( 240, boxBackgroundColorField.getPreferredSize().height ) );
         boxBackgroundColorField.addActionListener( actionListener );
 
         boxForegroundColorLabel = new JLabel();
-        boxForegroundColorField = new ColorField( Preferences.getInstance().getBoxForegroundColor(), new Color( 119, 68, 0 ) );
+        boxForegroundColorField = new ColorField( Preferences.getInstance().getBoxForegroundColor(), Preferences.DEFAULT_BOX_FOREGROUND_COLOR );
         boxForegroundColorField.setPreferredSize( new Dimension( 240, boxForegroundColorField.getPreferredSize().height ) );
         boxForegroundColorField.addActionListener( actionListener );
 
         boxBorderColorLabel = new JLabel();
-        boxBorderColorField = new ColorField( Preferences.getInstance().getBoxBorderColor(), new Color( 100, 130, 185 ) );
+        boxBorderColorField = new ColorField( Preferences.getInstance().getBoxBorderColor(), Preferences.DEFAULT_BOX_BORDER_COLOR );
         boxBorderColorField.setPreferredSize( new Dimension( 240, boxBorderColorField.getPreferredSize().height ) );
         boxBorderColorField.addActionListener( actionListener );
 
         edgeColorLabel = new JLabel();
-        edgeColorField = new ColorField( Preferences.getInstance().getEdgeColor(), new Color( 100, 130, 185 ) );
+        edgeColorField = new ColorField( Preferences.getInstance().getEdgeColor(), Preferences.DEFAULT_EDGE_COLOR );
         edgeColorField.setPreferredSize( new Dimension( 240, edgeColorField.getPreferredSize().height ) );
         edgeColorField.addActionListener( actionListener );
 
         boxWidthLabel = new JLabel();
-        boxWidthSpinner = new SpinnerField( Preferences.getInstance().getBoxWidth(), 50 );
+        boxWidthSpinner = new SpinnerField( Preferences.getInstance().getBoxWidth(), Preferences.DEFAULT_BOX_WIDTH );
         boxWidthSpinner.addChangeListener( changeListener );
 
         boxHeightLabel = new JLabel();
-        boxHeightSpinner = new SpinnerField( Preferences.getInstance().getBoxHeight(), 30 );
+        boxHeightSpinner = new SpinnerField( Preferences.getInstance().getBoxHeight(), Preferences.DEFAULT_BOX_HEIGHT );
         boxHeightSpinner.addChangeListener( changeListener );
 
         horizontalInterBoxGapLabel = new JLabel();
-        horizontalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getHorizontalInterBoxGap(), 10 );
+        horizontalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getHorizontalInterBoxGap(), Preferences.DEFAULT_HORIZ_INTERBOX_GAP );
         horizontalInterBoxGapSpinner.addChangeListener( changeListener );
 
         verticalInterBoxGapLabel = new JLabel();
-        verticalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getVerticalInterBoxGap(), 40 );
+        verticalInterBoxGapSpinner = new SpinnerField( Preferences.getInstance().getVerticalInterBoxGap(), Preferences.DEFAULT_VERT_INTERBOX_GAP );
         verticalInterBoxGapSpinner.addChangeListener( changeListener );
 
         boxFontSizeLabel = new JLabel();
-        boxFontSizeSpinner = new SpinnerField( Preferences.getInstance().getBoxFontSize(), 18 );
+        boxFontSizeSpinner = new SpinnerField( Preferences.getInstance().getBoxFontSize(), Preferences.DEFAULT_BOX_FONT_SIZE );
         boxFontSizeSpinner.addChangeListener( changeListener );
 
         lookAndFeelLabel.setPreferredSize( new Dimension( lookAndFeelLabel.getPreferredSize().width, lookAndFeelComboBox.getPreferredSize().height ) );
@@ -304,7 +304,7 @@ public class EditorSettingFrame extends JDialog {
 
         try {
             Color color = boxBackgroundColorField.getColor();
-            Preferences.getInstance().setBoxBackgroundColor( new Color( 195, 217, 255 ).equals(color) ? null : color );
+            Preferences.getInstance().setBoxBackgroundColor( Preferences.DEFAULT_BOX_BACKGROUND_COLOR.equals(color) ? null : color );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -312,7 +312,7 @@ public class EditorSettingFrame extends JDialog {
 
         try {
             Color color = boxForegroundColorField.getColor();
-            Preferences.getInstance().setBoxForegroundColor( new Color( 119, 68, 0 ).equals(color) ? null : color );
+            Preferences.getInstance().setBoxForegroundColor( Preferences.DEFAULT_BOX_FOREGROUND_COLOR.equals(color) ? null : color );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -320,7 +320,7 @@ public class EditorSettingFrame extends JDialog {
 
         try {
             Color color = boxBorderColorField.getColor();
-            Preferences.getInstance().setBoxBorderColor( new Color( 100, 130, 185 ).equals(color) ? null : color );
+            Preferences.getInstance().setBoxBorderColor( Preferences.DEFAULT_BOX_BORDER_COLOR.equals(color) ? null : color );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -328,7 +328,7 @@ public class EditorSettingFrame extends JDialog {
 
         try {
             Color color = edgeColorField.getColor();
-            Preferences.getInstance().setEdgeColor( new Color( 100, 130, 185 ).equals(color) ? null : color );
+            Preferences.getInstance().setEdgeColor( Preferences.DEFAULT_EDGE_COLOR.equals(color) ? null : color );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -336,7 +336,7 @@ public class EditorSettingFrame extends JDialog {
         
         try {
             Integer width = (Integer)boxWidthSpinner.getValue();
-            Preferences.getInstance().setBoxWidth( Integer.valueOf( 50 ).equals(width) ? null : width );
+            Preferences.getInstance().setBoxWidth( Integer.valueOf( Preferences.DEFAULT_BOX_WIDTH ).equals(width) ? null : width );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -344,7 +344,7 @@ public class EditorSettingFrame extends JDialog {
         
         try {
             Integer height = (Integer)boxHeightSpinner.getValue();
-            Preferences.getInstance().setBoxHeight( Integer.valueOf( 30 ).equals(height) ? null : height );
+            Preferences.getInstance().setBoxHeight( Integer.valueOf( Preferences.DEFAULT_BOX_HEIGHT ).equals(height) ? null : height );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -352,7 +352,7 @@ public class EditorSettingFrame extends JDialog {
         
         try {
             Integer gap = (Integer)horizontalInterBoxGapSpinner.getValue();
-            Preferences.getInstance().setHorizontalInterBoxGap( Integer.valueOf( 60 ).equals(gap) ? null : gap );
+            Preferences.getInstance().setHorizontalInterBoxGap( Integer.valueOf( Preferences.DEFAULT_HORIZ_INTERBOX_GAP ).equals(gap) ? null : gap );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -360,7 +360,7 @@ public class EditorSettingFrame extends JDialog {
         
         try {
             Integer gap = (Integer)verticalInterBoxGapSpinner.getValue();
-            Preferences.getInstance().setVerticalInterBoxGap( Integer.valueOf( 40 ).equals(gap) ? null : gap );
+            Preferences.getInstance().setVerticalInterBoxGap( Integer.valueOf( Preferences.DEFAULT_VERT_INTERBOX_GAP ).equals(gap) ? null : gap );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
@@ -368,7 +368,7 @@ public class EditorSettingFrame extends JDialog {
         
         try {
             Integer fontSize = (Integer)boxFontSizeSpinner.getValue();
-            Preferences.getInstance().setBoxFontSize( Integer.valueOf( 18 ).equals(fontSize) ? null : fontSize );
+            Preferences.getInstance().setBoxFontSize( Integer.valueOf( Preferences.DEFAULT_BOX_FONT_SIZE ).equals(fontSize) ? null : fontSize );
         }
         catch( Exception ex ) {
             ex.printStackTrace();
