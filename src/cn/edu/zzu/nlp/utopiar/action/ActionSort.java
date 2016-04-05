@@ -15,6 +15,7 @@ import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.EditorToolBar;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Preferences;
 
 public class ActionSort extends ActionGraph{
 
@@ -118,7 +119,7 @@ public class ActionSort extends ActionGraph{
             TreeParser.getSplitList().clear();
             TreeParser.vertex.clear();
             EditorToolBar.getCombobox().setSelectedIndex(0);
-            TreeParser.creatTree(editor,graphComponent,list1,  0);
+            TreeParser.creatTree(editor,graphComponent,list1,  Preferences.DEFAULT_OFFSET_Y);
             EditorBottom.getTextArea().setText(editor.getLabelString());
         } catch (Exception e1) {
             e1.printStackTrace();

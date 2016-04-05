@@ -228,7 +228,7 @@ public class EditorTabbedPane extends JTabbedPane{
             TreeParser.getLeaf().clear();
             TreeParser.getSplitList().clear();
             TreeParser.vertex.clear();
-            TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,0);
+            TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,Preferences.DEFAULT_OFFSET_Y);
         }else{
             PATH = ENGLISH_PATH;
             OR_GRAPH = ZH_GRAPH;
@@ -247,7 +247,7 @@ public class EditorTabbedPane extends JTabbedPane{
             TreeParser.getLeaf().clear();
             TreeParser.getSplitList().clear();
             TreeParser.vertex.clear();
-            TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,0);
+            TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,Preferences.DEFAULT_OFFSET_Y);
         }
         ValidCell.valid(editor);
         EditorBottom.getTextArea().setText(editor.getLabelString());

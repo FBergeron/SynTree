@@ -261,7 +261,7 @@ public class TreeParser extends JPanel {
         splitList.clear();
         countleaf = 1;
         vertex.clear();
-        creatTree(editor, graphComponent,list, 0);
+        creatTree(editor, graphComponent,list, Preferences.DEFAULT_OFFSET_Y);
         EditorBottom.getTextArea().setText(editor.getLabelString());
         new mxKeyboardHandler(graphComponent);
         this.setLayout(new BorderLayout());

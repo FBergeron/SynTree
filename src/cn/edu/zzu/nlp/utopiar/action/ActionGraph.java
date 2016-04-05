@@ -16,6 +16,7 @@ import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.EditorToolBar;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
 public abstract class ActionGraph extends AbstractAction {
@@ -141,13 +142,13 @@ public abstract class ActionGraph extends AbstractAction {
         TreeParser.getLeaf().clear();
         TreeParser.getSplitList().clear();
         TreeParser.vertex.clear();
-        TreeParser.creatTree(editor,orGraphComponent,list, 0);      
+        TreeParser.creatTree(editor,orGraphComponent,list, Preferences.DEFAULT_OFFSET_Y);      
         TreeParser.setCountleaf(1);
         List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(EditorTabbedPane.getPATH()));
         TreeParser.getLeaf().clear();
         TreeParser.getSplitList().clear();
         TreeParser.vertex.clear();
-        TreeParser.creatTree(editor, graphComponent, list1, 0);     
+        TreeParser.creatTree(editor, graphComponent, list1, Preferences.DEFAULT_OFFSET_Y);     
         ValidCell.valid(editor);
         EditorToolBar.getCombobox().setSelectedIndex(0);
         editor.update();

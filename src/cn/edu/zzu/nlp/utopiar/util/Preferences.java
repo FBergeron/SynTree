@@ -34,6 +34,8 @@ public class Preferences {
 
     public static final int DEFAULT_BOX_FONT_SIZE = 18;
 
+    public static final int DEFAULT_OFFSET_Y = 50;
+
     public static Preferences getInstance() {
         if( instance == null )
             instance = new Preferences();
