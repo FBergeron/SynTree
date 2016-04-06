@@ -89,8 +89,8 @@ public class EditorTabbedPane extends JTabbedPane{
         setOR_PATH(ENGLISH_PATH);
         setOR_GraphComponent(ENG_GRAPH_COMPONENT);
         JPanel englishPane = new TreeParser(editor,ENG_GRAPH_COMPONENT,ENGLISH_PATH,false);
-        addTab("中文",null,chinesePane);
-        addTab("英文",null,englishPane);
+        addTab("",null,chinesePane);
+        addTab("",null,englishPane);
         ((JTabbedPane)ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, CHINESE_PATH);
         ((JTabbedPane)ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, ENGLISH_PATH);
         drag(this,editor);
@@ -305,8 +305,6 @@ public class EditorTabbedPane extends JTabbedPane{
     public static mxGraphComponent getEngGraphComponent() {
         return ENG_GRAPH_COMPONENT;
     }
-
-
     
     public static mxGraphComponent getOR_GraphComponent() {
         return OR_GraphComponent;

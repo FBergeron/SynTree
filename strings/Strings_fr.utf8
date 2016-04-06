@@ -1,3 +1,7 @@
+ActionAddVertex.NewVertex=???
+
+ActionRefresh.ConfirmRevert.Body=Êtes-vous certain de vouloir rétablir les données?
+
 Menu.Help.About=À propos...
 
 Menu.File=Fichier
@@ -50,3 +54,28 @@ Frame.Settings.Button.Ok=Ok
 
 EditorTabbedPane.Tab.Chinese.Title=Chinois
 EditorTabbedPane.Tab.English.Title=Anglais
+
+Message.BackupError.Body=<html>Une erreur s'est produite pendant la copie de sécurité.<br>Les données n'ont pas été enregistrées.</html>
+Message.ConfirmSaveData.Body=Voulez-vous enregistrer les données?
+Message.EnterSentenceNumberWithinRange.Body=Entrez un numéro de phrase de 1 à {0}.
+Message.EnterValidSentenceNumber.Body=Veuillez entrer un # de phrase valide.
+Message.InvalidLeafVertexFound.Body=Assurez-vous que cette boîte feuille est valide.
+Message.IsolatedVertexFound.Body=Assurez-vous qu'aucune boîte ne soit isolée.
+Message.NoMoreNextSentence.Title=Avertissement
+Message.NoMoreNextSentence.Body=<html>Il n'y a pas d'autres phrases après celle-là.<br>Ceci est la dernière phrase.</html>
+Message.NoMorePreviousSentence.Title=Avertissement
+Message.NoMorePreviousSentence.Body=<html>Il n'y pas pas d'autres phrases avant celle-là.<br>Ceci est la première phrse.</html>
+Message.NotImplemented.Body=Cette fonctionnalité n'a pas encore été implantée.
+Message.Title.Error=Erreur
+Message.Title.Question=Question
+Message.Title.Warning=Avertissement
+Message.TooManyRootVertices.Body=L''arbre a {0} racines.
+Message.VertexWithoutChildren.Body=La boîte doit avoir des enfants.
+Message.VertexWithoutParent.Body=Une boîte doit avoir un parent.
+Message.VertexWithMoreThanOneParent.Body=La boîte a plus qu'un parent.
+
+ColorField.ColorChooser.Title=Sélectionnez une couleur...
+ColorField.PickColorButton.Tooltip=Sélectionnez une couleur...
+ColorField.RevertButton.Tooltip=Rétablir la couleur de défaut
+
+SpinnerField.RevertButton.Tooltip=Rétablir la valeur de défaut

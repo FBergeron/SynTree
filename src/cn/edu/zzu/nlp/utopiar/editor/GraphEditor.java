@@ -36,6 +36,7 @@ import cn.edu.zzu.nlp.readTree.Constraint;
 import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.Util;
 
@@ -133,7 +134,6 @@ public class GraphEditor extends JPanel{
         graph.getModel().addListener(mxEvent.UNDO, undoHandler);
         graph.getView().addListener(mxEvent.UNDO, undoHandler);
         getGraphComponent().getConnectionHandler().addListener(mxEvent.CONNECT, connectHandler); 
-        //graph.getView().addListener(mxEvent.CONNECT, connectHandler); 
     }
     
     /**
@@ -230,7 +230,10 @@ public class GraphEditor extends JPanel{
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                int flag = JOptionPane.showConfirmDialog(null, "是否保存？","确认", JOptionPane.YES_NO_CANCEL_OPTION);   
+                int flag = JOptionPane.showConfirmDialog(null, 
+                    Languages.getInstance().getString( "Message.ConfirmSaveData.Body" ),
+                    Languages.getInstance().getString( "Message.Title.Question" ),
+                    JOptionPane.YES_NO_CANCEL_OPTION);
                 GraphEditor editor = menuBar.getEditor();
                 mxGraphComponent graphComponent = GraphEditor.getGraphComponent();
                 mxGraph graph = graphComponent.getGraph();
@@ -261,7 +264,10 @@ public class GraphEditor extends JPanel{
                     }
                     catch( Exception ex ) {
                         ex.printStackTrace();
-                        JOptionPane.showMessageDialog( frame, "<html>An error occurred when performing backup.<br>Data has not been backed up.</html>", "Error", JOptionPane.ERROR_MESSAGE );
+                        JOptionPane.showMessageDialog( frame, 
+                            Languages.getInstance().getString( "Message.BackupError.Body" ),
+                            Languages.getInstance().getString( "Message.Title.Error" ),
+                            JOptionPane.ERROR_MESSAGE );
                     }
                     System.exit( 0 );
                 }

@@ -101,7 +101,10 @@ public class EditorToolBar extends JToolBar {
             public void focusLost(FocusEvent e) {
                 String temp = textField.getText();
                 if(!ValidCell.isNum(temp)){
-                    JOptionPane.showMessageDialog(editor, "请输入数字！","警告",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(editor, 
+                        Languages.getInstance().getString( "Message.EnterValidSentenceNumber.Body" ),
+                        Languages.getInstance().getString( "Message.Title.Warning" ),
+                        JOptionPane.WARNING_MESSAGE);
                     textField.setText("");
                 }
             }

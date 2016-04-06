@@ -1,6 +1,7 @@
 package cn.edu.zzu.nlp.utopiar.action;
 
 import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.EditorToolBar;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 
 public class ActionSort extends ActionGraph{
@@ -42,7 +44,10 @@ public class ActionSort extends ActionGraph{
                 graph.setCellStyle(":strockeColor=red;fillColor=red", list.toArray());                  
                 graph.getModel().endUpdate();                   
                 graph.refresh();
-                JOptionPane.showMessageDialog(editor, "现有"+list.size()+"个根节点");
+                JOptionPane.showMessageDialog(editor, 
+                    MessageFormat.format( Languages.getInstance().getString( "Message.TooManyRootVertices.Body" ), list.size() ),
+                    Languages.getInstance().getString( "Message.Title.Error" ),
+                    JOptionPane.ERROR_MESSAGE );
                 return;
             }else {
                 for (Object object : list) {
@@ -62,7 +67,10 @@ public class ActionSort extends ActionGraph{
                     graph.setCellStyle(":strockeColor=red;fillColor=red", sons);                    
                     graph.getModel().endUpdate();                   
                     graph.refresh();
-                    JOptionPane.showMessageDialog(editor, "父节点没有连好！");
+                    JOptionPane.showMessageDialog(editor, 
+                        Languages.getInstance().getString( "Message.VertexWithoutParent.Body" ),
+                        Languages.getInstance().getString( "Message.Title.Error" ),
+                        JOptionPane.ERROR_MESSAGE );
                     return;
                 }
                 Object son = graph.getModel().getTerminal(object, false);
@@ -75,7 +83,10 @@ public class ActionSort extends ActionGraph{
                     graph.setCellStyle(":strockeColor=red;fillColor=red", fathers);                 
                     graph.getModel().endUpdate();                   
                     graph.refresh();
-                    JOptionPane.showMessageDialog(editor, "子节点没有连好！");
+                    JOptionPane.showMessageDialog(editor, 
+                        Languages.getInstance().getString( "Message.VertexWithoutChildren.Body" ),
+                        Languages.getInstance().getString( "Message.Title.Error" ),
+                        JOptionPane.ERROR_MESSAGE );
                     return;
                 }
             }
@@ -97,7 +108,10 @@ public class ActionSort extends ActionGraph{
                 graph.setCellStyle(":strockeColor=red;fillColor=red", singleList.toArray());                    
                 graph.getModel().endUpdate();                   
                 graph.refresh();
-                JOptionPane.showMessageDialog(editor, "请确保不含有孤立结点！");
+                JOptionPane.showMessageDialog(editor, 
+                    Languages.getInstance().getString( "Message.IsolatedVertexFound.Body" ),
+                    Languages.getInstance().getString( "Message.Title.Error" ),
+                    JOptionPane.ERROR_MESSAGE);
                 return;
             }
             graph.clearSelection();
@@ -105,7 +119,10 @@ public class ActionSort extends ActionGraph{
             String[] strings = temp.split(" ");
             for (String string2 : strings) {
                 if(!string2.contains(")(")&&string2.contains("(")&&!string2.startsWith("(")){
-                    JOptionPane.showMessageDialog(editor, "请核对叶子结点是否正确！","警告",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(editor, 
+                        Languages.getInstance().getString( "Message.InvalidLeafVertexFound.Body" ),
+                        Languages.getInstance().getString( "Message.Title.Error" ),
+                        JOptionPane.ERROR_MESSAGE);
                     return ;
                 }
             }

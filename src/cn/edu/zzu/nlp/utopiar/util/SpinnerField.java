@@ -13,6 +13,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import cn.edu.zzu.nlp.utopiar.util.Languages;
+
 public class SpinnerField extends Box {
 
     public SpinnerField( final Integer value, final Integer defaultValue ) {
@@ -22,7 +24,7 @@ public class SpinnerField extends Box {
         spinner = new JSpinner( model );
         spinner.setPreferredSize( new Dimension( 50, spinner.getPreferredSize().height ) );
         revertValueButton = new JButton( "X" );
-        revertValueButton.setToolTipText( "Revert to default value" );
+        revertValueButton.setToolTipText( Languages.getInstance().getString( "SpinnerField.RevertButton.Tooltip" ) );
         revertValueButton.addActionListener(
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {

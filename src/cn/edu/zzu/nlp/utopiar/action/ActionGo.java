@@ -1,6 +1,7 @@
 package cn.edu.zzu.nlp.utopiar.action;
 
 import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
 
 import javax.swing.Action;
 import javax.swing.JOptionPane;
@@ -14,6 +15,7 @@ import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.EditorToolBar;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 
 public class ActionGo extends ActionGraph implements Action {
 
@@ -29,7 +31,10 @@ public class ActionGo extends ActionGraph implements Action {
         mxGraph graph = graphComponent.getGraph();
         int now = Integer.parseInt(EditorToolBar.getTextfield().getText());
         now--;
-        int check = JOptionPane.showConfirmDialog(null, "是否保存当前语句？","确认", JOptionPane.YES_NO_CANCEL_OPTION);
+        int check = JOptionPane.showConfirmDialog(null, 
+            Languages.getInstance().getString( "Message.ConfirmSaveData.Body" ),
+            Languages.getInstance().getString( "Message.Title.Question" ),
+            JOptionPane.YES_NO_CANCEL_OPTION);
         if(check==0){
             try{
             String str;
@@ -52,7 +57,10 @@ public class ActionGo extends ActionGraph implements Action {
             return ;
         }
         if(now<0||now>TreeParser.getMAXCOUNT()-1){
-            JOptionPane.showMessageDialog(editor, "请输入1~"+(TreeParser.getMAXCOUNT()),"警告",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(editor, 
+                MessageFormat.format( Languages.getInstance().getString( "Message.EnterSentenceNumberWithinRange.Body" ), TreeParser.getMAXCOUNT() ),
+                Languages.getInstance().getString( "Message.Title.Warning" ),
+                JOptionPane.WARNING_MESSAGE);
             EditorToolBar.getTextfield().setText("");
             return;
         }

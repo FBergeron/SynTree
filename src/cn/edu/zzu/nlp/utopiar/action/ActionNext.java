@@ -12,6 +12,7 @@ import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 
 public class ActionNext extends ActionGraph {
 
@@ -42,7 +43,10 @@ public class ActionNext extends ActionGraph {
             int count = TreeParser.getNow();
             count++;
             if(count>TreeParser.getMAXCOUNT()-1){
-                JOptionPane.showMessageDialog(editor, "校对完毕！","警告",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(editor, 
+                    Languages.getInstance().getString( "Message.NoMoreNextSentence.Body" ),
+                    Languages.getInstance().getString( "Message.NoMoreNextSentence.Title" ),
+                    JOptionPane.WARNING_MESSAGE);
                 return;
             }
             refreshTree(editor, count);

@@ -9,6 +9,7 @@ import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
@@ -42,7 +43,10 @@ public class ActionPre extends ActionGraph {
             int count = TreeParser.getNow();
             count--;
             if(count<0){
-                JOptionPane.showMessageDialog(editor, "请从此句开始校对！","警告",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(editor, 
+                    Languages.getInstance().getString( "Message.NoMorePreviousSentence.Body" ),
+                    Languages.getInstance().getString( "Message.NoMorePreviousSentence.Title" ),
+                    JOptionPane.WARNING_MESSAGE);
                 return;
             }
             refreshTree(editor, count);

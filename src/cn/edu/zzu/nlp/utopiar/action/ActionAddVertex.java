@@ -7,6 +7,7 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.Util;
 
@@ -39,7 +40,7 @@ public class ActionAddVertex extends ActionGraph{
                 strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
             Integer boxWidth = Preferences.getInstance().getBoxWidth();
             Integer boxHeight = Preferences.getInstance().getBoxHeight();
-            graph.insertVertex(parent, null, "我来了~", 0, 0, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth, boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight, strStyle.toString());
+            graph.insertVertex(parent, null, Languages.getInstance().getString( "ActionAddVertex.NewVertex" ), 0, 0, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth, boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight, strStyle.toString());
         }
         finally
         {

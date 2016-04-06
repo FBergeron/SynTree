@@ -1,3 +1,7 @@
+ActionAddVertex.NewVertex=???
+
+ActionRefresh.ConfirmRevert.Body=Do you really want to revert all your modifications?
+
 Menu.Help.About=About...
 
 Menu.File=File
@@ -50,3 +54,28 @@ Frame.Settings.Button.Ok=Ok
 
 EditorTabbedPane.Tab.Chinese.Title=Chinese
 EditorTabbedPane.Tab.English.Title=English
+
+Message.BackupError.Body=<html>An error occurred when performing backup.<br>Data has not been backed up.</html>
+Message.ConfirmSaveData.Body=Do you want to save the data?
+Message.EnterSentenceNumberWithinRange.Body=Enter a sentence number from 1 to {0}.
+Message.EnterValidSentenceNumber.Body=Please enter a valid Sentence #.
+Message.InvalidLeafVertexFound.Body=Make sure the leaf node is correct.
+Message.IsolatedVertexFound.Body=Make sure that no boxes are isolated.
+Message.NoMoreNextSentence.Title=Warning
+Message.NoMoreNextSentence.Body=<html>There is no next sentence.<br>This is the last sentence.</html>
+Message.NoMorePreviousSentence.Title=Warning
+Message.NoMorePreviousSentence.Body=<html>There is no previous sentence.<br>This is the first sentence.</html>
+Message.NotImplemented.Body=This feature has not been implemented yet.
+Message.Title.Error=Error
+Message.Title.Question=Question
+Message.Title.Warning=Warning
+Message.TooManyRootVertices.Body=The tree has {0} roots.
+Message.VertexWithoutChildren.Body=The box must have children.
+Message.VertexWithoutParent.Body=The box must have a parent.
+Message.VertexWithMoreThanOneParent.Body=The box has more than one parent.
+
+ColorField.ColorChooser.Title=Pick a color...
+ColorField.PickColorButton.Tooltip=Pick a color...
+ColorField.RevertButton.Tooltip=Revert to default color
+
+SpinnerField.RevertButton.Tooltip=Revert to default value

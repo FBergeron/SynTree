@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import cn.edu.zzu.nlp.utopiar.util.Languages;
+
 public class ColorField extends Box {
 
     public ColorField( Color colour, Color defaultColour ) {
@@ -28,18 +30,18 @@ public class ColorField extends Box {
         colorPanel.setBackground( colour == null ? defaultColour : colour );
         colorPanel.setPreferredSize( new Dimension( 50, colorPanel.getPreferredSize().height ) );
         pickColorButton = new JButton( "..." );
-        pickColorButton.setToolTipText( "Pick a color..." );
+        pickColorButton.setToolTipText( Languages.getInstance().getString( "ColorField.PickColorButton.Tooltip" ) );
         pickColorButton.addActionListener(
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {
-                    Color col = JColorChooser.showDialog( ColorField.this, "Color Selection", Color.BLACK );
+                    Color col = JColorChooser.showDialog( ColorField.this, Languages.getInstance().getString( "ColorField.ColorChooser.Title" ), Color.BLACK );
                     colorPanel.setBackground( col );
                     fireActionEvent();
                 }
             }
         );
         revertColorButton = new JButton( "X" );
-        revertColorButton.setToolTipText( "Revert to default color" );
+        revertColorButton.setToolTipText( Languages.getInstance().getString( "ColorField.RevertButton.Tooltip" ) );
         revertColorButton.addActionListener(
             new ActionListener() {
                 public void actionPerformed( ActionEvent evt ) {

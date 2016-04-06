@@ -202,27 +202,6 @@ public class TreeParser extends JPanel {
         }
     }
     
-//  public static List<String> getWord(int now, List<String> list) {
-//      List<String> wordlList = new ArrayList<String>();
-//      String testString = list.get(now);
-//      String[] strings = testString.split(" ");
-//      for (String string : strings) {
-//          if (string.startsWith("(")) {
-//              wordlList.add("(");
-//              wordlList.add(string.substring(1));
-//          } else if (string.endsWith(")")) {
-//              wordlList.add(string.substring(0, string.indexOf(')')));
-//              do {
-//                  string = string.substring(0, string.length() - 1);
-//                  wordlList.add(")");
-//              } while (string.endsWith(")"));
-//          } else {
-//              wordlList.add(string);
-//          }
-//      }
-//      return wordlList;
-//  }
-
     public TreeParser(GraphEditor editor, final mxGraphComponent graphComponent, String path, boolean iszH) throws IOException {
         this.PATH = path;
 //      final mxGraph graph = graphComponent.getGraph();

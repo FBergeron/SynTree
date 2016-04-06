@@ -7,6 +7,7 @@ import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 
 public class ActionRefresh extends ActionGraph {
 
@@ -17,7 +18,11 @@ public class ActionRefresh extends ActionGraph {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        int revertConfirmation = JOptionPane.showConfirmDialog(null, "Do you really want to revert all your modifications?","Question", JOptionPane.YES_NO_OPTION);
+System.out.println( "test0 str="+ Languages.getInstance().getString( "Message.VertexWithMoreThanOneParent.Body" ));                
+        int revertConfirmation = JOptionPane.showConfirmDialog(null, 
+            Languages.getInstance().getString( "ActionRefresh.ConfirmRevert.Body" ),
+            Languages.getInstance().getString( "Messasge.Title.Question" ), 
+                JOptionPane.YES_NO_OPTION);
         if(revertConfirmation == JOptionPane.YES_OPTION){ 
             GraphEditor editor = getEditor(e);
             TreeParser.readData(EditorTabbedPane.getPATH());
