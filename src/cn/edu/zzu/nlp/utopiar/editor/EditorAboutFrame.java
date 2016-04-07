@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.net.URI;
+import java.text.MessageFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,6 +29,8 @@ import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
 import com.mxgraph.view.mxGraph;
+
+import cn.edu.zzu.nlp.utopiar.util.Languages;
 
 public class EditorAboutFrame extends JDialog
 {
@@ -43,21 +46,14 @@ public class EditorAboutFrame extends JDialog
     public EditorAboutFrame(Frame owner)
     {
         super(owner);
-        setTitle("关于语法树工具");
+        setTitle( Languages.getInstance().getString( "Frame.About.Title" ) );
         setLayout(new BorderLayout());
 
         // Creates the gradient panel
         JPanel panel = new JPanel(new BorderLayout())
         {
-
-            /**
-             * 
-             */
             private static final long serialVersionUID = -5062895855016210947L;
 
-            /**
-             * 
-             */
             public void paintComponent(Graphics g)
             {
                 super.paintComponent(g);
@@ -76,7 +72,7 @@ public class EditorAboutFrame extends JDialog
                 .createEmptyBorder(8, 8, 12, 8)));
 
         // Adds title
-        JLabel titleLabel = new JLabel("关于语法树工具");
+        JLabel titleLabel = new JLabel( Languages.getInstance().getString( "Frame.About.Description" ) );
         titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
         titleLabel.setOpaque(false);
@@ -85,59 +81,53 @@ public class EditorAboutFrame extends JDialog
         Box subtitlePanel = Box.createVerticalBox();
 
         // Adds optional subtitle
-        JLabel subtitleLabel = new JLabel(
-            "<html>SynTree v2.3.0<br>更多信息请访问 <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>");
+        JLabel subtitleLabel = new JLabel( Languages.getInstance().getString( "Frame.About.Subtitle.Version-2.3.0" ) );
         subtitleLabel.addMouseListener( new LinkFacilitator( "https://github.com/FBergeron/SynTree" ) );
         subtitleLabel.setBorder(BorderFactory.createEmptyBorder(4, 18, 0, 0));
         subtitleLabel.setOpaque(false);
 
-        JLabel subtitleLabel2 = new JLabel( 
-            "<html>SynTree v2.2.1 (Original Version)<br>更多信息请访问 <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>" );
+        JLabel subtitleLabel2 = new JLabel( Languages.getInstance().getString( "Frame.About.Subtitle.Version-2.2.1" ) );
         subtitleLabel2.addMouseListener( new LinkFacilitator( "http://syntree.github.io/index.html" ) );
         subtitleLabel2.setBorder(BorderFactory.createEmptyBorder(14, 18, 0, 0));
         subtitleLabel2.setOpaque(false);
 
+        subtitlePanel.add( new JLabel( " " ) );
         subtitlePanel.add( subtitleLabel );
         subtitlePanel.add( subtitleLabel2 );
 
         panel.add(subtitlePanel, BorderLayout.CENTER);
         getContentPane().add(panel, BorderLayout.NORTH);
 
-
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        content.add(new JLabel("语法树工具 - 基于JGraphx的语法树修改工具"));
-        content.add(new JLabel("作者：郑大自然语言处理实验室  梁军"));
-        content.add(new JLabel(" "));
-
-        content.add(new JLabel("mxGraph版本 " + mxGraph.VERSION));
-        content.add(new JLabel("Copyright (C) 2013 by ZZU Nlp Ltd."));
-        content.add(new JLabel("All rights reserved."));
+        content.add(new JLabel( Languages.getInstance().getString( "Frame.About.Author" ) ) );
+        content.add(new JLabel(Languages.getInstance().getString("Frame.About.Copyright")));
         content.add(new JLabel(" "));
 
         try {
-            content.add(new JLabel("操作系统: " + System.getProperty("os.name")));
-        }
-        catch( Exception ignore ) {
-        }
-        try {
-            content.add(new JLabel("操作系统版本: " + System.getProperty("os.version")));
-        }
-        catch( Exception ignore ) {
-        }
-        content.add(new JLabel(" "));
-        try {
-            content.add(new JLabel("Java厂商: " + System.getProperty("java.vendor", "undefined")));
-            content.add(new JLabel("Java版本: " + System.getProperty("java.version", "undefined")));
+            content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.OS.Name" ), System.getProperty("os.name"))) );
+            content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.OS.Version" ), System.getProperty("os.version"))) );
             content.add(new JLabel(" "));
         }
         catch( Exception ignore ) {
         }
+
         try {
-            content.add(new JLabel("安装内存: " + Runtime.getRuntime().totalMemory()));
-            content.add(new JLabel("剩余内存: " + Runtime.getRuntime().freeMemory()));
+            content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.Java.Vendor" ), System.getProperty("java.vendor", "undefined"))) );
+            content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.Java.Version" ), System.getProperty("java.version", "undefined"))) );
+            content.add(new JLabel(" "));
+        }
+        catch( Exception ignore ) {
+        }
+
+        content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.mxGraph.Version" ), mxGraph.VERSION)));
+        content.add(new JLabel(" "));
+
+        try {
+            content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.Memory.Total" ), Runtime.getRuntime().totalMemory())) );
+            content.add(new JLabel( MessageFormat.format( Languages.getInstance().getString( "Frame.About.Memory.Free" ), Runtime.getRuntime().freeMemory())) );
         }
         catch( Exception ignore ) {
         }
@@ -151,7 +141,7 @@ public class EditorAboutFrame extends JDialog
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         // Adds OK button to close window
-        JButton closeButton = new JButton("关闭");
+        JButton closeButton = new JButton("OK");
         closeButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -166,7 +156,7 @@ public class EditorAboutFrame extends JDialog
         getRootPane().setDefaultButton(closeButton);
 
         setResizable(false);
-        setSize(460, 500);
+        pack();
     }
 
     /**

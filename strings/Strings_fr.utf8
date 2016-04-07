@@ -36,6 +36,20 @@ Toolbar.ShowOption.DisplayWordsAndPOS=Voir les mots et leur classe
 Toolbar.ShowOption.DisplayWordsAndConstraints=Voir les mots et les contraintes
 Toolbar.Refresh=Revenir
 
+Frame.About.Title=À propos de SynTree
+Frame.About.Subtitle.Version-2.3.0=<html>SynTree v2.3.0<br>Pour plus d'infos: <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
+Frame.About.Subtitle.Version-2.2.1=<html>SynTree v2.2.1 (Original Version)<br>Pour plus d'infos: <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
+Frame.About.Description=Outil de manipulation d'arbres syntaxiques basé sur la librairie JGraph.
+Frame.About.Author=Auteur original: Laboratoire de recherche sur le traitement du langage Cheng Liang 
+Frame.About.Copyright=<html>Copyright (C) 2013 par ZZU Nlp Ltd.<br>Tous droits réservés.</html>
+Frame.About.mxGraph.Version=Version de mxGraph: {0}
+Frame.About.OS.Name=Nom du système: {0}
+Frame.About.OS.Version=Version du système: {0}
+Frame.About.Java.Vendor=Distribution de Java: {0}
+Frame.About.Java.Version=Version de Java: {0}
+Frame.About.Memory.Total=Mémoire totale: {0}
+Frame.About.Memory.Free=Mémoire disponible: {0}
+
 Frame.Settings.Title=Paramètres
 Frame.Settings.TabPanel.Visual=Apparence
 Frame.Settings.TabPanel.PathSelection=Emplacement des données
@@ -51,11 +65,15 @@ Frame.Settings.Visual.InterBoxGapWidth=Espace horizontal entre les boîtes
 Frame.Settings.Visual.InterBoxGapHeight=Espace vertical entre les boîtes
 Frame.Settings.Visual.BoxFontSize=Taille des caractères des boîtes
 Frame.Settings.Button.Ok=Ok
+Frame.Settings.PathSelectionTab.Chinese.Title=Données chinoises
+Frame.Settings.PathSelectionTab.English.Title=Données anglaises
+Frame.Settings.PathSelectionTab.SelectButton=Spécifier...
 
 EditorTabbedPane.Tab.Chinese.Title=Chinois
 EditorTabbedPane.Tab.English.Title=Anglais
 
 Message.BackupError.Body=<html>Une erreur s'est produite pendant la copie de sécurité.<br>Les données n'ont pas été enregistrées.</html>
+Message.ConfirmDisplay.Body=Êtes-vous certain de vouloir ouvrir les nouvelles données?
 Message.ConfirmSaveData.Body=Voulez-vous enregistrer les données?
 Message.EnterSentenceNumberWithinRange.Body=Entrez un numéro de phrase de 1 à {0}.
 Message.EnterValidSentenceNumber.Body=Veuillez entrer un # de phrase valide.
@@ -66,6 +84,8 @@ Message.NoMoreNextSentence.Body=<html>Il n'y a pas d'autres phrases après celle
 Message.NoMorePreviousSentence.Title=Avertissement
 Message.NoMorePreviousSentence.Body=<html>Il n'y pas pas d'autres phrases avant celle-là.<br>Ceci est la première phrse.</html>
 Message.NotImplemented.Body=Cette fonctionnalité n'a pas encore été implantée.
+Message.OnlyDragOneFile.Body=Assurez-vous de faire glisser qu'1 seul fichier de données.
+Message.RestartMightBeNeeded.Body=<html>En fonction du look choisi, il est possible<br>qu'il soit nécessaire de redémarrer l'application<br>pour que le changement s'effectue correctement.</html>
 Message.Title.Error=Erreur
 Message.Title.Question=Question
 Message.Title.Warning=Avertissement

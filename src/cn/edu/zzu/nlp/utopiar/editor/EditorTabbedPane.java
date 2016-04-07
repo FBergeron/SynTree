@@ -339,12 +339,18 @@ public class EditorTabbedPane extends JTabbedPane{
                         List<File> list =  (List<File>) (dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
                         String temp="";
                         if(list.size()>1){
-                            JOptionPane.showMessageDialog(editor, "请拖入一个文件！","警告",JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(editor, 
+                                Languages.getInstance().getString( "Message.OnlyDragOneFile.Body" ),
+                                Languages.getInstance().getString( "Message.Title.Warning" ),
+                                JOptionPane.WARNING_MESSAGE);
                         }else{
                             for(File file:list)
                                 temp+=file.getAbsolutePath();
                             if(comp.getSelectedIndex()==1){                             
-                                int flag = JOptionPane.showConfirmDialog(null, "确认显示？","确认", JOptionPane.YES_NO_OPTION); 
+                                int flag = JOptionPane.showConfirmDialog(null, 
+                                    Languages.getInstance().getString( "Message.ConfirmDisplay.Body" ),
+                                    Languages.getInstance().getString( "Message.Title.Question" ),
+                                    JOptionPane.YES_NO_OPTION); 
                                 if(flag == 0){
                                     EditorTabbedPane.setENGLISH_PATH(temp);
                                     EditorTabbedPane.setPATH(temp);
@@ -355,7 +361,10 @@ public class EditorTabbedPane extends JTabbedPane{
                                 }
                             }
                             else if(comp.getSelectedIndex()==0){                                
-                                int flag = JOptionPane.showConfirmDialog(null, "确认显示？","确认", JOptionPane.YES_NO_OPTION); 
+                                int flag = JOptionPane.showConfirmDialog(null, 
+                                    Languages.getInstance().getString( "Message.ConfirmDisplay.Body" ),
+                                    Languages.getInstance().getString( "Message.Title.Question" ),
+                                    JOptionPane.YES_NO_OPTION); 
                                 if(flag == 0){
                                     EditorTabbedPane.setCHINESE_PATH(temp);
                                     EditorTabbedPane.setPATH(temp);

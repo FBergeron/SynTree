@@ -36,6 +36,20 @@ Toolbar.ShowOption.DisplayWordsAndPOS=显示分词及词性
 Toolbar.ShowOption.DisplayWordsAndConstraints=显示分词及约束
 Toolbar.Refresh=刷新
 
+Frame.About.Title=关于语法树工具
+Frame.About.Subtitle.Version-2.3.0=<html>SynTree v2.3.0<br>更多信息请访问 <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
+Frame.About.Subtitle.Version-2.2.1=<html>SynTree v2.2.1 (Original Version)<br>更多信息请访问 <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
+Frame.About.Description=语法树工具 - 基于JGraphx的语法树修改工
+Frame.About.Author=作者：郑大自然语言处理实验室  梁军
+Frame.About.Copyright=<html>Copyright (C) 2013 by ZZU Nlp Ltd.<br>All rights reserved.</html>
+Frame.About.mxGraph.Version=mxGraph版本: {0}
+Frame.About.OS.Name=操作系统: {0}
+Frame.About.OS.Version=操作系统: {0}
+Frame.About.Java.Vendor=Java厂商: {0}
+Frame.About.Java.Version=ava版本: {0}
+Frame.About.Memory.Total=安装内存: {0}
+Frame.About.Memory.Free=剩余内存: {0}
+
 Frame.Settings.Title=设置
 Frame.Settings.TabPanel.Visual=外观和感觉
 Frame.Settings.TabPanel.PathSelection=路径选择
@@ -51,11 +65,15 @@ Frame.Settings.Visual.InterBoxGapWidth=箱体之间广度
 Frame.Settings.Visual.InterBoxGapHeight=框之间的高度
 Frame.Settings.Visual.BoxFontSize=的字符尺寸
 Frame.Settings.Button.Ok=Ok
+Frame.Settings.PathSelectionTab.Chinese.Title=中国语言数据
+Frame.Settings.PathSelectionTab.English.Title=英语数据
+Frame.Settings.PathSelectionTab.SelectButton=选择...
 
 EditorTabbedPane.Tab.Chinese.Title=中文
 EditorTabbedPane.Tab.English.Title=英文
 
 Message.BackupError.Body=<html>执行备份时发生错误。<br>数据没有被备份。</html>
+Message.ConfirmDisplay.Body=确认显示？
 Message.ConfirmSaveData.Body=是否保存当前语句？
 Message.EnterSentenceNumberWithinRange.Body=请输入1~{0}
 Message.EnterValidSentenceNumber.Body=请输入数字！
@@ -66,6 +84,8 @@ Message.NoMoreNextSentence.Body=校对完毕！
 Message.NoMorePreviousSentence.Title=警告
 Message.NoMorePreviousSentence.Body=请从此句开始校对！
 Message.NotImplemented.Body=不好意思，该功能请稍后~
+Message.OnlyDragOneFile.Body=请拖入一个文件！
+Message.RestartMightBeNeeded.Body=你可能需要重新启动才能正常更改应用程序。
 Message.Title.Error=错误
 Message.Title.Question=警告
 Message.Title.Warning=警告

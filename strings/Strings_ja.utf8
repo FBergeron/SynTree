@@ -36,6 +36,20 @@ Toolbar.ShowOption.DisplayWordsAndPOS=単語とPOSを表示します
 Toolbar.ShowOption.DisplayWordsAndConstraints=単語と制約を表示します
 Toolbar.Refresh=更新
 
+Frame.About.Title=バジョン情報
+Frame.About.Subtitle.Version-2.3.0=<html>SynTree v2.3.0<br>詳細については、<a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
+Frame.About.Subtitle.Version-2.2.1=<html>SynTree v2.2.1 (元のバージョン)<br>詳細については、<a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
+Frame.About.Description=JGraph-based 構文木ツール
+Frame.About.Author=著者：チェン・リャン自然言語処理研究室
+Frame.About.Copyright=<html>Copyright (C) 2013 by ZZU Nlp Ltd.<br>All rights reserved.</html>
+Frame.About.mxGraph.Version=mxGraphのバージョン: {0}
+Frame.About.OS.Name=システムの名前: {0}
+Frame.About.OS.Version=システムのバージョン: {0}
+Frame.About.Java.Vendor=Javaのベンダー: {0}
+Frame.About.Java.Version=Javaのバージョン: {0}
+Frame.About.Memory.Total=総メモリ: {0}
+Frame.About.Memory.Free=空きメモリー: {0}
+
 Frame.Settings.Title=設定
 Frame.Settings.TabPanel.Visual=見た目
 Frame.Settings.TabPanel.PathSelection=経路選択
@@ -51,11 +65,15 @@ Frame.Settings.Visual.InterBoxGapWidth=ボックスの間の広さ
 Frame.Settings.Visual.InterBoxGapHeight=ボックスの間の高さ
 Frame.Settings.Visual.BoxFontSize=文字の大きさ
 Frame.Settings.Button.Ok=Ok
+Frame.Settings.PathSelectionTab.Chinese.Title=中国語のデータ
+Frame.Settings.PathSelectionTab.English.Title=英語データ
+Frame.Settings.PathSelectionTab.SelectButton=選択します...
 
 EditorTabbedPane.Tab.Chinese.Title=中国語
 EditorTabbedPane.Tab.English.Title=英語
 
 Message.BackupError.Body=<html>バックアップしなが、問題が起こりました。<br>バックアップがちゃんと出来ませんでした。</html>
+Message.ConfirmDisplay.Body=新しいデータを表示しますか？
 Message.ConfirmSaveData.Body=データを保存したいですか？
 Message.EnterSentenceNumberWithinRange.Body=<html>文の番号を入力して下さい。<br>数値は１から{0}は良いです。</html>
 Message.EnterValidSentenceNumber.Body=ちゃんとに番号を入力してください。
@@ -66,6 +84,8 @@ Message.NoMoreNextSentence.Body=<html>次の文ではありません。<br>こ�
 Message.NoMorePreviousSentence.Title=注意
 Message.NoMorePreviousSentence.Body=<html>前の文ではありません。<br>これは最初の文です。</html>
 Message.NotImplemented.Body=申し訳ありませんが、この機能はまだ実装されていません。
+Message.OnlyDragOneFile.Body=一つのファイルをドラッグしてください。
+Message.RestartMightBeNeeded.Body=適切に変更をするためにアプリケーションを再起動する必要かもしれません。
 Message.Title.Error=エラー
 Message.Title.Question=注意
 Message.Title.Warning=注意

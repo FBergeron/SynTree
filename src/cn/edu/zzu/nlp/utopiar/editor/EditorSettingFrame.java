@@ -77,8 +77,10 @@ public class EditorSettingFrame extends JDialog {
                     lookAndFeelComboBox.hidePopup();
                     if( !hasShownPrefChangeWarning ) {
                         JOptionPane.showOptionDialog(EditorSettingFrame.this, 
-                            "<html>You might have to close the Settings Dialog<br>or restart the application to view the changes.</html>", 
-                                "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] { "OK" }, "OK" );
+                            Languages.getInstance().getString( "Message.RestartMightBeNeeded.Body" ), 
+                            Languages.getInstance().getString( "Message.Title.Warning" ), 
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, 
+                            new String[] { "OK" }, "OK" );
                         hasShownPrefChangeWarning = true;
                     }
 
@@ -169,6 +171,8 @@ public class EditorSettingFrame extends JDialog {
         Box leftPanel = Box.createVerticalBox();
         Box rightPanel = Box.createVerticalBox();
 
+        leftPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
+        rightPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
         leftPanel.add(lookAndFeelLabel);
         rightPanel.add(lookAndFeelComboBox);
         leftPanel.add(Box.createRigidArea(new Dimension( 5, 15 )));
@@ -420,9 +424,9 @@ public class EditorSettingFrame extends JDialog {
             engImg.setAlignmentX( JComponent.CENTER_ALIGNMENT );
             engPanel.add( engImg );
             engPanel.add( Box.createRigidArea( new Dimension( 10, 10 ) ) );
-            JButton zhButton = new JButton("选择");
+            JButton zhButton = new JButton( Languages.getInstance().getString( "Frame.Settings.PathSelectionTab.SelectButton" ) );
             zhButton.setAlignmentX( JComponent.CENTER_ALIGNMENT );
-            JButton engButton = new JButton("选择");
+            JButton engButton = new JButton( Languages.getInstance().getString( "Frame.Settings.PathSelectionTab.SelectButton" ) );
             engButton.setAlignmentX( JComponent.CENTER_ALIGNMENT );
             engButton.addActionListener(new ActionListener() {
                 
@@ -461,8 +465,8 @@ public class EditorSettingFrame extends JDialog {
             zhPanel.add( Box.createVerticalGlue() );
             engPanel.add(engButton);
             engPanel.add( Box.createVerticalGlue() );
-            this.add("中文路径选择",zhPanel);
-            this.add("英文路径选择",engPanel);
+            this.add(Languages.getInstance().getString( "Frame.Settings.PathSelectionTab.Chinese.Title" ), zhPanel);
+            this.add(Languages.getInstance().getString( "Frame.Settings.PathSelectionTab.English.Title" ), engPanel);
         }
         
     }
