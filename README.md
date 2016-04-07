@@ -1,13 +1,9 @@
-SynTree
-
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+##SynTree
 
 A Syntax Tree Tool based on the JGraph library.
 
 
 ###2016-04-07 What's new: 
-
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 1.The application has been localized in English, French, Japanese.
 
@@ -28,8 +24,6 @@ A Syntax Tree Tool based on the JGraph library.
 
 ###2013-12-01 What's new: 
 
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
 1.修复由于文件中不存在该句法树而造成软件卡死的情况；
 
 2.修复中英文句子数量不对照时，无法读取较多数量文件的情况；
@@ -42,8 +36,6 @@ A Syntax Tree Tool based on the JGraph library.
 
 ###2013-10-21 What's new: 
 
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
 1.修改生成语法树顺序的保存方式，改为仅与叶子结点坐标相关，与其父结点的坐标顺序不再相关；
 
 2.修改错误提示的方式，直接将错误结点的背景改为红色。
@@ -52,15 +44,11 @@ A Syntax Tree Tool based on the JGraph library.
 
 ###2013-10-17 What's new: 
 
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
 1.修复由于连线父节点端没有连好造成结点丢失的情况。
 
 
 
 ###2013-10-13 What's new: 
-
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 1.修复选择文件路径后没有自动刷新的Bug；
 
@@ -77,8 +65,6 @@ A Syntax Tree Tool based on the JGraph library.
 
 ###2013-10-8 What's new:
 
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
 1.修正结点子节点按照坐标顺序保存句法树的括号对形式；
 
 2.添加对句法树修改工具中出现孤立结点的判断；
@@ -91,8 +77,6 @@ A Syntax Tree Tool based on the JGraph library.
 
 ###2013-09-28 What's new: 
 
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
 1.新增文件路径自定义功能；
 
 2.新增跳转前询问用户是否保存；
@@ -104,8 +88,6 @@ A Syntax Tree Tool based on the JGraph library.
 
 
 ###2013-09-24 What's new: 
-
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 1.全新的界面布局，采用beauty eye风格界面，显示效果更清晰；
 
