@@ -1,3 +1,31 @@
+SynTree
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+A Syntax Tree Tool based on the JGraph library.
+
+
+###2016-04-07 What's new: 
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+1.The application has been localized in English, French, Japanese.
+
+2.A new Preferences Dialog allows the user to customize colors, layout, and look.
+
+3.Data are automatically backed up when the application exits.
+
+4.A contextual Edition menu has been added.
+
+5.Part of the sentence can be highlighted while clicking on a box.
+
+6.The toolbar layout has been improved and Zoom in/Zoom out buttons have been added.
+
+7.Implemented rectangle area multi-selection.
+
+8.Added build.xml file to easily build the application using Ant.
+
+
 ###2013-12-01 What's new: 
 
 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
