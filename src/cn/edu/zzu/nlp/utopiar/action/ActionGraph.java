@@ -153,7 +153,9 @@ public abstract class ActionGraph extends AbstractAction {
         TreeParser.creatTree(editor, graphComponent, list1, Preferences.DEFAULT_OFFSET_Y);     
         ValidCell.valid(editor);
         EditorToolBar.getCombobox().setSelectedIndex(0);
+        editor.clearHighlight();
         editor.update();
+        editor.setModified(false);
     }
     
     public static String getSaveStr(GraphEditor editor, mxGraph graph){

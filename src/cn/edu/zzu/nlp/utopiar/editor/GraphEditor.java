@@ -230,35 +230,8 @@ public class GraphEditor extends JPanel{
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                int flag = JOptionPane.showConfirmDialog(null, 
-                    Languages.getInstance().getString( "Message.ConfirmSaveData.Body" ),
-                    Languages.getInstance().getString( "Message.Title.Question" ),
-                    JOptionPane.YES_NO_CANCEL_OPTION);
-                GraphEditor editor = menuBar.getEditor();
-                mxGraphComponent graphComponent = GraphEditor.getGraphComponent();
-                mxGraph graph = graphComponent.getGraph();
-                if(flag == JOptionPane.YES_OPTION){
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    String str = null;
-                    try {
-                        str = ActionGraph.getSaveStr(editor, EditorTabbedPane.getOR_GRAPH());
-                        if(str==null){
-                            return;
-                        }
-                        SaveTree.save(TreeParser.getNow(), str ,EditorTabbedPane.getOR_PATH());
-                        SaveTree.save(EditorTabbedPane.getOR_PATH());
-                        str = ActionGraph.getSaveStr(editor, graph);
-                        if(str==null){
-                            System.out.print("str="+str);
-                            return;
-                        }           
-                        SaveTree.save(TreeParser.getNow(), str, EditorTabbedPane.getPATH());
-                        SaveTree.save(EditorTabbedPane.getPATH());
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                if( flag == JOptionPane.YES_OPTION || flag == JOptionPane.NO_OPTION ) {
+                boolean isGraphClosed = doCloseGraph();
+                if(isGraphClosed) {
                     try {
                         backupTrainData();
                     }
@@ -277,6 +250,57 @@ public class GraphEditor extends JPanel{
         return frame;
     }
     
+    /*
+     * If the graph's data have changed, display a dialog to confirm that that data must be saved or not.
+     * Try to save the graph's data if it's needed.
+     * @return <code>true</code> if the data has been saved successfully and the graph can be disposed of, <code>false</code> otherwise.
+     */
+    public boolean doCloseGraph() {
+        if (!isModified())
+            return(true);
+
+        int flag = JOptionPane.showConfirmDialog(null, 
+            Languages.getInstance().getString( "Message.ConfirmSaveData.Body" ),
+            Languages.getInstance().getString( "Message.Title.Question" ),
+            JOptionPane.YES_NO_CANCEL_OPTION);
+        if (flag == JOptionPane.CANCEL_OPTION) 
+            return(false);
+        else if(flag == JOptionPane.YES_OPTION){
+            boolean isDataSaved = doSave();
+            if (!isDataSaved)
+                return (false);
+        }
+        return(true);
+    }
+
+    /*
+     * Save the data.
+     * @return <code>true</code> if the data has been saved successfully, <code>false</code> otherwise.
+     */
+    public boolean doSave() {
+        mxGraph graph = graphComponent.getGraph();
+        String str = null;
+        try {
+            str = ActionGraph.getSaveStr(this, EditorTabbedPane.getOR_GRAPH());
+            if(str==null)
+                return(false);
+            SaveTree.save(TreeParser.getNow(), str ,EditorTabbedPane.getOR_PATH());
+            SaveTree.save(EditorTabbedPane.getOR_PATH());
+
+            str = ActionGraph.getSaveStr(this, graph);
+            if(str==null){
+                System.out.print("str="+str);
+                return(false);
+            }           
+            SaveTree.save(TreeParser.getNow(), str, EditorTabbedPane.getPATH());
+            SaveTree.save(EditorTabbedPane.getPATH());
+            return (true);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            return (false);
+        }
+    }
+
     /**
      * 设置路径窗口
      */
@@ -319,6 +343,14 @@ public class GraphEditor extends JPanel{
             // Shows the modal dialog and waits
             about.setVisible(true);
         }
+    }
+
+    public boolean isModified() {
+        return( isModified );
+    }
+
+    public void setModified(boolean isModified) {
+        this.isModified = isModified;
     }
 
     public void setHighlight( int startAndEnd ) {
@@ -511,6 +543,8 @@ public class GraphEditor extends JPanel{
     private int highlightEndPos = -1;
 
     private EditorToolBar toolbar;
+
+    private boolean isModified = false;
 
     private static final int BUFFER_SIZE = 8192;
 

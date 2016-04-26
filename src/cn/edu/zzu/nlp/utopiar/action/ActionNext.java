@@ -24,36 +24,20 @@ public class ActionNext extends ActionGraph {
     @Override
     public void actionPerformed(ActionEvent e) {
         GraphEditor editor = getEditor(e);
-        mxGraphComponent graphComponent = GraphEditor.getGraphComponent();
-        mxGraph graph = graphComponent.getGraph();
-        String str = null;
-        try {
-            mxGraph orGraph = EditorTabbedPane.getOR_GRAPH();
-            String orPath = EditorTabbedPane.getOR_PATH();
-            str = getSaveStr(editor, orGraph);
-            if(str==null){
-                return;
-            }
-            SaveTree.save(TreeParser.getNow(), str ,orPath);
-            str = getSaveStr(editor, graph);
-            if(str==null){
-                return;
-            }
-            SaveTree.save(TreeParser.getNow(), str ,EditorTabbedPane.getPATH());
+        boolean isGraphClosed = editor.doCloseGraph();
+        if (isGraphClosed) {
             int count = TreeParser.getNow();
-            count++;
-            if(count>TreeParser.getMAXCOUNT()-1){
+            if(count + 1 >TreeParser.getMAXCOUNT()-1){
                 JOptionPane.showMessageDialog(editor, 
                     Languages.getInstance().getString( "Message.NoMoreNextSentence.Body" ),
                     Languages.getInstance().getString( "Message.NoMoreNextSentence.Title" ),
                     JOptionPane.WARNING_MESSAGE);
-                return;
             }
+            else
+                count++;
             refreshTree(editor, count);
             EditorBottom.getTextArea().setText(editor.getLabelString());
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }               
+        }
     }
 
 }

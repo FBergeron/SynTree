@@ -25,6 +25,9 @@ import javax.swing.event.ChangeListener;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
 
 import cn.edu.zzu.nlp.readTree.SaveTree;
@@ -106,6 +109,14 @@ public class EditorTabbedPane extends JTabbedPane{
                 }
             }
         );
+
+        mxIEventListener changeListener = new mxIEventListener() {
+            public void invoke(Object source, mxEventObject evt) {
+                editor.setModified(true);
+            }
+        };
+        ENG_GRAPH.getModel().addListener(mxEvent.CHANGE, changeListener);
+        ZH_GRAPH.getModel().addListener(mxEvent.CHANGE, changeListener);
     }
 
     public void setLocale( Locale locale ) {
