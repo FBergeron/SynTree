@@ -18,10 +18,9 @@ public class ActionRefresh extends ActionGraph {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-System.out.println( "test0 str="+ Languages.getInstance().getString( "Message.VertexWithMoreThanOneParent.Body" ));                
         int revertConfirmation = JOptionPane.showConfirmDialog(null, 
             Languages.getInstance().getString( "ActionRefresh.ConfirmRevert.Body" ),
-            Languages.getInstance().getString( "Messasge.Title.Question" ), 
+            Languages.getInstance().getString( "Message.Title.Question" ), 
                 JOptionPane.YES_NO_OPTION);
         if(revertConfirmation == JOptionPane.YES_OPTION){ 
             GraphEditor editor = getEditor(e);

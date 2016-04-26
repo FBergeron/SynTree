@@ -37,8 +37,8 @@ Toolbar.ShowOption.DisplayWordsAndConstraints=View Words and Constraints
 Toolbar.Refresh=Revert
 
 Frame.About.Title=About SynTree
-Frame.About.Subtitle.Version-2.3.0=<html>SynTree v2.3.0<br>For more information: <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
-Frame.About.Subtitle.Version-2.2.1=<html>SynTree v2.2.1 (Original Version)<br>For more information: <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
+Frame.About.Subtitle.Version-2.3.x=<html>SynTree v2.3.1<br>For more information: <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
+Frame.About.Subtitle.Version-2.2.x=<html>SynTree v2.2.1 (Original Version)<br>For more information: <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
 Frame.About.Description=Syntax Tree Tool based on the JGraph library.
 Frame.About.Author=Original Author: Cheng Liang Nature Language Processing Lab
 Frame.About.Copyright=<html>Copyright (C) 2013 by ZZU Nlp Ltd.<br>All rights reserved.</html>

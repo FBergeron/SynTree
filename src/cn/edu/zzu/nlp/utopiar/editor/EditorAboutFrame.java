@@ -81,12 +81,12 @@ public class EditorAboutFrame extends JDialog
         Box subtitlePanel = Box.createVerticalBox();
 
         // Adds optional subtitle
-        JLabel subtitleLabel = new JLabel( Languages.getInstance().getString( "Frame.About.Subtitle.Version-2.3.0" ) );
+        JLabel subtitleLabel = new JLabel( Languages.getInstance().getString( "Frame.About.Subtitle.Version-2.3.x" ) );
         subtitleLabel.addMouseListener( new LinkFacilitator( "https://github.com/FBergeron/SynTree" ) );
         subtitleLabel.setBorder(BorderFactory.createEmptyBorder(4, 18, 0, 0));
         subtitleLabel.setOpaque(false);
 
-        JLabel subtitleLabel2 = new JLabel( Languages.getInstance().getString( "Frame.About.Subtitle.Version-2.2.1" ) );
+        JLabel subtitleLabel2 = new JLabel( Languages.getInstance().getString( "Frame.About.Subtitle.Version-2.2.x" ) );
         subtitleLabel2.addMouseListener( new LinkFacilitator( "http://syntree.github.io/index.html" ) );
         subtitleLabel2.setBorder(BorderFactory.createEmptyBorder(14, 18, 0, 0));
         subtitleLabel2.setOpaque(false);

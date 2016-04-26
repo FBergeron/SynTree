@@ -37,8 +37,8 @@ Toolbar.ShowOption.DisplayWordsAndConstraints=显示分词及约束
 Toolbar.Refresh=刷新
 
 Frame.About.Title=关于语法树工具
-Frame.About.Subtitle.Version-2.3.0=<html>SynTree v2.3.0<br>更多信息请访问 <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
-Frame.About.Subtitle.Version-2.2.1=<html>SynTree v2.2.1 (Original Version)<br>更多信息请访问 <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
+Frame.About.Subtitle.Version-2.3.x=<html>SynTree v2.3.1<br>更多信息请访问 <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
+Frame.About.Subtitle.Version-2.2.x=<html>SynTree v2.2.1 (Original Version)<br>更多信息请访问 <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
 Frame.About.Description=语法树工具 - 基于JGraphx的语法树修改工
 Frame.About.Author=作者：郑大自然语言处理实验室  梁军
 Frame.About.Copyright=<html>Copyright (C) 2013 by ZZU Nlp Ltd.<br>All rights reserved.</html>
