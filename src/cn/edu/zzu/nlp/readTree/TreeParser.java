@@ -314,7 +314,8 @@ public class TreeParser extends JPanel {
                 while (!stack.empty() && !stack.peek().equals("(")) {
                     stack.pop();
                 }
-                stack.pop();
+                if(!stack.empty())
+                    stack.pop();
             } else {
                 stack.push(list.get(i));
                 if (stack.size() == 3) {
