@@ -38,7 +38,7 @@ Toolbar.ShowOption.DisplayWordsAndConstraints=Voir les mots et les contraintes
 Toolbar.Refresh=Revenir
 
 Frame.About.Title=À propos de SynTree
-Frame.About.Subtitle.Version-2.3.x=<html>SynTree v2.3.1<br>Pour plus d'infos: <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
+Frame.About.Subtitle.Version-2.3.x=<html>SynTree v2.4.1<br>Pour plus d'infos: <a href=\"https://github.com/FBergeron/SynTree\">https://github.com/FBergeron/SynTree</a></html>
 Frame.About.Subtitle.Version-2.2.x=<html>SynTree v2.2.1 (Original Version)<br>Pour plus d'infos: <a href=\"http://syntree.github.io/index.html\">http://syntree.github.io/index.html</a></html>
 Frame.About.Description=Outil de manipulation d'arbres syntaxiques basé sur la librairie JGraph.
 Frame.About.Author=Auteur original: Laboratoire de recherche sur le traitement du langage Cheng Liang 
