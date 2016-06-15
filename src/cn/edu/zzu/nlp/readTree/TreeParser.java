@@ -25,6 +25,7 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.handler.mxKeyboardHandler;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxRectangle;
 
 public class TreeParser extends JPanel {
 
@@ -32,6 +33,8 @@ public class TreeParser extends JPanel {
      * 
      */
     private static final long serialVersionUID = 1L;
+
+    private static final int MARGIN = 1000;
 
     /**
      * 构造语法树文本路径
@@ -242,6 +245,11 @@ public class TreeParser extends JPanel {
         vertex.clear();
         creatTree(editor, graphComponent,list, Preferences.DEFAULT_OFFSET_Y);
         EditorBottom.getTextArea().setText(editor.getLabelString());
+        mxRectangle bounds = graphComponent.getGraph().getGraphBounds();
+        graphComponent.getGraph().setMinimumGraphSize(new mxRectangle(0, 0, bounds.getWidth() + 2 * MARGIN, bounds.getHeight() + MARGIN));
+        // Weird but 2 calls are needed to make the scrollbar move. - FB
+        graphComponent.scrollToCenter(true);
+        graphComponent.scrollToCenter(true);
         new mxKeyboardHandler(graphComponent);
         this.setLayout(new BorderLayout());
 
@@ -294,7 +302,7 @@ public class TreeParser extends JPanel {
                 Color boxBorderColor = Preferences.getInstance().getBoxBorderColor();
                 if( boxBorderColor != null ) 
                     strStyle.append( "strokeColor=" + Util.colorRGBToHex( boxBorderColor ) + ";" );
-                Object ob = graph.insertVertex(parent, null, list.get(0), pointX,
+                Object ob = graph.insertVertex(parent, null, list.get(0), pointX + MARGIN,
                         vertexY, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth.intValue(), boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight.intValue(), strStyle.toString());
                 vertex.put(ob, String.valueOf(countleaf-2));
                 rtList.add(ob);
@@ -360,7 +368,7 @@ public class TreeParser extends JPanel {
                 pointX += (Integer) rtList.get(1);
             }
             pointX = pointX / os.size();
-            Object v1 = graph.insertVertex(parent, null, list.get(1), pointX,
+            Object v1 = graph.insertVertex(parent, null, list.get(1), pointX + MARGIN,
                     vertexY, boxWidth == null ? Preferences.DEFAULT_BOX_WIDTH : boxWidth.intValue(), boxHeight == null ? Preferences.DEFAULT_BOX_HEIGHT : boxHeight.intValue(), strStyle.toString());
             rtList.set(0, v1);
             rtList.set(1, pointX);
@@ -407,5 +415,4 @@ public class TreeParser extends JPanel {
         return MAXCOUNT;
     }
 
-    
 }
