@@ -9,6 +9,7 @@ Menu.File.Settings=設定...
 Menu.File.Save=保存
 
 Menu.Edition=編集
+Menu.Edition.Sort=きれいにする
 Menu.Edition.Undo=元に戻す
 Menu.Edition.Redo=やり直し
 Menu.Edition.Cut=切り取り

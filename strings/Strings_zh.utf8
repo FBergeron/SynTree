@@ -9,6 +9,7 @@ Menu.File.Settings=设置...
 Menu.File.Save=保存
 
 Menu.Edition=编辑
+Menu.Edition.Sort=整理
 Menu.Edition.Undo=撤消
 Menu.Edition.Redo=重做
 Menu.Edition.Cut=剪切

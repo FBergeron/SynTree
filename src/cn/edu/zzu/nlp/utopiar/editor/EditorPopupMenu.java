@@ -14,6 +14,7 @@ import com.mxgraph.util.mxResources;
 import cn.edu.zzu.nlp.utopiar.action.ActionAddEdge;
 import cn.edu.zzu.nlp.utopiar.action.ActionAddVertex;
 import cn.edu.zzu.nlp.utopiar.action.ActionDelete;
+import cn.edu.zzu.nlp.utopiar.action.ActionSort;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
 
@@ -21,6 +22,10 @@ public class EditorPopupMenu extends JPopupMenu {
 
     public EditorPopupMenu(GraphEditor graphEditor, mxGraphComponent graphComponent) {
         boolean selected = !graphComponent.getGraph().isSelectionEmpty();
+
+        actionSort = graphEditor.bind(null, new ActionSort(),"/img/pan.gif");
+        add( actionSort );
+        addSeparator();
 
         actionUndo = graphEditor.bind(null, new ActionUndo(true),"/img/undo.gif");
         add( actionUndo );
@@ -57,6 +62,7 @@ public class EditorPopupMenu extends JPopupMenu {
     public void setLocale( Locale locale ) {
         super.setLocale( locale );
         
+        actionSort.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Sort" ) );
         actionUndo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Undo" ) );
         actionRedo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Redo" ) );
         actionCut.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Cut" ) );
@@ -69,6 +75,7 @@ public class EditorPopupMenu extends JPopupMenu {
         actionSelectNone.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.SelectNone" ) );
     }
 
+    private Action actionSort;
     private Action actionUndo;
     private Action actionRedo;
     private Action actionCut;

@@ -9,6 +9,7 @@ Menu.File.Settings=Settings...
 Menu.File.Save=Save
 
 Menu.Edition=Edition
+Menu.Edition.Sort=Layout
 Menu.Edition.Undo=Undo
 Menu.Edition.Redo=Redo
 Menu.Edition.Cut=Cut

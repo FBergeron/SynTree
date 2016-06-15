@@ -24,6 +24,7 @@ import cn.edu.zzu.nlp.utopiar.action.ActionDelete;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetting;
 import cn.edu.zzu.nlp.utopiar.action.ActionSave;
 import cn.edu.zzu.nlp.utopiar.action.ActionSetLocale;
+import cn.edu.zzu.nlp.utopiar.action.ActionSort;
 import cn.edu.zzu.nlp.utopiar.action.ActionUndo;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
@@ -48,6 +49,10 @@ public class EditorMenuBar extends JMenuBar{
 
         menuEdition = new JMenu();
         menu = add( menuEdition );
+
+        actionSort = editor.bind(null, new ActionSort(),"/img/pan.gif");
+        menu.add( actionSort );
+        menu.addSeparator();
         actionUndo = editor.bind(null, new ActionUndo(true),"/img/undo.gif");
         menu.add( actionUndo );
         actionRedo = editor.bind(null, new ActionUndo(false),"/img/redo.gif");
@@ -128,6 +133,7 @@ public class EditorMenuBar extends JMenuBar{
         actionSave.putValue( Action.NAME, Languages.getInstance().getString( "Menu.File.Save" ) );
 
         menuEdition.setText( Languages.getInstance().getString( "Menu.Edition" ) );
+        actionSort.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Sort" ) );
         actionUndo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Undo" ) );
         actionRedo.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Redo" ) );
         actionCut.putValue( Action.NAME, Languages.getInstance().getString( "Menu.Edition.Cut" ) );
@@ -151,6 +157,7 @@ public class EditorMenuBar extends JMenuBar{
     private Action actionSave;
 
     private JMenu menuEdition;
+    private Action actionSort;
     private Action actionUndo;
     private Action actionRedo;
     private Action actionCut;

@@ -9,6 +9,7 @@ Menu.File.Settings=Paramètres...
 Menu.File.Save=Enregistrer
 
 Menu.Edition=Édition
+Menu.Edition.Sort=Redisposer
 Menu.Edition.Undo=Annuler
 Menu.Edition.Redo=Rétablir
 Menu.Edition.Cut=Couper
