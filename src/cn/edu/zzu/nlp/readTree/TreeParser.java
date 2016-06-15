@@ -247,9 +247,11 @@ public class TreeParser extends JPanel {
         EditorBottom.getTextArea().setText(editor.getLabelString());
         mxRectangle bounds = graphComponent.getGraph().getGraphBounds();
         graphComponent.getGraph().setMinimumGraphSize(new mxRectangle(0, 0, bounds.getWidth() + 2 * MARGIN, bounds.getHeight() + MARGIN));
+        graphComponent.getVerticalScrollBar().setUnitIncrement(10);        
         // Weird but 2 calls are needed to make the scrollbar move. - FB
         graphComponent.scrollToCenter(true);
         graphComponent.scrollToCenter(true);
+        
         new mxKeyboardHandler(graphComponent);
         this.setLayout(new BorderLayout());
 
