@@ -1,6 +1,8 @@
 package cn.edu.zzu.nlp.utopiar.util;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
@@ -8,6 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Enumeration;
+
+import javax.swing.JFrame;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.UIManager;
 
 public class Util {
 
@@ -63,5 +71,43 @@ public class Util {
         }
     }
 
+    /**
+     * 判断是否全由数字组成
+     * @param str
+     */
+    public static boolean isNum(String str){
+      String num = "1234567890";
+      for(int i=0;i<str.length();i++){
+          String single = str.substring(i, i+1);
+          if(num.indexOf(single)<0)
+              return false;
+      }
+      return true;
+    }
+
+    /**
+     * 设置全局字体
+     * @param fnt
+     */
+    public static void initGlobalFontSetting(Font fnt) {
+        FontUIResource fontRes = new FontUIResource(fnt);
+        for (Enumeration<?> keys = UIManager.getDefaults().keys(); keys
+                .hasMoreElements();) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource)
+                UIManager.put(key, fontRes);
+        }
+    }
+
+    public static void setFrameCenter(JFrame jFrame){
+        //居中显示
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screen = toolkit.getScreenSize();
+        int x = screen.width - jFrame.getWidth()>>1;
+        int y = (screen.height - jFrame.getHeight()>>1)-32;
+        jFrame.setLocation(x, y);
+    }
+    
 }
 

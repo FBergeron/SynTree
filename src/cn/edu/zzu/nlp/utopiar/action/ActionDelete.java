@@ -13,7 +13,8 @@ public class ActionDelete extends ActionGraph {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        mxGraphComponent graphComponent = GraphEditor.getGraphComponent();
+        GraphEditor editor = getEditor(e);
+        mxGraphComponent graphComponent = editor.getGraphComponent();
         mxGraph graph = graphComponent.getGraph();
         if( graph != null )
             graph.removeCells();

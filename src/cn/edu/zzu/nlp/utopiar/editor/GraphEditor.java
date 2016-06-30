@@ -3,7 +3,6 @@ package cn.edu.zzu.nlp.utopiar.editor;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -13,9 +12,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -23,17 +24,18 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.plaf.FontUIResource;
 
 import cn.edu.zzu.nlp.readTree.Constraint;
-import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
@@ -49,6 +51,8 @@ import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxGraph.mxICellVisitor;
+import com.mxgraph.view.mxMultiplicity;
 
 public class GraphEditor extends JPanel{    
     
@@ -56,16 +60,16 @@ public class GraphEditor extends JPanel{
      * 
      */
     private static final long serialVersionUID = 1L;
-    
+
+    public static final int VIEW_MODE_SENTENCE_ONLY = 0;
+    public static final int VIEW_MODE_WORDS = 1;
+    public static final int VIEW_MODE_WORDS_AND_POS = 2;
+    public static final int VIEW_MODE_WORDS_AND_CONSTRAINTS = 3;
+
     /**
      * 
      */
-    public static mxGraphComponent graphComponent;
-    
-    /**
-     * 
-     */
-    protected static mxUndoManager undoManager;
+    protected mxUndoManager undoManager;
     
     
     protected mxRubberband rubberband;
@@ -74,7 +78,7 @@ public class GraphEditor extends JPanel{
     /**
      * 
      */
-    protected static mxIEventListener undoHandler = new mxIEventListener()
+    protected mxIEventListener undoHandler = new mxIEventListener()
     {
         public void invoke(Object source, mxEventObject evt)
         {
@@ -83,7 +87,7 @@ public class GraphEditor extends JPanel{
         }
     };
     
-    protected static mxIEventListener connectHandler = new mxIEventListener()
+    protected mxIEventListener connectHandler = new mxIEventListener()
     {
         public void invoke(Object source, mxEventObject evt) {
             mxCell edge = (mxCell)evt.getProperty("cell");
@@ -95,15 +99,12 @@ public class GraphEditor extends JPanel{
         }
     };
     
-    public GraphEditor() throws IOException
-    {
-        this( new mxGraphComponent(new mxGraph()));
-    }
-    
-    public GraphEditor( mxGraphComponent component) throws IOException{
+    public GraphEditor() throws IOException{
         setLayout(new BorderLayout());
+        installTabbedPane();
+
         // Stores a reference to the graph and creates the command history
-        graphComponent = component;
+        mxGraphComponent graphComponent = getGraphComponent();//TabbedPane().chineseGraphComponent;
         final mxGraph graph = graphComponent.getGraph();
 
         graph.setCellsSelectable(true);
@@ -111,10 +112,9 @@ public class GraphEditor extends JPanel{
         // Do not change the scale and translation after files have been loaded
         graph.setResetViewOnRootChange(false);
 
-        changeUndo(component);      
+        changeUndo(graphComponent);      
         
         installToolBar();
-        installTabbedPane();
         installBottom();
         
         rubberband = new mxRubberband(graphComponent);
@@ -125,10 +125,50 @@ public class GraphEditor extends JPanel{
             toolbar.update();
     }
 
+    public void validCells(mxGraphComponent graphComponent){
+        final mxGraph graph = graphComponent.getGraph();
+        Object root = null;
+        List<Object> rootList = graph.findTreeRoots(graph.getDefaultParent(),false,false);
+        if (rootList.size() > 1) {
+            JOptionPane.showMessageDialog(this, "请确保有且仅有一个根节点！");
+            return;
+        } else {
+            for (Object object : rootList) {
+                root = object;
+            }
+        }
+        final List<mxMultiplicity> mxMultiplicities = new ArrayList<mxMultiplicity>();
+        final List<String> havelist = new ArrayList<String>();
+        graph.traverse(root, true, new mxICellVisitor() {
+            public boolean visit(Object vertex, Object edge) {
+                if(havelist.contains(graph.convertValueToString(vertex))){
+                    return true;
+                }
+                havelist.add(graph.convertValueToString(vertex));
+                mxMultiplicities.add(new mxMultiplicity(false, graph.convertValueToString(vertex), null, null, 1, "1",
+                        null, "请确保每个子节点有且仅有一个父节点！", null, false));
+                return true;
+            }
+        });
+        mxMultiplicity[] multiplicities = new mxMultiplicity[mxMultiplicities.size()];
+        for (int i=0;i<mxMultiplicities.size();i++) {
+            multiplicities[i] = mxMultiplicities.get(i);
+        }
+        graph.setMultiplicities(multiplicities);
+        
+        graph.getModel().addListener(mxEvent.CHANGE, new mxIEventListener() {
+            public void invoke(Object sender, mxEventObject evt) {
+                graphComponent.validateGraph();
+            }
+        });
+    }
+
+
+
     /**
      * 
      */
-    public static void changeUndo(mxGraphComponent graphComponent){
+    public void changeUndo(mxGraphComponent graphComponent){
         mxGraph graph = graphComponent.getGraph();
         // Adds the command history to the model and view
         graph.getModel().addListener(mxEvent.UNDO, undoHandler);
@@ -179,13 +219,9 @@ public class GraphEditor extends JPanel{
         return newAction;
     }
 
-    public static mxGraphComponent getGraphComponent() {
-        return graphComponent;
+    public mxGraphComponent getGraphComponent() {
+        return getTabbedPane().getCurrentGraphComponent();
     }   
-
-    public static void setGraphComponent(mxGraphComponent graphComponent) {
-        GraphEditor.graphComponent = graphComponent;
-    }
 
     public EditorTabbedPane getTabbedPane() {
         return( tabbedPane );
@@ -193,6 +229,24 @@ public class GraphEditor extends JPanel{
 
     public mxUndoManager getUndoManager() {
         return undoManager;
+    }
+
+    public JComboBox<String> getComboBoxViewMode() {
+        return (toolbar == null ? null : toolbar.getComboBoxViewMode());
+    }
+
+    public JTextField getTextFieldGraphNumber() {
+        return (toolbar == null ? null : toolbar.getTextFieldGraphNumber());
+    }
+
+    public void updateBottomTextArea() {
+        JEditorPane bottomTextArea = getBottomTextArea();
+        if (bottomTextArea != null)
+            bottomTextArea.setText(getLabelString());
+    }
+
+    public JEditorPane getBottomTextArea() {
+        return (bottom == null ? null : bottom.getTextArea());
     }
 
     protected void installToolBar()
@@ -214,7 +268,8 @@ public class GraphEditor extends JPanel{
      * 
      */
     protected void installBottom() {
-        add(new EditorBottom(this), BorderLayout.SOUTH);
+        bottom = new EditorBottom(this);
+        add(bottom, BorderLayout.SOUTH);
     }
    
     /**
@@ -225,7 +280,6 @@ public class GraphEditor extends JPanel{
         final JFrame frame = new JFrame();
         frame.setContentPane(this);     
         frame.setJMenuBar(menuBar);
-        setFrameCenter(frame);
         frame.setSize(1200, 750);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -246,7 +300,7 @@ public class GraphEditor extends JPanel{
                 }
             }
         });
-        setFrameCenter(frame);
+        Util.setFrameCenter(frame);
         return frame;
     }
     
@@ -278,29 +332,270 @@ public class GraphEditor extends JPanel{
      * @return <code>true</code> if the data has been saved successfully, <code>false</code> otherwise.
      */
     public boolean doSave() {
-        mxGraph graph = graphComponent.getGraph();
+        mxGraph graph = getGraphComponent().getGraph();
         String str = null;
         try {
-            str = ActionGraph.getSaveStr(this, EditorTabbedPane.getOR_GRAPH());
+            str = getSaveStr(getTabbedPane().getOrGraph());
+            //str = ActionGraph.getSaveStr(this, EditorTabbedPane.getOR_GRAPH());
             if(str==null)
                 return(false);
-            SaveTree.save(TreeParser.getNow(), str ,EditorTabbedPane.getOR_PATH());
-            SaveTree.save(EditorTabbedPane.getOR_PATH());
+            saveTree(getNow(), str, getTabbedPane().getOrPath());
+            saveTree(getTabbedPane().getOrPath());
 
-            str = ActionGraph.getSaveStr(this, graph);
+            str = getSaveStr(graph);
+            //str = ActionGraph.getSaveStr(this, graph);
             if(str==null){
                 System.out.print("str="+str);
                 return(false);
             }           
-            SaveTree.save(TreeParser.getNow(), str, EditorTabbedPane.getPATH());
-            SaveTree.save(EditorTabbedPane.getPATH());
+            saveTree(getNow(), str, getTabbedPane().getPath());
+            saveTree(getTabbedPane().getPath());
             return (true);
         } catch (Exception e1) {
             e1.printStackTrace();
             return (false);
         }
     }
+   
+    public void saveTree(int now, String str, String path) throws Exception{
+        TreeParser parser = getTabbedPane().getPane(path);
+        parser.map.put(Integer.valueOf(now), str);
+    }
+    
+    public boolean saveTree(String path){   
+        TreeParser parser = getTabbedPane().getPane(path);
+        HashMap<Integer, String> saveMap = parser.map;
+        try {
+            FileOutputStream fos = new FileOutputStream(path);
+            String init = "";
+            fos.write(init.getBytes());
+            fos = new FileOutputStream(path,true);
+            for (int i = 0; i < saveMap.size(); i++) {
+                String temp = saveMap.get(i);
+                temp += System.getProperty("line.separator");
+                fos.write(temp.getBytes("utf-8"));
+            }
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }       
+        return true;
+    }
 
+    public List<Object> traverse(Object vertex, mxGraph graph) {
+        List<Object> roots = graph.findTreeRoots(graph.getDefaultParent());
+        List<Object> point = new ArrayList<Object>(2);
+        Object root = null;
+        if(roots.size()==0){
+            point.add(0);
+            point.add("");
+            return point;
+        }
+        root = roots.get(0);
+        String string = "";
+        Integer x = 0 ;
+        if (vertex != null)
+        {
+            int edgeCount = graph.getModel().getEdgeCount(vertex);
+            //出度和入度的和为1的结点只有叶子结点也根节点，此处需要判断为非根节点
+            if(edgeCount==1&&!vertex.equals(root)){
+                string = graph.getLabel(vertex);
+                x = Integer.valueOf((int)graph.getCellBounds(vertex).getCenterX());
+                point.add(x);
+                point.add(string);
+                return point;
+            }else {
+                //非叶子结点需要加括号
+                string = "("+graph.getLabel(vertex)+" ";
+            }
+            List<List<Object>> cells = new ArrayList<List<Object>>();
+            if (edgeCount > 0)
+            {
+                for (int i = 0; i < edgeCount; i++)
+                {
+                    Object e1 = graph.getModel().getEdgeAt(vertex, i);
+                    boolean isSource = graph.getModel().getTerminal(e1, true) == vertex;
+
+                    if (isSource)
+                    {                       
+                        Object next = graph.getModel().getTerminal(e1, !isSource);
+                        if(next!=null){
+                            List<Object> temp;
+                            temp = traverse(next ,graph) ;
+                            x += (Integer)temp.get(0);
+                            cells.add(temp);
+                        }                                                   
+                    }
+                }
+                //处理根节点只有一个孩子的情况
+                if(vertex.equals(root)&&edgeCount==1)
+                    edgeCount++;
+                x = x/(edgeCount-1);
+                point.add(x);
+            }
+            for (int i = cells.size() - 1; i > 0; --i) {
+                boolean isSort=false;
+                for (int j = 0; j < i; ++j) {
+                    if (((Integer)((List<Object>)cells.get(j+1)).get(0))< ((Integer)((List<Object>)cells.get(j)).get(0))){
+                        List<Object> temp = (List<Object>) cells.get(j);
+                        cells.set(j, cells.get(j+1));
+                        cells.set(j+1, temp);
+                        isSort=true;
+                    }
+                }
+                if(!isSort)break;
+            }
+            for (int i =0 ;i<cells.size();i++) {
+                String temp;
+                temp = (String) ((List<Object>)cells.get(i)).get(1) ;
+                string = string +  temp ;
+            }
+            if(edgeCount!=1)
+                string = string +  ")";
+        }
+        point.add(string);
+        return point;
+    }
+    
+    public String getSaveStr(mxGraph graph){
+        String str="";
+        Object cell = null;
+        List<Object> list = graph.findTreeRoots(graph.getDefaultParent());
+        if(list.size()>1){
+            String str1 = "";
+            for (int i =0;i<list.size();i++) {
+                str1=str1+graph.getLabel(list.get(i))+"  ";
+            }
+            graph.getModel().beginUpdate();
+            graph.setCellStyle(":strockeColor=red;fillColor=red", list.toArray());                  
+            graph.getModel().endUpdate();                   
+            graph.refresh();
+            JOptionPane.showMessageDialog(this, 
+                MessageFormat.format( Languages.getInstance().getString( "Message.TooManyRootVertices.Body" ), list.size() ),
+                Languages.getInstance().getString( "Message.Title.Error" ),
+                JOptionPane.ERROR_MESSAGE );
+            return null;
+        }else {
+            for (Object object : list) {
+                cell = object;
+            }
+        }
+        graph.selectEdges();
+        Object[] edges = graph.getSelectionCells();
+        for (Object object : edges) {
+            Object father = graph.getModel().getTerminal(object, true);
+            if(father ==null){
+                Object son = graph.getModel().getTerminal(object, false);               
+                graph.clearSelection();                 
+                Object[] sons = new Object[1];
+                sons[0] = son;
+                graph.getModel().beginUpdate();
+                graph.setCellStyle(":strockeColor=red;fillColor=red", sons);                    
+                graph.getModel().endUpdate();                   
+                graph.refresh();
+                JOptionPane.showMessageDialog(this, 
+                    Languages.getInstance().getString( "Message.VertexWithoutParent.Body" ),
+                    Languages.getInstance().getString( "Message.Title.Error" ),
+                    JOptionPane.ERROR_MESSAGE );
+                return null;
+            }
+            Object son = graph.getModel().getTerminal(object, false);
+            if(son ==null){
+                father = graph.getModel().getTerminal(object, true);                
+                graph.clearSelection();
+                Object[] fathers = new Object[1];
+                fathers[0] = father;
+                graph.getModel().beginUpdate();
+                graph.setCellStyle(":strockeColor=red;fillColor=red", fathers);                 
+                graph.getModel().endUpdate();                   
+                graph.refresh();
+                JOptionPane.showMessageDialog(this, 
+                    Languages.getInstance().getString( "Message.VertexWithoutChildren.Body" ),
+                    Languages.getInstance().getString( "Message.Title.Error" ),
+                    JOptionPane.ERROR_MESSAGE );
+                return null;
+            }
+        }
+        graph.clearSelection();
+        graph.selectCells(true, false);
+        Object []objects = graph.getSelectionCells();
+        List<Object> singleList = new ArrayList<Object>();
+        for (Object object : objects) {
+            if(objects.length==1)
+                break;
+            int count = graph.getModel().getEdgeCount(object);              
+            if(count<1){
+                singleList.add(object);                 
+            }
+        }
+        if (singleList.size()>0) {          
+            graph.clearSelection();
+            graph.getModel().beginUpdate();
+            graph.setCellStyle(":strockeColor=red;fillColor=red", singleList.toArray());                    
+            graph.getModel().endUpdate();                   
+            graph.refresh();
+            JOptionPane.showMessageDialog(this, 
+                Languages.getInstance().getString( "Message.IsolatedVertexFound.Body" ),
+                Languages.getInstance().getString( "Message.Title.Error" ),
+                JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        graph.clearSelection();
+        str = (String) traverse(cell, graph).get(1);
+        String[] strings = str.split(" ");
+        for (String string2 : strings) {
+            if(!string2.contains(")(")&&string2.contains("(")&&!string2.startsWith("(")){
+                JOptionPane.showMessageDialog(this, 
+                    Languages.getInstance().getString( "Message.InvalidLeafVertexFound.Body" ),
+                    Languages.getInstance().getString( "Message.Title.Error" ),
+                    JOptionPane.ERROR_MESSAGE);
+                return null ;
+            }
+        }           
+        str = "( " + str.replaceAll("\\)\\(", "\\) \\(") + " )";
+        return str;
+    }
+
+    public void refreshTree(int count){
+        mxGraphComponent graphComponent = getGraphComponent();
+        mxGraph graph = graphComponent.getGraph();
+        mxGraph orGraph = getTabbedPane().getOrGraph();
+        String orPath = getTabbedPane().getOrPath();
+        mxGraphComponent orGraphComponent = getTabbedPane().getOrGraphComponent();
+        graph.selectAll();
+        graph.removeCells();
+        orGraph.selectAll();
+        orGraph.removeCells();
+        setNow(count);
+        
+        TreeParser parser = getTabbedPane().getPane(orPath);
+        parser.setCountleaf(1);
+        List<String> list = parser.getWord(count,parser.map);
+        parser.getLeaf().clear();
+        parser.getSplitList().clear();
+        parser.vertex.clear();
+        parser.creatTree(this,orGraphComponent,list, Preferences.DEFAULT_OFFSET_Y);      
+
+        parser.resizeViewport(orGraphComponent);
+        parser = getTabbedPane().getCurrentPane();
+        parser.setCountleaf(1);
+        List<String> list1 = parser.getWord(getNow(),parser.map);
+        parser.getLeaf().clear();
+        parser.getSplitList().clear();
+        parser.vertex.clear();
+        parser.creatTree(this, graphComponent, list1, Preferences.DEFAULT_OFFSET_Y);     
+
+        parser.resizeViewport(graphComponent);
+        validCells(graphComponent);
+        JComboBox<String> comboBoxViewMode = getComboBoxViewMode();
+        if (comboBoxViewMode != null)
+            comboBoxViewMode.setSelectedIndex(0);
+        clearHighlight();
+        update();
+        setModified(false);
+    }
+    
     /**
      * 设置路径窗口
      */
@@ -377,23 +672,24 @@ public class GraphEditor extends JPanel{
 
     public String getLabelString() {
         String label = "";
-        if(EditorToolBar.FLAG==2){
-            List<String> splitList = TreeParser.getSplitList();
+        TreeParser parser = getTabbedPane().getCurrentPane();
+        if(getViewMode()==VIEW_MODE_WORDS_AND_POS){
+            List<String> splitList = parser.getSplitList();
             for (String string : splitList) {
                 label += string;
             }
             return label;
         }
-        List<String> temp = TreeParser.getLeaf();
+        List<String> temp = parser.getLeaf();
         int index = 0;
         for (String string : temp) {
-            if(EditorToolBar.FLAG==0/*&&!EditorTabbedPane.iszH()*/||EditorToolBar.FLAG==3){
+            if(getViewMode()==VIEW_MODE_SENTENCE_ONLY/*&&!EditorTabbedPane.iszH()*/||getViewMode()==VIEW_MODE_WORDS_AND_CONSTRAINTS){
                 label += string;
                 label += " ";
-//          }else if(EditorToolBar.FLAG==0&&EditorTabbedPane.iszH()){
+//          }else if(getViewMode()==VIEW_MODE_SENTENCE_ONLY&&EditorTabbedPane.iszH()){
 //              label += string;
             }
-            if(EditorToolBar.FLAG==1){
+            if(getViewMode()==VIEW_MODE_WORDS){
                 label += String.valueOf(index)+string;
                 label +="  ";
             }
@@ -401,27 +697,27 @@ public class GraphEditor extends JPanel{
         }
         
         //读取已有约束并显示
-        if(EditorToolBar.FLAG==0){
-            if(EditorTabbedPane.getPATH().equalsIgnoreCase(EditorTabbedPane.getChinesePath())){
-                if (TreeParser.zhConstraint.get(TreeParser.getNow())!=null
-                        &&TreeParser.zhConstraint.get(TreeParser.getNow()).length()!=0){
-                    label = TreeParser.zhConstraint.get(TreeParser.getNow());
+        if(getViewMode()==VIEW_MODE_SENTENCE_ONLY){
+            if(getTabbedPane().getPath().equalsIgnoreCase(getTabbedPane().getChinesePath())){
+                if (parser.constraint.get(getNow())!=null
+                        &&parser.constraint.get(getNow()).length()!=0){
+                    label = parser.constraint.get(getNow());
                     if(!label.contains("@#@#@#")){
                         label += "@#@#@# ";
                     }
                 }else if(!label.contains("@#@#@#")){
-                    TreeParser.zhConstraint.put(TreeParser.getNow(), label);
+                    parser.constraint.put(getNow(), label);
                     label += "@#@#@# ";
                 }
-            }else if(EditorTabbedPane.getPATH().equalsIgnoreCase(EditorTabbedPane.getEnglishPath())){
-                if (TreeParser.engConstraint.get(TreeParser.getNow())!=null
-                        &&TreeParser.engConstraint.get(TreeParser.getNow()).length()!=0){
-                    label = TreeParser.engConstraint.get(TreeParser.getNow());
+            }else if(getTabbedPane().getPath().equalsIgnoreCase(getTabbedPane().getEnglishPath())){
+                if (parser.constraint.get(getNow())!=null
+                        &&parser.constraint.get(getNow()).length()!=0){
+                    label = parser.constraint.get(getNow());
                     if(!label.contains("@#@#@#")){
                         label += "@#@#@# ";
                     }
                 }else if(!label.contains("@#@#@#")){
-                    TreeParser.engConstraint.put(TreeParser.getNow(), label);
+                    parser.constraint.put(getNow(), label);
                     label += "@#@#@# ";
                 }
             }
@@ -431,46 +727,19 @@ public class GraphEditor extends JPanel{
             label = getHighlightedLabel(label);
         }
         
-        if(EditorToolBar.FLAG==3){
-//          TreeParser.readData(EditorTabbedPane.getPATH());
-            Constraint.constraint = "";
-            List<String> list = TreeParser.getWord(TreeParser.getNow(), TreeParser.selectData(EditorTabbedPane.getPATH()));
-            Constraint.leafCount = 0;
-            Constraint.creatTree(list);
-            label += "  @#@#@#  " + Constraint.constraint;
+        if(getViewMode()==VIEW_MODE_WORDS_AND_CONSTRAINTS){
+            Constraint c = new Constraint();
+            List<String> list = parser.getWord(getNow(), parser.map);
+            c.creatTree(list);
+            label += "  @#@#@#  " + c.constraint;
         }
         return "<html>" + label + "</html>";
     }
 
-
-    /**
-     * 设置全局字体
-     * @param fnt
-     */
-    public static void initGlobalFontSetting(Font fnt) {
-        FontUIResource fontRes = new FontUIResource(fnt);
-        for (Enumeration<?> keys = UIManager.getDefaults().keys(); keys
-                .hasMoreElements();) {
-            Object key = keys.nextElement();
-            Object value = UIManager.get(key);
-            if (value instanceof FontUIResource)
-                UIManager.put(key, fontRes);
-        }
-    }
-    
     /**
      * 窗口居中显示
      * @param jFrame
      */
-    public static void setFrameCenter(JFrame jFrame){
-        //居中显示
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screen = toolkit.getScreenSize();
-        int x = screen.width - jFrame.getWidth()>>1;
-        int y = (screen.height - jFrame.getHeight()>>1)-32;
-        jFrame.setLocation(x, y);
-    }
-    
     /**
      * 
      * @param args
@@ -494,7 +763,7 @@ public class GraphEditor extends JPanel{
             else if( "org.jb2011.lnf.beautyeye.BeautyEyeLookAndFeelCross".equals( lnf ) ) {
                 org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
                 UIManager.put("RootPane.setupButtonVisible", false);
-                initGlobalFontSetting(new Font("微软雅黑",5,14));
+                Util.initGlobalFontSetting(new Font("微软雅黑",5,14));
                 // mxSwingConstants.SHADOW_COLOR = Color.LIGHT_GRAY;
                 // mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
             }
@@ -511,8 +780,7 @@ public class GraphEditor extends JPanel{
             }
         }
 
-        setGraphComponent(EditorTabbedPane.ZH_GRAPH_COMPONENT);
-        GraphEditor editor = new GraphEditor(graphComponent);
+        GraphEditor editor = new GraphEditor();
         editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
     }
 
@@ -537,15 +805,42 @@ public class GraphEditor extends JPanel{
         output.close();
     }
 
+    public int getViewMode() {
+        return viewMode;
+    }
+
+    public void setViewMode(int viewMode) {
+        this.viewMode = viewMode;
+    }
+
+    public int getNow() {
+        return now;
+    }
+
+    public void setNow(int now) {
+        this.now = now;
+    }
+
+    /**
+     * @description 用于标记下拉多选框现在所处的状态
+     */
+    private int viewMode = VIEW_MODE_SENTENCE_ONLY;
+    
     private EditorTabbedPane tabbedPane;
 
     private int highlightStartPos = -1;
     private int highlightEndPos = -1;
 
     private EditorToolBar toolbar;
+    private EditorBottom bottom;
 
     private boolean isModified = false;
 
     private static final int BUFFER_SIZE = 8192;
+
+    /**
+     * 记录当前句法树位置
+     */
+    public int now = 0;
 
 }

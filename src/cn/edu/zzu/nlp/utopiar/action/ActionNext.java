@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
-import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
@@ -24,10 +23,11 @@ public class ActionNext extends ActionGraph {
     @Override
     public void actionPerformed(ActionEvent e) {
         GraphEditor editor = getEditor(e);
+        TreeParser parser = editor.getTabbedPane().getCurrentPane();
         boolean isGraphClosed = editor.doCloseGraph();
         if (isGraphClosed) {
-            int count = TreeParser.getNow();
-            if(count + 1 >TreeParser.getMAXCOUNT()-1){
+            int count = editor.getNow();
+            if(count + 1 >parser.getMaxCount()-1){
                 JOptionPane.showMessageDialog(editor, 
                     Languages.getInstance().getString( "Message.NoMoreNextSentence.Body" ),
                     Languages.getInstance().getString( "Message.NoMoreNextSentence.Title" ),
@@ -35,8 +35,8 @@ public class ActionNext extends ActionGraph {
             }
             else
                 count++;
-            refreshTree(editor, count);
-            EditorBottom.getTextArea().setText(editor.getLabelString());
+            editor.refreshTree(count);
+            editor.updateBottomTextArea();
         }
     }
 

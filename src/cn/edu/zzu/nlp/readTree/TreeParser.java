@@ -19,7 +19,6 @@ import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
 import cn.edu.zzu.nlp.utopiar.util.UnicodeReader;
 import cn.edu.zzu.nlp.utopiar.util.Util;
-import cn.edu.zzu.nlp.utopiar.util.ValidCell;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.handler.mxKeyboardHandler;
@@ -39,27 +38,19 @@ public class TreeParser extends JPanel {
     /**
      * 构造语法树文本路径
      */
-    public String PATH;
+    public String path;
     
     /**
      * 叶子结点计数，构造语法树时需要设置为1
      */
-    public static int countleaf = 1;
+    public int countleaf = 1;
     
     /**
      * 保存句法树的总数量
      */
-    public static int MAXCOUNT = 0;
+    public int maxCount = 0;
     
-    /**
-     * 保存句法树汉语句子的总数量
-     */
-    public static int ZHCOUNT = 0;
-    
-    /**
-     * 保存句法树英语句子的总数量
-     */
-    public static int ENGCOUNT = 0;
+    public int count = 0;
 
     /**
      * 
@@ -67,96 +58,47 @@ public class TreeParser extends JPanel {
     Stack<String> stack = new Stack<String>();
 
     /**
-     * 记录当前句法树位置
-     */
-    public static int now = 0;
-
-    /**
      * 保存叶子结点
      */
-    public static List<String> leaf = new ArrayList<String>();
+    public List<String> leaf = new ArrayList<String>();
     
     /**
      * 保存叶子结点及其词性
      */
-    public static List<String> splitList = new ArrayList<String>();
+    public List<String> splitList = new ArrayList<String>();
     
-    public static HashMap<Integer, String> zhMap = new HashMap<Integer, String>();
+    public HashMap<Integer, String> map = new HashMap<Integer, String>();
+   
+    public HashMap<Integer, String> constraint = new HashMap<Integer, String>();
     
-    public static HashMap<Integer, String> engMap = new HashMap<Integer, String>();
+    public HashMap<Object, String> vertex = new HashMap<Object, String>();
     
-    public static HashMap<Integer, String> zhConstraint = new HashMap<Integer, String>();
-    
-    public static HashMap<Integer, String> engConstraint = new HashMap<Integer, String>();
-    
-    public static HashMap<Integer, String> zhParser = new HashMap<Integer, String>();
-    
-    public static HashMap<Integer, String> engParser = new HashMap<Integer, String>();
-    
-    public static HashMap<Object, String> vertex = new HashMap<Object, String>();
-    
-    public static HashMap<Integer, String> selectData(String path){
-        if(path.equalsIgnoreCase(EditorTabbedPane.getEnglishPath())){
-            return engMap;
-        }else if(path.equalsIgnoreCase(EditorTabbedPane.getChinesePath())){
-            return zhMap;
-        }else{
-            return null;
-        }
-    }
-
-    public static  Boolean readData(String path) {
-        if(path.equalsIgnoreCase(EditorTabbedPane.getChinesePath())){
-            zhMap.clear();
-            try {
-                File f  = new File(path);
-                FileInputStream in = new FileInputStream(f);
-                BufferedReader br = new BufferedReader(new UnicodeReader(in, "utf-8"));
-                String temp;
-                int i=0;
-                while ((temp = br.readLine()) != null) {
-                    // 过滤掉字符传中含有的“() ”
-                    temp = temp.replaceAll("\\(\\) ", "");
-                    zhMap.put(i, temp);
-                    i++;
-                }
-                ZHCOUNT = i;
-                MAXCOUNT = i>MAXCOUNT?i:MAXCOUNT;
-                MAXCOUNT = ZHCOUNT==ENGCOUNT?ZHCOUNT:MAXCOUNT;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+    public Boolean readData() {
+        map.clear();
+        try {
+            File f  = new File(path);
+            FileInputStream in = new FileInputStream(f);
+            BufferedReader br = new BufferedReader(new UnicodeReader(in, "utf-8"));
+            String temp;
+            int i=0;
+            while ((temp = br.readLine()) != null) {
+                // 过滤掉字符传中含有的“() ”
+                temp = temp.replaceAll("\\(\\) ", "");
+                map.put(i, temp);
+                i++;
             }
-        }else if(path.equalsIgnoreCase(EditorTabbedPane.getEnglishPath())){
-            engMap.clear();
-            try {
-                File f  = new File(path);
-                FileInputStream in = new FileInputStream(f);
-                BufferedReader br = new BufferedReader(new UnicodeReader(in, "utf-8"));
-                String temp;
-                int i=0;
-                while ((temp = br.readLine()) != null) {
-                    // 过滤掉字符传中含有的“() ”
-                    temp = temp.replaceAll("\\(\\) ", "");
-                    engMap.put(i, temp);
-                    i++;
-                }
-                ENGCOUNT = i;
-                MAXCOUNT = i>MAXCOUNT?i:MAXCOUNT;
-                MAXCOUNT = ZHCOUNT==ENGCOUNT?ENGCOUNT:MAXCOUNT;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }else{
+            count = i;
+            maxCount = i>maxCount?i:maxCount;
+            //maxCount = ZHCOUNT==ENGCOUNT?ZHCOUNT:maxCount;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-        
         
         return true;
     }
 
-    public static List<String> getWord(int now , HashMap<Integer, String> map){
+    public List<String> getWord(int now , HashMap<Integer, String> map){
         List<String> wordlList = new ArrayList<String>();
         String temp = map.get(now);
         if(temp==null){
@@ -198,37 +140,27 @@ public class TreeParser extends JPanel {
     }
     
     public static void main(String[] args){
-        TreeParser.readData("data/train.ch.parse");
-        List<String> list = TreeParser.getWord(0, TreeParser.selectData("data/train.ch.parse"));
-        for (String string : list) {
-            System.out.print(string.getBytes());
-        }
+        //TreeParser.readData("data/train.ch.parse");
+        //List<String> list = TreeParser.getWord(0, TreeParser.selectData("data/train.ch.parse"));
+        //for (String string : list) {
+        //    System.out.print(string.getBytes());
+        //}
     }
     
     public TreeParser(GraphEditor editor, final mxGraphComponent graphComponent, String path, boolean iszH) throws IOException {
-        this.PATH = path;
+        this.path = path;
+        this.editor = editor;
 //      final mxGraph graph = graphComponent.getGraph();
         try {
-            File f  = new File("out/ch.seg.con");
+            String filename = (iszH ? "out/ch.seg.con" : "out/en.raw.con");
+            File f = new File(filename);
             FileInputStream in = new FileInputStream(f);
             BufferedReader br = new BufferedReader(new UnicodeReader(in, "utf-8"));
             String temp = "";
             int i=0;
             while ((temp = br.readLine()) != null) {
                 if(temp.contains("@#@#@#")){
-                    zhConstraint.put(i, temp);
-                }               
-                i++;
-            }
-            in.close();
-            f = new File("out/en.raw.con");
-            in = new FileInputStream(f);
-            br = new BufferedReader(new UnicodeReader(in, "utf-8"));
-            temp = "";
-            i=0;
-            while ((temp = br.readLine()) != null) {
-                if(temp.contains("@#@#@#")){
-                    engConstraint.put(i, temp);
+                    constraint.put(i, temp);
                 }               
                 i++;
             }
@@ -236,31 +168,25 @@ public class TreeParser extends JPanel {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        readData(PATH);
-        System.out.print(PATH);
-        List<String> list = getWord(0, selectData(PATH));
+        readData();
+        System.out.print(path);
+        List<String> list = getWord(0, map);
         leaf.clear();
         splitList.clear();
         countleaf = 1;
         vertex.clear();
         creatTree(editor, graphComponent,list, Preferences.DEFAULT_OFFSET_Y);
-        EditorBottom.getTextArea().setText(editor.getLabelString());
-        mxRectangle bounds = graphComponent.getGraph().getGraphBounds();
-        graphComponent.getGraph().setMinimumGraphSize(new mxRectangle(0, 0, bounds.getWidth() + 2 * MARGIN, bounds.getHeight() + MARGIN));
-        graphComponent.getVerticalScrollBar().setUnitIncrement(10);        
-        // Weird but 2 calls are needed to make the scrollbar move. - FB
-        graphComponent.scrollToCenter(true);
-        graphComponent.scrollToCenter(true);
-        
+        editor.updateBottomTextArea();
+        resizeViewport(graphComponent);
         new mxKeyboardHandler(graphComponent);
         this.setLayout(new BorderLayout());
 
-        ValidCell.valid(editor);
+        editor.validCells(graphComponent);
 
         this.add(graphComponent, BorderLayout.CENTER);
     }
     
-    public static List<Object> creatTree(GraphEditor editor, final mxGraphComponent graphComponent,List<String> list,
+    public List<Object> creatTree(GraphEditor editor, final mxGraphComponent graphComponent,List<String> list,
             int vertexY) {
         Integer verticalInterBoxGap = Preferences.getInstance().getVerticalInterBoxGap();
         vertexY += ( verticalInterBoxGap == null ? Preferences.DEFAULT_VERT_INTERBOX_GAP : verticalInterBoxGap.intValue() );
@@ -389,32 +315,36 @@ public class TreeParser extends JPanel {
         return rtList;
     }
 
-    public static int getCountleaf() {
+    public void resizeViewport(mxGraphComponent graphComponent) {
+        mxRectangle bounds = graphComponent.getGraph().getGraphBounds();
+        mxRectangle minGraphSize = new mxRectangle(0, 0, bounds.getWidth() + 2 * MARGIN, bounds.getHeight() + MARGIN);
+        graphComponent.getGraph().setMinimumGraphSize(minGraphSize);
+        graphComponent.getVerticalScrollBar().setUnitIncrement(10);        
+        // Weird but 2 calls are needed to make the scrollbar move. - FB
+        graphComponent.scrollToCenter(true);
+        graphComponent.scrollToCenter(true);
+    }
+
+    public int getCountleaf() {
         return countleaf;
     }
 
-    public static void setCountleaf(int countleaf) {
-        TreeParser.countleaf = countleaf;
+    public void setCountleaf(int countleaf) {
+        this.countleaf = countleaf;
     }
 
-    public static int getNow() {
-        return now;
-    }
-
-    public static void setNow(int now) {
-        TreeParser.now = now;
-    }
-
-    public static List<String> getLeaf() {
+    public List<String> getLeaf() {
         return leaf;
     }
 
-    public static List<String> getSplitList() {
+    public List<String> getSplitList() {
         return splitList;
     }
 
-    public static int getMAXCOUNT() {
-        return MAXCOUNT;
+    public int getMaxCount() {
+        return maxCount;
     }
+
+    private GraphEditor editor;
 
 }

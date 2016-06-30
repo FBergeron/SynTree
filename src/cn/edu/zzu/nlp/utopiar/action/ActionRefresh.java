@@ -24,9 +24,9 @@ public class ActionRefresh extends ActionGraph {
                 JOptionPane.YES_NO_OPTION);
         if(revertConfirmation == JOptionPane.YES_OPTION){ 
             GraphEditor editor = getEditor(e);
-            TreeParser.readData(EditorTabbedPane.getPATH());
-            ActionGraph.refreshTree(editor, TreeParser.getNow());
-            EditorBottom.getTextArea().setText(editor.getLabelString());
+            editor.getTabbedPane().getCurrentPane().readData(); 
+            editor.refreshTree(editor.getNow());
+            editor.updateBottomTextArea();
         }
     }
 

@@ -5,12 +5,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
-import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
@@ -29,7 +29,7 @@ public class ActionSort extends ActionGraph{
     @Override
     public void actionPerformed(ActionEvent e) {
         GraphEditor editor = getEditor(e);
-        mxGraphComponent graphComponent = GraphEditor.getGraphComponent();
+        mxGraphComponent graphComponent = editor.getGraphComponent();
         final mxGraph graph = graphComponent.getGraph();
         Object cell = null;
         try {
@@ -115,7 +115,7 @@ public class ActionSort extends ActionGraph{
                 return;
             }
             graph.clearSelection();
-            String temp = (String) traverse(cell, graph).get(1);
+            String temp = (String) editor.traverse(cell, graph).get(1);
             String[] strings = temp.split(" ");
             for (String string2 : strings) {
                 if(!string2.contains(")(")&&string2.contains("(")&&!string2.startsWith("(")){
@@ -127,17 +127,20 @@ public class ActionSort extends ActionGraph{
                 }
             }
             temp = "( " + temp.replaceAll("\\)\\(", "\\) \\(") + " )";
-            SaveTree.save(TreeParser.getNow(), temp, EditorTabbedPane.getPATH());
+            editor.saveTree(editor.getNow(), temp, editor.getTabbedPane().getPath());
             graph.selectAll();
             graph.removeCells();
-            TreeParser.setCountleaf(1);
-            List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(EditorTabbedPane.getPATH()));
-            TreeParser.getLeaf().clear();
-            TreeParser.getSplitList().clear();
-            TreeParser.vertex.clear();
-            EditorToolBar.getCombobox().setSelectedIndex(0);
-            TreeParser.creatTree(editor,graphComponent,list1,  Preferences.DEFAULT_OFFSET_Y);
-            EditorBottom.getTextArea().setText(editor.getLabelString());
+            TreeParser parser = editor.getTabbedPane().getCurrentPane();
+            parser.setCountleaf(1);
+            List<String> list1 = parser.getWord(editor.getNow(),parser.map);
+            parser.getLeaf().clear();
+            parser.getSplitList().clear();
+            parser.vertex.clear();
+            JComboBox<String> comboBoxViewMode = editor.getComboBoxViewMode();
+            if (comboBoxViewMode != null)
+                comboBoxViewMode.setSelectedIndex(0);
+            parser.creatTree(editor,graphComponent,list1,  Preferences.DEFAULT_OFFSET_Y);
+            editor.updateBottomTextArea();
         } catch (Exception e1) {
             e1.printStackTrace();
         }       

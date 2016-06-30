@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
@@ -26,7 +25,7 @@ public class ActionPre extends ActionGraph {
         GraphEditor editor = getEditor(e);
         boolean isGraphClosed = editor.doCloseGraph();
         if (isGraphClosed) {
-            int count = TreeParser.getNow();
+            int count = editor.getNow();
             if(count - 1 < 0){
                 JOptionPane.showMessageDialog(editor, 
                     Languages.getInstance().getString( "Message.NoMorePreviousSentence.Body" ),
@@ -35,8 +34,8 @@ public class ActionPre extends ActionGraph {
             }
             else
                 count--;
-            refreshTree(editor, count);
-            EditorBottom.getTextArea().setText(editor.getLabelString());
+            editor.refreshTree(count);
+            editor.updateBottomTextArea();
         }
     }
 

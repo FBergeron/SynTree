@@ -436,12 +436,12 @@ public class EditorSettingFrame extends JDialog {
                     int intRetVal = engFileChooser.showOpenDialog((Component)e.getSource());
                     if (intRetVal == JFileChooser.APPROVE_OPTION) {
                         System.out.println(engFileChooser.getSelectedFile().getPath());     
-                        if(!EditorTabbedPane.iszH()){
-                            EditorTabbedPane.setPATH(engFileChooser.getSelectedFile().getPath());
+                        if(!editor.getTabbedPane().isChinese()){
+                            editor.getTabbedPane().setPath(engFileChooser.getSelectedFile().getPath());
                         }
-                        EditorTabbedPane.setENGLISH_PATH(engFileChooser.getSelectedFile().getPath());
-                        ((JTabbedPane)EditorTabbedPane.ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, engFileChooser.getSelectedFile().getPath());
-                        TreeParser.readData(EditorTabbedPane.getEnglishPath());
+                        editor.getTabbedPane().setEnglishPath(engFileChooser.getSelectedFile().getPath());
+                        ((JTabbedPane)editor.getTabbedPane().getEngGraphComponent().getParent().getParent()).setToolTipTextAt(1, engFileChooser.getSelectedFile().getPath());
+                        editor.getTabbedPane().getEnglishPane().readData();
                     }
                 }
             });
@@ -452,12 +452,12 @@ public class EditorSettingFrame extends JDialog {
                     zhFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
                     int intRetVal = zhFileChooser.showOpenDialog((Component)e.getSource());
                     if (intRetVal == JFileChooser.APPROVE_OPTION) { 
-                        if(EditorTabbedPane.iszH()){
-                            EditorTabbedPane.setPATH(zhFileChooser.getSelectedFile().getPath());
+                        if(editor.getTabbedPane().isChinese()){
+                            editor.getTabbedPane().setPath(zhFileChooser.getSelectedFile().getPath());
                         }
-                        EditorTabbedPane.setCHINESE_PATH(zhFileChooser.getSelectedFile().getPath());
-                        ((JTabbedPane)EditorTabbedPane.ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, zhFileChooser.getSelectedFile().getPath());
-                        TreeParser.readData(EditorTabbedPane.getChinesePath());
+                        editor.getTabbedPane().setChinesePath(zhFileChooser.getSelectedFile().getPath());
+                        ((JTabbedPane)editor.getTabbedPane().getZhGraphComponent().getParent().getParent()).setToolTipTextAt(0, zhFileChooser.getSelectedFile().getPath());
+                        editor.getTabbedPane().getChinesePane().readData();
                     }
                 }
             });

@@ -2,7 +2,6 @@ package cn.edu.zzu.nlp.utopiar.action;
 
 import java.awt.event.ActionEvent;
 
-import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
 import cn.edu.zzu.nlp.utopiar.editor.GraphEditor;

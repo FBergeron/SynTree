@@ -8,7 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import cn.edu.zzu.nlp.readTree.SaveTree;
+import javax.swing.JEditorPane;
+
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.editor.EditorBottom;
 import cn.edu.zzu.nlp.utopiar.editor.EditorTabbedPane;
@@ -25,12 +26,18 @@ public class ActionRebuild extends ActionGraph {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String temp = EditorBottom.textArea.getText();
+        GraphEditor editor = getEditor(e);
+        JEditorPane bottomTextArea = editor.getBottomTextArea();
+        if( bottomTextArea == null)
+            return;
+
+        String temp = bottomTextArea.getText();
         temp = temp.replaceAll("  ", " ");
         if(temp.endsWith("@#@#@# ")){
             temp = (String) temp.subSequence(0, temp.indexOf('@'));
         }
         String temPath = "out/seg.con.tmp";
+        TreeParser parser = null;
         try {
             String filePath = null;
             String model = null;
@@ -38,24 +45,26 @@ public class ActionRebuild extends ActionGraph {
             HashMap<Integer, String> saveMap = null;
             HashMap<Integer, String> conMap = null;
             String savePath = null;
-            if(EditorTabbedPane.getPATH().equalsIgnoreCase(EditorTabbedPane.getChinesePath())){
+            if(editor.getTabbedPane().getPath().equalsIgnoreCase(editor.getTabbedPane().getChinesePath())){
                 filePath = "out/ch.seg.con";
                 model = "data/chn_sm5.gr";
                 language = "-chinese";
-                saveMap = TreeParser.zhMap;
-                savePath = EditorTabbedPane.CHINESE_PATH;
-                conMap = TreeParser.zhConstraint;               
+                parser = editor.getTabbedPane().getChinesePane();
+                saveMap = parser.map;
+                savePath = editor.getTabbedPane().getChinesePath();
+                conMap = parser.constraint;               
             }else {
                 filePath = "out/en.raw.con";
                 model = "data/eng_sm6.gr";
                 language = "-tokenize";
-                saveMap = TreeParser.engMap;
-                savePath = EditorTabbedPane.ENGLISH_PATH;
-                conMap = TreeParser.engConstraint;
+                parser = editor.getTabbedPane().getEnglishPane();
+                saveMap = parser.map;
+                savePath = editor.getTabbedPane().getEnglishPath();
+                conMap = parser.constraint;
             }
             
             //将约束条件保存
-            conMap.put(TreeParser.getNow(), temp);
+            conMap.put(editor.getNow(), temp);
             save(conMap,filePath);
             
             FileOutputStream os = new FileOutputStream(temPath);
@@ -73,19 +82,17 @@ public class ActionRebuild extends ActionGraph {
             out = br.readLine();
             
             //将结果保存起来
-            saveMap.put(TreeParser.getNow(), out);
-            SaveTree.save(savePath);
+            saveMap.put(editor.getNow(), out);
+            editor.saveTree(savePath);
             
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        GraphEditor editor = getEditor(e);
-        TreeParser.readData(EditorTabbedPane.getPATH());
-        ActionGraph.refreshTree(editor, TreeParser.getNow());
-        EditorBottom.getTextArea().setText(editor.getLabelString());
+        parser.readData();
+        bottomTextArea.setText(editor.getLabelString());
     }
     
-    public static void save(HashMap<Integer, String>map,String path) {
+    private void save(HashMap<Integer, String>map,String path) {
         try {
             int max = 0;
             FileOutputStream fos = new FileOutputStream(path);
@@ -109,9 +116,4 @@ public class ActionRebuild extends ActionGraph {
         
     }
 
-    public static void main(String []args){
-        HashMap<Integer, String> map = new HashMap<Integer, String>();
-        map.put(1,"10");
-        map.put(2, "20");
-    }
 }

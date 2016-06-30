@@ -13,9 +13,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -30,12 +32,11 @@ import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
 
-import cn.edu.zzu.nlp.readTree.SaveTree;
 import cn.edu.zzu.nlp.readTree.TreeParser;
 import cn.edu.zzu.nlp.utopiar.action.ActionGraph;
 import cn.edu.zzu.nlp.utopiar.util.Languages;
 import cn.edu.zzu.nlp.utopiar.util.Preferences;
-import cn.edu.zzu.nlp.utopiar.util.ValidCell;
+import cn.edu.zzu.nlp.utopiar.util.SynTreeGraph;
 
 
 public class EditorTabbedPane extends JTabbedPane{
@@ -44,62 +45,28 @@ public class EditorTabbedPane extends JTabbedPane{
      * 
      */
     private static final long serialVersionUID = 1L;
-    public static String CHINESE_PATH = "data/train.ch.parse";
-    public static String ENGLISH_PATH = "data/train.en.parse";
-    
-    public static final mxGraph ZH_GRAPH = new mxGraph(){
-        public String getToolTipForCell(Object cell)
-        {
-            if(TreeParser.vertex.containsKey(cell))
-                return TreeParser.vertex.get(cell);
-            else
-                return convertValueToString(cell);
-        }
-    };
-    public static final mxGraphComponent ZH_GRAPH_COMPONENT = new mxGraphComponent(ZH_GRAPH);
-    public static final mxGraph ENG_GRAPH = new mxGraph(){
-        public String getToolTipForCell(Object cell)
-        {
-            if(TreeParser.vertex.containsKey(cell))
-                return TreeParser.vertex.get(cell);
-            else
-                return convertValueToString(cell);
-        }
-    };
-    public static final mxGraphComponent ENG_GRAPH_COMPONENT = new mxGraphComponent(ENG_GRAPH);
-    public static String PATH = "data/train.ch.parse";
-    public static mxGraph OR_GRAPH = ENG_GRAPH;
-    public static String OR_PATH = "data/train.en.parse";
-    public static boolean iszH = true; 
-    public static mxGraphComponent OR_GraphComponent = ENG_GRAPH_COMPONENT;
-    
+
     public EditorTabbedPane(final GraphEditor editor) throws IOException{
-       
         this.editor = editor;
 
-        this.addChangeListener(new ChangeListener() {
-            
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                update();
-            }
-        });
-        
-        JPanel chinesePane = new TreeParser(editor,ZH_GRAPH_COMPONENT,CHINESE_PATH,true);
+        chineseGraph = new SynTreeGraph(editor);
+        englishGraph = new SynTreeGraph(editor);
+        chineseGraphComponent = new mxGraphComponent(chineseGraph);
+        englishGraphComponent = new mxGraphComponent(englishGraph);
 
-//      GraphEditor.setGraphComponent(ENG_GRAPH_COMPONENT);
-        setOR_GRAPH(ENG_GRAPH);
-        setOR_PATH(ENGLISH_PATH);
-        setOR_GraphComponent(ENG_GRAPH_COMPONENT);
-        JPanel englishPane = new TreeParser(editor,ENG_GRAPH_COMPONENT,ENGLISH_PATH,false);
+        chinesePane = new TreeParser(editor,chineseGraphComponent,chinesePath,true);
+
+        setOrPath(englishPath);
+        setOrGraphComponent(englishGraphComponent);
+        englishPane = new TreeParser(editor,englishGraphComponent,englishPath,false);
         addTab("",null,chinesePane);
         addTab("",null,englishPane);
-        ((JTabbedPane)ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, CHINESE_PATH);
-        ((JTabbedPane)ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, ENGLISH_PATH);
+        ((JTabbedPane)chineseGraphComponent.getParent().getParent()).setToolTipTextAt(0, chinesePath);
+        ((JTabbedPane)englishGraphComponent.getParent().getParent()).setToolTipTextAt(1, englishPath);
         drag(this,editor);
 
-        ENG_GRAPH_COMPONENT.getGraphControl().addMouseListener( new GraphMouseListener( ENG_GRAPH_COMPONENT ) );
-        ZH_GRAPH_COMPONENT.getGraphControl().addMouseListener( new GraphMouseListener( ZH_GRAPH_COMPONENT ) );
+        englishGraphComponent.getGraphControl().addMouseListener( new GraphMouseListener( englishGraphComponent ) );
+        chineseGraphComponent.getGraphControl().addMouseListener( new GraphMouseListener( chineseGraphComponent ) );
         
         Languages.getInstance().addItemListener(
             new ItemListener() {
@@ -115,8 +82,15 @@ public class EditorTabbedPane extends JTabbedPane{
                 editor.setModified(true);
             }
         };
-        ENG_GRAPH.getModel().addListener(mxEvent.CHANGE, changeListener);
-        ZH_GRAPH.getModel().addListener(mxEvent.CHANGE, changeListener);
+        englishGraph.getModel().addListener(mxEvent.CHANGE, changeListener);
+        chineseGraph.getModel().addListener(mxEvent.CHANGE, changeListener);
+        this.addChangeListener(new ChangeListener() {
+            
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                update();
+            }
+        });
     }
 
     public void setLocale( Locale locale ) {
@@ -132,14 +106,14 @@ public class EditorTabbedPane extends JTabbedPane{
         }
 
         public void mousePressed(MouseEvent e) {
-            if( EditorToolBar.FLAG == 0 ) {
+            if( editor.getViewMode() == 0 ) {
                 Object cell = graphComponent.getCellAt(e.getX(), e.getY());
                 if (cell != null && cell instanceof mxCell) {
                     mxCell clickedCell = (mxCell)cell;
                     int[] range = new int[] { Integer.MAX_VALUE, Integer.MIN_VALUE };
                     findRange( clickedCell, range );
                     editor.setHighlight( range[ 0 ], range[ 1 ] );
-                    EditorBottom.getTextArea().setText(editor.getLabelString());
+                    editor.updateBottomTextArea();
                 }
             }
 
@@ -148,9 +122,9 @@ public class EditorTabbedPane extends JTabbedPane{
         }
 
         public void mouseReleased(MouseEvent e) {
-            if( EditorToolBar.FLAG == 0 ) {
+            if( editor.getViewMode() == 0 ) {
                 editor.clearHighlight();
-                EditorBottom.getTextArea().setText(editor.getLabelString());
+                editor.updateBottomTextArea();
             }
 
             if( e.isPopupTrigger() )
@@ -172,7 +146,8 @@ public class EditorTabbedPane extends JTabbedPane{
                 }
             }
             if( outgoingEdgeCount == 0 ) {
-                String strPos = TreeParser.vertex.get(vertex);
+                TreeParser parser = editor.getTabbedPane().getCurrentPane();
+                String strPos = parser.vertex.get(vertex);
                 if( strPos != null ) {
                     try {
                         int pos = Integer.parseInt(strPos);
@@ -201,136 +176,133 @@ public class EditorTabbedPane extends JTabbedPane{
     }
 
     public void update() {
-        EditorToolBar.getCombobox().setSelectedIndex(0);
-        TreeParser.getSplitList().clear();
+        JComboBox<String> comboBoxViewMode = editor.getComboBoxViewMode();
+        if (comboBoxViewMode != null)
+            comboBoxViewMode.setSelectedIndex(0);
+        TreeParser parser = getCurrentPane();
+        parser.getSplitList().clear();
         mxGraph saveGraph = null;
         String savePath = null;
-        if(PATH.equalsIgnoreCase(CHINESE_PATH)){
-            saveGraph = ZH_GRAPH;
-            savePath = CHINESE_PATH;
+        if(path.equalsIgnoreCase(chinesePath)){
+            saveGraph = chineseGraph;
+            savePath = chinesePath;
         }else {
-            saveGraph = ENG_GRAPH;
-            savePath = ENGLISH_PATH;
+            saveGraph = englishGraph;
+            savePath = englishPath;
         }
-        String str = ActionGraph.getSaveStr(editor, saveGraph);
+        String str = editor.getSaveStr(saveGraph);
         if(str==null){
             return;
         }
         try {
-            SaveTree.save(TreeParser.getNow(), str ,savePath);
+            editor.saveTree(editor.getNow(), str ,savePath);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         if(getSelectedIndex()==0){
-            PATH = CHINESE_PATH;
-            OR_GRAPH = ENG_GRAPH;
-            OR_PATH = ENGLISH_PATH;
-            OR_GraphComponent = ENG_GRAPH_COMPONENT;
-            iszH = true;
+            path = chinesePath;
+            parser = getChinesePane();
+            OR_GRAPH = englishGraph;
+            orPath = englishPath;
+            orGraphComponent = englishGraphComponent;
             Color prefColor = Preferences.getInstance().getGraphBackgroundColor();
             if( prefColor != null )
-                ZH_GRAPH_COMPONENT.getViewport().setBackground( prefColor );
-            GraphEditor.changeUndo(ZH_GRAPH_COMPONENT);
-            GraphEditor.setGraphComponent(ZH_GRAPH_COMPONENT);
-            TreeParser.setCountleaf(1);
-            ZH_GRAPH.selectAll();
-            ZH_GRAPH.removeCells();
-            List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(PATH));
-            TreeParser.getLeaf().clear();
-            TreeParser.getSplitList().clear();
-            TreeParser.vertex.clear();
-            TreeParser.creatTree(editor,ZH_GRAPH_COMPONENT,list1,Preferences.DEFAULT_OFFSET_Y);
+                chineseGraphComponent.getViewport().setBackground( prefColor );
+            editor.changeUndo(chineseGraphComponent);
+            parser.setCountleaf(1);
+            chineseGraph.selectAll();
+            chineseGraph.removeCells();
+            List<String> list1 = parser.getWord(editor.getNow(),getChinesePane().map);
+            parser.getLeaf().clear();
+            parser.getSplitList().clear();
+            parser.vertex.clear();
+            getChinesePane().creatTree(editor,chineseGraphComponent,list1,Preferences.DEFAULT_OFFSET_Y);
         }else{
-            PATH = ENGLISH_PATH;
-            OR_GRAPH = ZH_GRAPH;
-            OR_PATH = CHINESE_PATH;
-            OR_GraphComponent = ZH_GRAPH_COMPONENT;
-            iszH = false;
-            GraphEditor.changeUndo(ENG_GRAPH_COMPONENT);
+            path = englishPath;
+            parser = getEnglishPane();
+            OR_GRAPH = chineseGraph;
+            orPath = chinesePath;
+            orGraphComponent = chineseGraphComponent;
+            editor.changeUndo(englishGraphComponent);
             Color prefColor = Preferences.getInstance().getGraphBackgroundColor();
             if( prefColor != null )
-                ENG_GRAPH_COMPONENT.getViewport().setBackground( prefColor );
-            GraphEditor.setGraphComponent(ENG_GRAPH_COMPONENT);
-            TreeParser.setCountleaf(1);
-            ENG_GRAPH.selectAll();
-            ENG_GRAPH.removeCells();
-            List<String> list1 = TreeParser.getWord(TreeParser.getNow(),TreeParser.selectData(PATH));
-            TreeParser.getLeaf().clear();
-            TreeParser.getSplitList().clear();
-            TreeParser.vertex.clear();
-            TreeParser.creatTree(editor,ENG_GRAPH_COMPONENT,list1,Preferences.DEFAULT_OFFSET_Y);
+                englishGraphComponent.getViewport().setBackground( prefColor );
+            parser.setCountleaf(1);
+            englishGraph.selectAll();
+            englishGraph.removeCells();
+            List<String> list1 = parser.getWord(editor.getNow(),getEnglishPane().map);
+            parser.getLeaf().clear();
+            parser.getSplitList().clear();
+            parser.vertex.clear();
+            getEnglishPane().creatTree(editor,englishGraphComponent,list1,Preferences.DEFAULT_OFFSET_Y);
         }
-        ValidCell.valid(editor);
-        EditorBottom.getTextArea().setText(editor.getLabelString());
+        editor.validCells(editor.getGraphComponent());
+        editor.updateBottomTextArea();
         editor.update();
     }
 
-    public static String getPATH() {
-        return PATH;
+    public String getPath() {
+        return path;
     }
 
-    public static void setPATH(String pATH) {
-        PATH = pATH;
+    public void setPath(String pATH) {
+        path = pATH;
     }
 
-    public static mxGraph getZhGraph() {
-        return ZH_GRAPH;
+    public mxGraph getZhGraph() {
+        return chineseGraph;
     }
 
-    public static mxGraph getEngGraph() {
-        return ENG_GRAPH;
+    public mxGraph getEngGraph() {
+        return englishGraph;
     }
 
-    public static String getChinesePath() {
-        return CHINESE_PATH;
+    public String getChinesePath() {
+        return chinesePath;
     }
 
-    public static String getEnglishPath() {
-        return ENGLISH_PATH;
+    public String getEnglishPath() {
+        return englishPath;
     }
 
-    public static void setCHINESE_PATH(String cHINESEPATH) {
-        CHINESE_PATH = cHINESEPATH;
+    public void setChinesePath(String path) {
+        chinesePath = path;
     }
 
-    public static void setENGLISH_PATH(String eNGLISHPATH) {
-        ENGLISH_PATH = eNGLISHPATH;
+    public void setEnglishPath(String path) {
+        englishPath = path;
     }
 
-    public static mxGraph getOR_GRAPH() {
-        return OR_GRAPH;
+    public mxGraph getOrGraph() {
+        return orGraphComponent.getGraph();
     }
 
-    public static void setOR_GraphComponent(mxGraphComponent oRGraphComponent) {
-        OR_GraphComponent = oRGraphComponent;
+    public void setOrGraphComponent(mxGraphComponent oRGraphComponent) {
+        orGraphComponent = oRGraphComponent;
     }
 
-    public static void setOR_GRAPH(mxGraph oRGRAPH) {
-        OR_GRAPH = oRGRAPH;
+    public mxGraphComponent getZhGraphComponent() {
+        return chineseGraphComponent;
     }
 
-    public static mxGraphComponent getZhGraphComponent() {
-        return ZH_GRAPH_COMPONENT;
-    }
-
-    public static mxGraphComponent getEngGraphComponent() {
-        return ENG_GRAPH_COMPONENT;
+    public mxGraphComponent getEngGraphComponent() {
+        return englishGraphComponent;
     }
     
-    public static mxGraphComponent getOR_GraphComponent() {
-        return OR_GraphComponent;
+    public mxGraphComponent getOrGraphComponent() {
+        return orGraphComponent;
     }
 
-    public static boolean iszH() {
-        return iszH;
+    public boolean isChinese() {
+        return (getSelectedIndex() == 0);
     }
 
-    public static String getOR_PATH() {
-        return OR_PATH;
+    public String getOrPath() {
+        return orPath;
     }
 
-    public static void setOR_PATH(String oRPATH) {
-        OR_PATH = oRPATH;
+    public void setOrPath(String path) {
+        orPath = path;
     }
 
     public void drag(final JTabbedPane comp,final GraphEditor editor)//定义的拖拽方法
@@ -363,12 +335,12 @@ public class EditorTabbedPane extends JTabbedPane{
                                     Languages.getInstance().getString( "Message.Title.Question" ),
                                     JOptionPane.YES_NO_OPTION); 
                                 if(flag == 0){
-                                    EditorTabbedPane.setENGLISH_PATH(temp);
-                                    EditorTabbedPane.setPATH(temp);
-                                    TreeParser.readData(EditorTabbedPane.getEnglishPath());
-                                    ActionGraph.refreshTree(editor, 0);
-                                    EditorBottom.getTextArea().setText(editor.getLabelString());
-                                    ((JTabbedPane)ENG_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(1, temp);
+                                    setEnglishPath(temp);
+                                    setPath(temp);
+                                    getEnglishPane().readData();
+                                    editor.refreshTree(0);
+                                    editor.updateBottomTextArea();
+                                    ((JTabbedPane)englishGraphComponent.getParent().getParent()).setToolTipTextAt(1, temp);
                                 }
                             }
                             else if(comp.getSelectedIndex()==0){                                
@@ -377,12 +349,12 @@ public class EditorTabbedPane extends JTabbedPane{
                                     Languages.getInstance().getString( "Message.Title.Question" ),
                                     JOptionPane.YES_NO_OPTION); 
                                 if(flag == 0){
-                                    EditorTabbedPane.setCHINESE_PATH(temp);
-                                    EditorTabbedPane.setPATH(temp);
-                                    TreeParser.readData(EditorTabbedPane.getChinesePath());
-                                    ActionGraph.refreshTree(editor, 0);
-                                    EditorBottom.getTextArea().setText(editor.getLabelString());
-                                    ((JTabbedPane)ZH_GRAPH_COMPONENT.getParent().getParent()).setToolTipTextAt(0, temp);
+                                    setChinesePath(temp);
+                                    setPath(temp);
+                                    getChinesePane().readData();
+                                    editor.refreshTree(0);
+                                    editor.updateBottomTextArea();
+                                    ((JTabbedPane)chineseGraphComponent.getParent().getParent()).setToolTipTextAt(0, temp);
                                 }
                             }
                         }                        
@@ -403,4 +375,40 @@ public class EditorTabbedPane extends JTabbedPane{
     
     private GraphEditor editor;
 
+    public TreeParser getChinesePane() {
+        return chinesePane;
+    }
+
+    public TreeParser getEnglishPane() {
+        return englishPane;
+    }
+
+    public TreeParser getPane(String path) {
+        return (path.equalsIgnoreCase(getChinesePath()) ? getChinesePane() : getEnglishPane());
+    }
+
+    public TreeParser getCurrentPane() {
+        return getPane(path);
+    }
+
+    public mxGraphComponent getCurrentGraphComponent() {
+        return (isChinese() ? chineseGraphComponent : englishGraphComponent);
+    }
+
+    private TreeParser chinesePane;
+    private TreeParser englishPane;
+
+    private String chinesePath = "data/train.ch.parse";
+    private String englishPath = "data/train.en.parse";
+    
+    private mxGraph chineseGraph;
+    private mxGraphComponent chineseGraphComponent;
+    private mxGraph englishGraph;
+    private mxGraphComponent englishGraphComponent;
+
+    private String path = "data/train.ch.parse";
+    private mxGraph OR_GRAPH = englishGraph;
+    private String orPath = "data/train.en.parse";
+    private mxGraphComponent orGraphComponent = englishGraphComponent;
+    
 }

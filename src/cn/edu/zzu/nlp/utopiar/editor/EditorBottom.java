@@ -12,8 +12,6 @@ public class EditorBottom extends JScrollPane{
      */
     private static final long serialVersionUID = 6856024347910766867L;
     
-    public static JEditorPane textArea = new JEditorPane("text/html","<html>This is <u>a test</u>.</html>");
-    
     public EditorBottom(GraphEditor editor){
         JCheckBox fencibBox = new JCheckBox("分词");
         //textArea.setLineWrap(true);
@@ -26,8 +24,10 @@ public class EditorBottom extends JScrollPane{
         setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, fencibBox);
     }
 
-    public static JEditorPane getTextArea() {
+    public JEditorPane getTextArea() {
         return textArea;
     }   
+    
+    private JEditorPane textArea = new JEditorPane("text/html","<html>This is <u>a test</u>.</html>");
     
 }

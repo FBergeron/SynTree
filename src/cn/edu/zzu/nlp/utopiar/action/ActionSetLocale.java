@@ -11,11 +11,17 @@ import cn.edu.zzu.nlp.utopiar.util.Preferences;
 
 public class ActionSetLocale extends AbstractAction {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public ActionSetLocale( String id, String name, ImageIcon icon ) {
         super( name, icon );
         this.id = id;
     }
 
+    @Override
     public void actionPerformed( ActionEvent evt ) {
         try {
             Preferences.getInstance().setLanguage( id );
