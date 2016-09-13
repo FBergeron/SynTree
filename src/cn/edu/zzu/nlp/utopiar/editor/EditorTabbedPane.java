@@ -30,6 +30,7 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxGraph;
 
 import cn.edu.zzu.nlp.readTree.TreeParser;
@@ -49,16 +50,29 @@ public class EditorTabbedPane extends JTabbedPane{
     public EditorTabbedPane(final GraphEditor editor) throws IOException{
         this.editor = editor;
 
+        mxRectangle minGraphSize = new mxRectangle(0, 0, 20000, 3000);
+
         chineseGraph = new SynTreeGraph(editor);
+        chineseGraph.setMinimumGraphSize(minGraphSize);
+
         englishGraph = new SynTreeGraph(editor);
+        englishGraph.setMinimumGraphSize(minGraphSize);
+
         chineseGraphComponent = new mxGraphComponent(chineseGraph);
+        chineseGraphComponent.getVerticalScrollBar().setUnitIncrement(10);
+
         englishGraphComponent = new mxGraphComponent(englishGraph);
+        englishGraphComponent.getVerticalScrollBar().setUnitIncrement(10);
 
         chinesePane = new TreeParser(editor,chineseGraphComponent,chinesePath,true);
+        int scrollValue = (int)(TreeParser.MARGIN * chineseGraphComponent.getGraph().getView().getScale());
+        chineseGraphComponent.getHorizontalScrollBar().setValue(scrollValue);
 
         setOrPath(englishPath);
         setOrGraphComponent(englishGraphComponent);
         englishPane = new TreeParser(editor,englishGraphComponent,englishPath,false);
+        scrollValue = (int)(TreeParser.MARGIN * englishGraphComponent.getGraph().getView().getScale());
+        englishGraphComponent.getHorizontalScrollBar().setValue(scrollValue);
         addTab("",null,chinesePane);
         addTab("",null,englishPane);
         ((JTabbedPane)chineseGraphComponent.getParent().getParent()).setToolTipTextAt(0, chinesePath);
@@ -217,6 +231,8 @@ public class EditorTabbedPane extends JTabbedPane{
             parser.getSplitList().clear();
             parser.vertex.clear();
             getChinesePane().creatTree(editor,chineseGraphComponent,list1,Preferences.DEFAULT_OFFSET_Y);
+            int scrollValue = (int)(TreeParser.MARGIN * chineseGraphComponent.getGraph().getView().getScale());
+            chineseGraphComponent.getHorizontalScrollBar().setValue(scrollValue);
         }else{
             path = englishPath;
             parser = getEnglishPane();
@@ -235,6 +251,8 @@ public class EditorTabbedPane extends JTabbedPane{
             parser.getSplitList().clear();
             parser.vertex.clear();
             getEnglishPane().creatTree(editor,englishGraphComponent,list1,Preferences.DEFAULT_OFFSET_Y);
+            int scrollValue = (int)(TreeParser.MARGIN * englishGraphComponent.getGraph().getView().getScale());
+            englishGraphComponent.getHorizontalScrollBar().setValue(scrollValue);
         }
         editor.validCells(editor.getGraphComponent());
         editor.updateBottomTextArea();

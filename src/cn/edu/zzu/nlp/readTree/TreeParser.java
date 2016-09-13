@@ -33,7 +33,7 @@ public class TreeParser extends JPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    private static final int MARGIN = 1000;
+    public static final int MARGIN = 1000;
 
     /**
      * 构造语法树文本路径
@@ -176,8 +176,10 @@ public class TreeParser extends JPanel {
         countleaf = 1;
         vertex.clear();
         creatTree(editor, graphComponent,list, Preferences.DEFAULT_OFFSET_Y);
+        int scrollValue = (int)(TreeParser.MARGIN * graphComponent.getGraph().getView().getScale());
+        graphComponent.getHorizontalScrollBar().setValue(scrollValue);
+
         editor.updateBottomTextArea();
-        resizeViewport(graphComponent);
         new mxKeyboardHandler(graphComponent);
         this.setLayout(new BorderLayout());
 
@@ -313,16 +315,6 @@ public class TreeParser extends JPanel {
             graph.getModel().endUpdate();
         }
         return rtList;
-    }
-
-    public void resizeViewport(mxGraphComponent graphComponent) {
-        mxRectangle bounds = graphComponent.getGraph().getGraphBounds();
-        mxRectangle minGraphSize = new mxRectangle(0, 0, bounds.getWidth() + 2 * MARGIN, bounds.getHeight() + MARGIN);
-        graphComponent.getGraph().setMinimumGraphSize(minGraphSize);
-        graphComponent.getVerticalScrollBar().setUnitIncrement(10);        
-        // Weird but 2 calls are needed to make the scrollbar move. - FB
-        graphComponent.scrollToCenter(true);
-        graphComponent.scrollToCenter(true);
     }
 
     public int getCountleaf() {

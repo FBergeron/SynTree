@@ -575,9 +575,10 @@ public class GraphEditor extends JPanel{
         parser.getLeaf().clear();
         parser.getSplitList().clear();
         parser.vertex.clear();
-        parser.creatTree(this,orGraphComponent,list, Preferences.DEFAULT_OFFSET_Y);      
+        Object root = parser.creatTree(this,orGraphComponent,list, Preferences.DEFAULT_OFFSET_Y);      
+        int scrollValue = (int)(TreeParser.MARGIN * graphComponent.getGraph().getView().getScale());
+        orGraphComponent.getHorizontalScrollBar().setValue(scrollValue);
 
-        parser.resizeViewport(orGraphComponent);
         parser = getTabbedPane().getCurrentPane();
         parser.setCountleaf(1);
         List<String> list1 = parser.getWord(getNow(),parser.map);
@@ -585,8 +586,8 @@ public class GraphEditor extends JPanel{
         parser.getSplitList().clear();
         parser.vertex.clear();
         parser.creatTree(this, graphComponent, list1, Preferences.DEFAULT_OFFSET_Y);     
+        graphComponent.getHorizontalScrollBar().setValue(scrollValue);
 
-        parser.resizeViewport(graphComponent);
         validCells(graphComponent);
         JComboBox<String> comboBoxViewMode = getComboBoxViewMode();
         if (comboBoxViewMode != null)
